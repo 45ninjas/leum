@@ -1,0 +1,31 @@
+#modal-background
+{
+	background-color: #000000;
+	opacity: 0.8;
+	z-index: 1000;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.modal
+{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: auto;
+	transform: translate(-50%, -50%);
+
+	background-color: white;
+	z-index: 2000;
+	border-radius: 2px;
+}
+
+.modal-footer
+{
+	border-top: 1px solid #CCCCCC;
+	text-align: right;
+	padding: 0.5rem;
+}

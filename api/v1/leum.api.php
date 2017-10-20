@@ -40,6 +40,33 @@ class LeumApi extends API
 				break;
 		}
 	}
+	public function Tag ($args)
+	{
+		require_once 'tags.php';
+
+		$db = DBConnect();
+		switch ($this->method)
+		{
+			case 'GET':
+				if(isset($args[0]))
+					return Tag::Get($db, $args[0]);
+				else
+					return Tag::Get($db);
+				break;
+			case 'DELETE':
+				if(isset($args[0]))
+					return Tag::Delete($db, $args[0]);
+				else
+					throw new Exception("Invalid Arguments");
+				break;
+			case 'POST':
+				if(isset($args[0]))
+					return Tag::Post($db, $this->request, $args[0]);
+				else
+					return Tag::Post($db, $this->request);
+				break;
+		}
+	}
 }
 
 

@@ -1,4 +1,29 @@
-h1.title-big
+.debug-head
 {
-	font-size: 500%;
+	background-color: wheat;
+}
+.debug-head pre
+{
+	margin: 0;
+}
+
+.leum-page-buttons
+{
+	text-align: center;
+	display: block;
+}
+
+.full-width
+{
+	width: 100%;
+}
+
+.button-compact
+{
+	padding: 0.35rem;
+	font-size: 85%;
+}
+.button-delete
+{
+	background: rgb(215, 164, 164);
 }

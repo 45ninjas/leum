@@ -1,3 +1,17 @@
+<?php
+/**
+* Home Page
+*/
+class Page
+{
+	public $title = "Home";
+	public function __construct($arguments)
+	{
+
+	}
+	public function Content()
+	{
+		?>
 <div class="main">
 	<div class="header">
 		<h1>Leum</h1>
@@ -17,3 +31,7 @@
 		</ul>
 	</div>
 </div>
+		<?php
+	}
+}
+?>

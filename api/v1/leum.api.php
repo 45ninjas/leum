@@ -15,15 +15,14 @@ class LeumApi extends API
 	{
 		require_once 'media.php';
 
-		$min = $this->verb == "min";
 		$db = DBConnect();
 		switch ($this->method)
 		{
 			case 'GET':
 				if(isset($args[0]))
-					return Media::Get($db, $args[0], $min);
+					return Media::Get($db, $args[0]);
 				else
-					return Media::Get($db, null, $min);
+					return Media::Get($db, null);
 				break;
 			case 'DELETE':
 				if(isset($args[0]))
@@ -61,9 +60,9 @@ class LeumApi extends API
 				break;
 			case 'POST':
 				if(isset($args[0]))
-					return Tag::Post($db, $this->request, $args[0]);
+					return Tag::Insert($db, $this->request, $args[0]);
 				else
-					return Tag::Post($db, $this->request);
+					return Tag::Insert($db, $this->request);
 				break;
 		}
 	}

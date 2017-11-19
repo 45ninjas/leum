@@ -1,6 +1,5 @@
 <?php
 require_once 'prefrences.php';
-require_once 'application/libs/view.interface.php';
 
 function DBConnect()
 {
@@ -11,40 +10,25 @@ function DBConnect()
 		PDO::ATTR_EMULATE_PREPARES		=> false,
 	];
 	
-	$pdo = new PDO("mysql:host=" . $prefrences["db host"] . ";dbname=" . $prefrences["db name"] .";charset=utf8", $prefrences["db user"], $prefrences["db password"], $opt);
+	$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME .";charset=utf8", DB_USER, DB_PASS, $opt);
 	return $pdo;
 }
 
-function asset($asset)
+function Asset($asset)
 {
-	global $prefrences;
-	echo $prefrences['root'].$asset;
+	echo ROOT.$asset;
 }
 
-function InterfaceRouter($request)
+function TheTitle()
 {
-	$parts = explode('/', $request);
-	$parts = array_filter($parts);
-
-	// if there is noting show the home-page.
-	if(count($parts) == 0)
-		return SetupView("pages/home.php");
-
-	$first = strtolower(array_shift($parts));
-	$second = strtolower(array_shift($parts));
-
-	// Looks like the view is in the views/
-	if(is_file("application/views/$first/$second.php"))
-	{
-		return SetupView("application/views/$first/$second.php");
-	}
-	// I give up, can't find it. 404.
-	return SetupView("pages/404.php");
+	echo Leum::Instance()->title;
 }
-function SetupView($viewPath, $arguments = null)
+function TheContent()
 {
-	include $viewPath;
-	$view = new Viewable($arguments);
-	return $view;
+	Leum::Instance()->Output();
+}
+function TheHead()
+{
+	Leum::Instance()->Head();
 }
 ?>

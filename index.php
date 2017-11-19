@@ -1,13 +1,5 @@
 <?php
-include_once 'functions.php';
-
-if(isset($_GET['request']))
-$request = urldecode($_GET['request']);
-else
-$request = "";
-
-$view = InterfaceRouter($request);
-
+include_once 'leum.php';
 // Leum.
 // The simple local media tagging system.
 // Designed to store your webm, gif and other content.
@@ -24,17 +16,20 @@ $view = InterfaceRouter($request);
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, inital-scale=1.0">
-	<title><?php echo $view->title; ?></title>
-	<link rel="stylesheet" type="text/css" href="<?php asset("resources/css/pure-min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php asset("resources/css/side-menu.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php asset("resources/css/leum-modal.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php asset("resources/css/grids-responsive-min.css"); ?>">
-	<?php $view->TheHead(); ?>
+	<title><?php TheTitle(); ?></title>
+	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/pure-min.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/side-menu.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/leum-modal.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/grids-responsive-min.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/leum.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/font-awesome.min.css"); ?>">
+	<script type="text/javascript" src="<?php Asset("resources/js/jquery-3.2.1.min.js"); ?>"></script>
+	<?php TheHead(); ?>
 </head>
 <body>
 	<div id="layout">
 		<?php include "page-parts/side-bar.php"; ?>
-		<?php $view->TheContent(); ?>
+		<?php TheContent(); ?>
 	</div>
 
 
@@ -50,8 +45,8 @@ $view = InterfaceRouter($request);
 			</div>
 		</div>
 	</template>
-	<script type="text/javascript" src="<?php asset("resources/js/ui.js"); ?>"></script>
-	<script type="text/javascript" src="<?php asset("resources/js/modal.js"); ?>"></script>
+	<script type="text/javascript" src="<?php Asset("resources/js/ui.js"); ?>"></script>
+	<script type="text/javascript" src="<?php Asset("resources/js/modal.js"); ?>"></script>
 
 </body>
 </html>

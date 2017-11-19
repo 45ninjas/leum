@@ -72,5 +72,33 @@ class Tag
 			$statement->execute([$request['slug'], $request['title']]);
 		}
 	}
+
+	public static function Insert($dbc, $request, $index = null)
+	{
+		// if the request is not an instance of a Tag class then convert it.
+		if($request instanceof Tag)
+			$tag = $request;
+		else
+		{
+			$tag = new Tag();
+			$tag->title = $request['title'];
+			$tag->slug = $request['slug'];
+		}
+
+		// See if the index can be used as an index.
+		if(is_numeric($index))
+		{
+			// Update an existing tag.
+			$sql = "UPDATE tags SET title = ?, slug = ? WHERE tag_id = ?";
+			$statement = $dbc->prepare($sql);
+			$statement->execute([$tag->title, $tag->slug, $index]);
+		}
+		else
+		{
+			$sql = "INSERT INTO tags (title, slug) VALUES (?,?)";
+			$statement = $dbc->prepare($sql);
+			$statement->execute([$tag->title, $tag->slug]);
+		}
+	}
 }
 ?>

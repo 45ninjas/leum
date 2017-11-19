@@ -27,3 +27,25 @@
 {
 	background: rgb(215, 164, 164);
 }
+
+.leum-code
+{
+	background-color: #EEE;
+	display: block;
+	border-radius: 0.35rem;
+	padding: 1em;
+}
+.leum-code pre
+{
+	margin: 0;
+}
+.leum-green
+{
+	color: #3B5;
+}
+
+.leum-blank-list
+{
+	list-style: none;
+	padding: 0;
+}

@@ -51,19 +51,19 @@ class Page
 					<div class="pure-g">
 						<div class="pure-u-1 pure-u-md-1-2">
 							<label for="title">Title</label>
-							<input class="pure-u-1" type="text" name="title" id="title" placeholder="Title" <?php $this->EchoValue($this->mediaItem->title); ?>>
+							<input tabindex="1" class="pure-u-1" type="text" name="title" id="title" placeholder="Title" <?php $this->EchoValue($this->mediaItem->title); ?>>
 						</div>
 						<div class="pure-u-1 pure-u-md-1-2">
 							<label for="path">Path</label>
-							<input class="pure-u-1" type="text" name="path" id="path" placeholder="Path" <?php $this->EchoValue($this->mediaItem->path); ?>>
+							<input tabindex="2" class="pure-u-1" type="text" name="path" id="path" placeholder="Path" <?php $this->EchoValue($this->mediaItem->path); ?>>
 						</div>
 						<div class="pure-u-1 pure-u-md-1">
 							<label for="source">Source</label>
-							<input class="pure-u-1" type="text" name="source" id="source" placeholder="Source of Media" <?php $this->EchoValue($this->mediaItem->source); ?>>
+							<input tabindex="3" class="pure-u-1" type="text" name="source" id="source" placeholder="Source of Media" <?php $this->EchoValue($this->mediaItem->source); ?>>
 						</div>
 					</div>
 				</fieldset>
-				<button type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
+				<button tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 			</form>
 		</div>
 	</div>

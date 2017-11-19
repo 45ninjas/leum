@@ -41,7 +41,7 @@ class LeumApi extends API
 	}
 	public function Tag ($args)
 	{
-		require_once 'tags.php';
+		require_once 'tag.php';
 
 		$db = DBConnect();
 		switch ($this->method)

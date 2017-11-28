@@ -3,12 +3,14 @@
 * Default page
 */
 require_once 'api/v1/media.php';
+require_once 'page-parts/item-preview.php';
 class Page
 {
 	public $title = "Create Media";
 	private $mediaItem;
 	private $modify = false;
 	private $db;
+	private $itemPreview;
 
 	public function __construct($arguments)
 	{
@@ -37,6 +39,8 @@ class Page
 		}
 		else
 			$this->mediaItem = new Media();
+
+		$this->itemPreview = new ItemPreview($this->mediaItem);
 	}
 	public function Content()
 	{ ?>
@@ -48,20 +52,28 @@ class Page
 		<div class="content">
 			<form class="pure-form pure-form-stacked" method="post">
 				<fieldset>
+					<legend>Media Information</legend>
 					<div class="pure-g">
 						<div class="pure-u-1 pure-u-md-1-2">
 							<label for="title">Title</label>
-							<input tabindex="1" class="pure-u-1" type="text" name="title" id="title" placeholder="Title" <?php $this->EchoValue($this->mediaItem->title); ?>>
+							<input class="pure-u-1" tabindex="1" type="text" name="title" id="title" placeholder="Title" <?php $this->EchoValue($this->mediaItem->title); ?>>
+
+							<label for="path">Path</label>
+							<input class="pure-u-1" tabindex="2" type="text" name="path" id="path" placeholder="Path" <?php $this->EchoValue($this->mediaItem->path); ?>>
+
+							<label for="source">Source</label>
+							<textarea class="pure-u-1 leum-textarea" tabindex="3" name="source" id="source" placeholder="Source of Media item"><?php if($this->modify) echo $this->mediaItem->source; ?></textarea>
 						</div>
 						<div class="pure-u-1 pure-u-md-1-2">
-							<label for="path">Path</label>
-							<input tabindex="2" class="pure-u-1" type="text" name="path" id="path" placeholder="Path" <?php $this->EchoValue($this->mediaItem->path); ?>>
-						</div>
-						<div class="pure-u-1 pure-u-md-1">
-							<label for="source">Source</label>
-							<input tabindex="3" class="pure-u-1" type="text" name="source" id="source" placeholder="Source of Media" <?php $this->EchoValue($this->mediaItem->source); ?>>
+							<div class="leum-content-container">
+								<?php $this->itemPreview->Show(); ?>
+							</div>
 						</div>
 					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Tags</legend>
+
 				</fieldset>
 				<button tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 			</form>

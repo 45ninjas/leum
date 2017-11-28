@@ -4,6 +4,7 @@ class Tag
 	public $tag_id;
 	public $slug;
 	public $title;
+	public $tags;
 
 	public static function Get($dbc,$index = null)
 	{

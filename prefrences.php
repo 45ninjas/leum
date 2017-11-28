@@ -21,8 +21,8 @@ define('DB_NAME', 'leum');
 // === Advanced stuff (no touch) ===
 // 
 // The directory where the media is stored relative to this directory.
-define('MEDIA_DIR', 'content/media/');
-define('THUMB_DIR', 'content/thumbs/');
+define('MEDIA_DIR', '/content/media/');
+define('THUMB_DIR', '/content/thumbs/');
 
 // === Routes ===
 // 

@@ -33,7 +33,7 @@ class Page
 function DoThumbnail($mediItem)
 {
 	?>
-	
+	<div class=""></div>
 	<?php
 }
 }

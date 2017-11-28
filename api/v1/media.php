@@ -7,6 +7,19 @@ class Media
 	public $path;
 	public $date;
 
+	public function GetLink()
+	{
+		return ROOT . MEDIA_DIR . $this->path;
+	}
+	public function GetThumbnail()
+	{
+		return ROOT . THUMB_DIR . $this->path;
+	}
+	public function GetPath()
+	{
+		return SYS_ROOT . MEDIA_DIR . $this->path;
+	}
+
 	public static function Get($dbc,$index = null)
 	{
 		// BUG: Minimal does not do what it's supposed to do. It still produces
@@ -62,17 +75,24 @@ class Media
 	}
 	public static function Insert($dbc, $request, $index = null)
 	{
+		if($request instanceof Media)
+			$media = $request;
+		else
+		{
+			$media = new Media();
+			$media->title = $request['title'];
+			$media->source = $request['source'];
+			$media->path = $request['path'];
+			//$media->index = $index;
+		}
+
 		if(is_numeric($index))
 		{
 			// Updating existing media
 			$sql = "UPDATE media SET title = ?, source = ?, path = ? WHERE media_id = ?";
 
 			$statement = $dbc->prepare($sql);
-			
-			if($request instanceof Media)
-				$statement->execute([$request->title, $request->source, $request->path, $index]);
-			else
-				$statement->execute([$request['title'], $request['source'], $request['path'], $index]);	
+			$statement->execute([$media->title, $media->source, $media->path, $index]);
 		}
 		else
 		{
@@ -80,12 +100,62 @@ class Media
 			$sql = "INSERT INTO media (title, source, path) VALUES (?, ?, ?)";
 
 			$statement = $dbc->prepare($sql);
-
-			if($request instanceof Media)
-				$statement->execute([$request->title, $request->source, $request->path]);
-			else
-				$statement->execute([$request['title'], $request['source'], $request['path']]);
+			$statement->execute([$media->title, $media->source, $media->path]);
 		}
+	}
+
+	public static function AddTag($dbc, $media, $tag)
+	{
+		// Add a tag to a media item.
+		
+		// First, Get the media ID.
+		if(is_integer($media))
+			$media_id = $media;
+		elseif ($media instanceof Media)
+			$media_id = $media->media_id;
+
+		// Next get the tag ID.
+		if(is_integer($tag))
+			$tag_id = $tag;
+		elseif ($tag instanceof Tag)
+			$tag_id = $tag->tag_id;
+		/*elseif (is_string($tag))
+		{
+			// Looks like the tag is a slug...
+			// TODO: Finish Implementation of slug support.
+		}*/
+
+		$sql = "INSERT INTO map (media_id, tag_id) VALUES (?, ?)";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute($media_id, $tag_id);
+	}
+
+	public static function RemoveTag($dbc, $media, $tag)
+	{
+		// Remove a tag from a media item.
+		
+				// First, Get the media ID.
+		if(is_integer($media))
+			$media_id = $media;
+		elseif ($media instanceof Media)
+			$media_id = $media->media_id;
+
+		// Next get the tag ID.
+		if(is_integer($tag))
+			$tag_id = $tag;
+		elseif ($tag instanceof Tag)
+			$tag_id = $tag->tag_id;
+		/*elseif (is_string($tag))
+		{
+			// Looks like the tag is a slug...
+			// TODO: Finish Implementation of slug support.
+		}*/
+
+		$sql = "DELETE FROM map WHERE media_id =? AND tag_id =?";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute($media_id, $tag_id);
 	}
 }
 ?>

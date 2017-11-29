@@ -2,8 +2,9 @@
 /**
 * Default page
 */
-require_once 'api/v1/media.php';
+require_once 'api/v1/leum.api.php';
 require_once 'page-parts/item-preview.php';
+require_once 'page-parts/tag-field.php';
 class Page
 {
 	public $title = "Create Media";
@@ -11,6 +12,7 @@ class Page
 	private $modify = false;
 	private $db;
 	private $itemPreview;
+	private $tagField;
 
 	public function __construct($arguments)
 	{
@@ -29,7 +31,13 @@ class Page
 			$this->mediaItem->title = $_POST['title'];
 			$this->mediaItem->path = $_POST['path'];
 			$this->mediaItem->source = $_POST['source'];
-			Media::Insert($this->db, $this->mediaItem,$mediaId);
+
+			$index = Media::Insert($this->db, $this->mediaItem,$mediaId);
+
+			if(isset($_POST['tags']))
+				Mapping::SetMediaTags($this->db, $index, $_POST['tags']);
+			else
+				Mapping::SetMediaTags($this->db, $index);
 		}
 
 		if(isset($mediaId))
@@ -41,6 +49,7 @@ class Page
 			$this->mediaItem = new Media();
 
 		$this->itemPreview = new ItemPreview($this->mediaItem);
+		$this->tagField = new TagField($this->mediaItem->GetTags());
 	}
 	public function Content()
 	{ ?>
@@ -50,7 +59,7 @@ class Page
 			<h1><?php echo $this->title; ?></h1>
 		</div>
 		<div class="content">
-			<form class="pure-form pure-form-stacked" method="post">
+			<form id="media-edit" class="pure-form pure-form-stacked" method="post">
 				<fieldset>
 					<legend>Media Information</legend>
 					<div class="pure-g">
@@ -71,11 +80,14 @@ class Page
 						</div>
 					</div>
 				</fieldset>
-				<fieldset>
-					<legend>Tags</legend>
-
-				</fieldset>
-				<button tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
+				<div class="pure-form">
+					<fieldset>
+						<legend>Tags</legend>
+						<?php $this->tagField->Show(); ?>
+					</fieldset>
+				</div>
+				<br>
+				<button form="media-edit" tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 			</form>
 		</div>
 	</div>

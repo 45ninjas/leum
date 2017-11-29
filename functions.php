@@ -16,7 +16,11 @@ function DBConnect()
 
 function Asset($asset)
 {
-	echo ROOT.$asset;
+	echo GetAsset($asset);
+}
+function GetAsset($asset)
+{
+	return ROOT.$asset;
 }
 
 function TheTitle()

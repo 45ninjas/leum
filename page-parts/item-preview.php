@@ -1,7 +1,8 @@
 <?php
 class ItemPreview
 {
-	// Get the MIME type of the file and provide the correct html.
+	// Get the MIME type of the file and provide the correct html to show the content.
+	// TODO: Separate each type into it's own class/files to allow easy modular types.
 
 	public $mediaItem;
 	private $type = "undefined";
@@ -9,10 +10,12 @@ class ItemPreview
 	private $isFile = false;
 	function __construct($mediaItem)
 	{
+		// Get the file of the media item and check it it's a real file.
 		$this->mediaItem = $mediaItem;
 		$file = $this->mediaItem->GetPath();
 		if(is_file($file))
 		{
+			// Get the file's Mime type.
 			$this->isFile = true;
 			$this->type = mime_content_type($file);
 			$this->baseType = explode('/', $this->type)[0];
@@ -21,12 +24,14 @@ class ItemPreview
 
 	public function Show()
 	{
+		// Show no file if there is... no file.
 		if(!$this->isFile)
 		{
 			$this->DoNoFile();
 			return;
 		}
 
+		// Show videos, images and what not.
 		switch ($this->baseType)
 		{
 			case 'video':

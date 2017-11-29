@@ -1,24 +1,24 @@
 <?php
+include_once "leum.api.php";
 class Tag
 {
 	public $tag_id;
 	public $slug;
 	public $title;
-	public $tags;
 
-	public static function Get($dbc,$index = null)
+	public static function Get($dbc,$tag = null)
 	{
 		// BUG: Minimal does not do what it's supposed to do. It still produces
 		// variables in the JSON output just with nulls instead. :/
 
-		// --- Get a single item if the index is defined ---
-		if(is_numeric($index))
+		// --- Get a single item if the tag is defined ---
+		if(is_numeric($tag))
 		{
 			$sql = "SELECT * from tags where tag_id = ?";
 		
 			// Execute the query
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$index]);
+			$statement->execute([$tag]);
 
 			// Convert the row to a Media class and return it.
 			return $statement->fetchObject(__CLASS__);
@@ -66,8 +66,8 @@ class Tag
 		}
 		else
 		{
-			// Inserting a new media item into the database
-			$sql = "INSERT INTO media (slug, title) VALUES (?, ?)";
+			// Inserting a new tag item into the database
+			$sql = "INSERT INTO tag (slug, title) VALUES (?, ?)";
 
 			$statement = $dbc->prepare($sql);
 			$statement->execute([$request['slug'], $request['title']]);
@@ -100,6 +100,15 @@ class Tag
 			$statement = $dbc->prepare($sql);
 			$statement->execute([$tag->title, $tag->slug]);
 		}
+	}
+	public static function FindTagsLike($dbc, $queryString)
+	{
+		$queryString = strtolower($queryString);
+		$queryString = "%$queryString%";
+		$sql = "SELECT * FROM tags WHERE title LIKE ?";
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$queryString]);
+		return $statement->fetchAll();
 	}
 }
 ?>

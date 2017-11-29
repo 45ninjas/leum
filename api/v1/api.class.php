@@ -32,6 +32,9 @@ abstract class API
 	 * Constructor __construct
 	 * Allow for CROSS, assemble and pre-process the data
  	*/
+ 
+ 	protected $db;
+
  	public function __construct($request)
  	{
  		header("Access-Control-Allow-Origin: *");
@@ -84,6 +87,9 @@ abstract class API
  				$this->_response('Invalid Method', 405);
  				break;
  		}
+
+ 		// Connect to the database.
+ 		$this->db = DBConnect();
  	}
 
  	public function processAPI()

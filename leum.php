@@ -17,20 +17,8 @@ class Leum
 
 	private $my_db;
 
-	public static function Instance()
-	{
-		if(self::$_instance == null)
-			die("Error: Leum has not been instantiated properly. Or a function is trying to access Leum too early.");
+	public $headIncludes;
 
-		return self::$_instance;
-	}
-
-	public function GetDatabase()
-	{
-		if(!isset($my_db))
-			$this->my_db = DBConnect();
-		return $this->my_db;
-	}
 	public function __construct()
 	{
 		// Set the instance variable for singleton.
@@ -47,6 +35,9 @@ class Leum
 			}
 		}
 
+		// Setup the head includes.
+		$this->headIncludes = array();
+
 		// Setup the dispatcher.
 		global $routes;
 		$this->dispatcher = new Dispatcher($routes);
@@ -61,9 +52,40 @@ class Leum
 		$this->arguments = $arguments;
 	}
 
+	public function RequireResource($file, $html)
+	{
+		if(!array_key_exists($file, $this->headIncludes))
+		{
+			$this->headIncludes[$file] = $html;
+		}
+	}
+
+	public static function Instance()
+	{
+		if(self::$_instance == null)
+			die("Error: Leum has not been instantiated properly. Or a function is trying to access Leum too early.");
+
+		return self::$_instance;
+	}
+
+	public function GetDatabase()
+	{
+		if(!isset($my_db))
+			$this->my_db = DBConnect();
+		return $this->my_db;
+	}
+
 	public function Head()
 	{
-
+		if(count($this->headIncludes) > 0)
+		{
+			echo "<!-- RequireResource resources -->\n";
+			foreach ($this->headIncludes as $file => $html)
+			{
+				echo "$html\n";
+			}
+			echo "\n";
+		}
 	}
 	public function Output()
 	{

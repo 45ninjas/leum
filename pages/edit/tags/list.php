@@ -58,15 +58,15 @@ class Page
 					<td><?php echo $item->title; ?></td>
 					<td><?php echo $item->slug; ?></td>
 					<td>
-						<a class="pure-button button-compact" href="<?php echo ROOT."edit/tag/$item->tag_id"; ?>">
+						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/tag/$item->tag_id"; ?>">
 							<i class="fa fa-edit"></i>
 							Edit
 						</a>
-						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."api/v1/tag/$item->tag_id"; ?>">
+						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/tag/$item->tag_id"; ?>">
 							<i class="fa fa-trash"></i>
 							Delete
 						</a>
-<!-- 						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."view/$item->tag_id"; ?>">
+<!-- 						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/view/$item->tag_id"; ?>">
 							<i class="fa fa-eye"></i>
 							View
 						</a> -->
@@ -77,7 +77,7 @@ class Page
 			?>		
 			</tbody>
 		</table>
-		<script type="text/javascript" src="<?php Asset("resources/js/deleter.js");?>"></script>
+		<script type="text/javascript" src="<?php Asset("/resources/js/deleter.js");?>"></script>
 		<?php
 		}
 		else

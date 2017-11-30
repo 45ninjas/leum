@@ -3,8 +3,8 @@
 // 
 // === Interface preferences ===
 // 
-// The web root of the site.
-define('ROOT', '/leum/');
+// The web root of the site. (no trailing slash)
+define('ROOT', '/leum');
 // The title of the app.
 define('APP_TITLE', 'Leum');
 
@@ -20,9 +20,9 @@ define('DB_NAME', 'leum');
 
 // === Advanced stuff (no touch) ===
 // 
-// The directory where the media is stored relative to this directory.
-define('MEDIA_DIR', 'content/media/');
-define('THUMB_DIR', 'content/thumbs/');
+// The directory where the media is stored relative to this directory. (no trailing slash)
+define('MEDIA_DIR', '/content/media');
+define('THUMB_DIR', '/content/thumbs');
 
 // === Routes ===
 // 

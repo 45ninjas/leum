@@ -30,7 +30,7 @@ class Page
 		<h1>Media</h1>
 	</div>
 	<div class="content">
-		<a class="pure-button pure-button-primary" href="<?php echo ROOT."edit/media/new/" ?>">
+		<a class="pure-button pure-button-primary" href="<?php echo ROOT."/edit/media/new/" ?>">
 			<i class="fa fa-new"></i>
 			Insert New Media
 		</a>
@@ -60,15 +60,15 @@ class Page
 					<td><?php echo $item->path; ?></td>
 					<td><?php echo $item->date; ?></td>
 					<td>
-						<a class="pure-button button-compact" href="<?php echo ROOT."edit/media/$item->media_id"; ?>">
+						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/media/$item->media_id"; ?>">
 							<i class="fa fa-edit"></i>
 							Edit
 						</a>
-						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."api/v1/media/$item->media_id"; ?>">
+						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/media/$item->media_id"; ?>">
 							<i class="fa fa-trash"></i>
 							Delete
 						</a>
-						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."view/$item->media_id"; ?>">
+						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/view/$item->media_id"; ?>">
 							<i class="fa fa-eye"></i>
 							View
 						</a>
@@ -79,7 +79,7 @@ class Page
 			?>		
 			</tbody>
 		</table>
-		<script type="text/javascript" src="<?php Asset("resources/js/deleter.js");?>"></script>
+		<script type="text/javascript" src="<?php Asset("/resources/js/deleter.js");?>"></script>
 		<?php
 		}
 		else

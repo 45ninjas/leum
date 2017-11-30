@@ -3,6 +3,7 @@
 * Default page
 */
 require_once "page-parts/page-buttons.php";
+require_once "page-parts/tag-field.php";
 require_once "api/v1/leum.api.php";
 class Page
 {
@@ -16,9 +17,13 @@ class Page
 
 	private $totalResults;
 	private $totalPages;
+
+	private $tagField;
 	
 	public function __construct($arguments)
 	{
+		$dbc = Leum::Instance()->GetDatabase();
+
 		// Get the page number.
 		if(isset($_GET['page']) && is_numeric($_GET['page']))
 			$this->pageNum = $_GET['page'] - 1;
@@ -30,20 +35,20 @@ class Page
 			$queryString = strtolower($_GET['tags']);
 
 			$queryString = preg_replace("[^A-Za-z0-9-]", "", $queryString);
-			$tags = explode(' ', $queryString);
-			$tags = array_filter($tags);
+			$tagSlugs = explode(' ', $queryString);
+			$tagSlugs = array_filter($tagSlugs);
+			$tags = Browse::GetTagsFromSlugs($dbc, $tagSlugs);
 		}
 
-		// Get the items.
-		$dbc = Leum::Instance()->GetDatabase();
-
-		// Get the total items to know how many pages we need.
+		// Get the items and total items to know how many pages we need.
 		$this->itemsToShow = Browse::GetItems($dbc, $tags, $this->pageNum, $this->pageSize);
 
 		$this->totalResults = Browse::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
 
 		$this->pageButtons = new PageButtons($this->totalPages,$this->pageNum + 1);
+
+		$this->tagField = new TagField($tags, false);
 	}
 	public function Content()
 	{ ?>
@@ -53,6 +58,7 @@ class Page
 		<h1>Browse</h1>
 	</div>
 	<div class="content">
+		<?php $this->tagField->ShowField(); ?>
 		<?php echo "$this->totalResults results, $this->totalPages pages." ?>
 	</div>
 		<div class="items">
@@ -72,7 +78,7 @@ function DoItem($mediItem)
 {
 	$thumbnailUrl = $mediItem->GetThumbnail();
 	?>
-	<a class="item-tile">
+	<a class="item-tile" src="">
 		<img src="<?php echo $thumbnailUrl ?>">
 	</a>
 	<?php

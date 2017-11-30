@@ -3,37 +3,40 @@
 * View individual pages.
 */
 require_once 'api/v1/media.php';
+require_once 'page-parts/item-preview.php';
+require_once 'page-parts/tag-field.php';
 class Page
 {
 	public $title = "View";
 	private $mediaItem;
-	private $db;
+	private $itemPreview;
+	private $tagField;
 
 	public function __construct($arguments)
 	{
-		$this->db = Leum::Instance()->GetDatabase();
+		$dbc = Leum::Instance()->GetDatabase();
 
 		$mediaId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{
 			$mediaId = $arguments[0];
 		
-			$this->mediaItem = Media::Get($this->db, $arguments[0]);
+			$this->mediaItem = Media::Get($dbc, $arguments[0]);
 			$this->title = $this->mediaItem->title;
 		}
+		$this->itemPreview = new ItemPreview($this->mediaItem);
+		$this->tagField = new TagField($this->mediaItem->GetTags(), true);
 	}
 	public function Content()
 	{ ?>
 
 	<div class="main">
-		<div class="viewer-content">
-			<img src="<?php echo ROOT.MEDIA_DIR.$this->mediaItem->path; ?>">
-			<video autoplay="yes" loop="yes" controls="yes">
-				<source src="<?php echo ROOT.MEDIA_DIR.$this->mediaItem->path; ?>">
-			</video>
+		<div class="leum-content-container">
+			<?php $this->itemPreview->Show(); ?>
 		</div>
 		<div class="content viewer-meta">
 			<h3><?php echo $this->mediaItem->title; ?></h3>
+			<?php $this->tagField->ShowField(); ?>
 		</div>
 	</div>
 

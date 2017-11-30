@@ -10,15 +10,15 @@ class Media
 
 	public function GetLink()
 	{
-		return ROOT . MEDIA_DIR . $this->path;
+		return ROOT . MEDIA_DIR . "/" . $this->path;
 	}
 	public function GetThumbnail()
 	{
-		return ROOT . THUMB_DIR . $this->path . ".jpg";
+		return ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
 	}
 	public function GetPath()
 	{
-		return SYS_ROOT . MEDIA_DIR . $this->path;
+		return SYS_ROOT . MEDIA_DIR . "/" . $this->path;
 	}
 	public function GetTags()
 	{

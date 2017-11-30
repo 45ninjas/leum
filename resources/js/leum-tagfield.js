@@ -26,6 +26,7 @@ $(function()
 			onChooseEvent: function()
 			{
 				var tag = $("#tag-input").getSelectedItemData();
+				$("#tag-input").val('');
 				// Create a new tag.
 
 				var t = document.querySelector("#tag-template");

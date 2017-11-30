@@ -17,13 +17,13 @@ include_once 'leum.php';
 <head>
 	<meta name="viewport" content="width=device-width, inital-scale=1.0">
 	<title><?php TheTitle(); ?></title>
-	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/pure-min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/side-menu.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/leum-modal.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/grids-responsive-min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/leum.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php Asset("resources/css/font-awesome.min.css"); ?>">
-	<script type="text/javascript" src="<?php Asset("resources/js/jquery-3.2.1.min.js"); ?>"></script>
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/pure-min.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/side-menu.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum-modal.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/grids-responsive-min.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/font-awesome.min.css"); ?>">
+	<script type="text/javascript" src="<?php Asset("/resources/js/jquery-3.2.1.min.js"); ?>"></script>
 	<?php TheHead(); ?>
 </head>
 <body>
@@ -45,8 +45,8 @@ include_once 'leum.php';
 			</div>
 		</div>
 	</template>
-	<script type="text/javascript" src="<?php Asset("resources/js/ui.js"); ?>"></script>
-	<script type="text/javascript" src="<?php Asset("resources/js/modal.js"); ?>"></script>
+	<script type="text/javascript" src="<?php Asset("/resources/js/ui.js"); ?>"></script>
+	<script type="text/javascript" src="<?php Asset("/resources/js/modal.js"); ?>"></script>
 
 </body>
 </html>

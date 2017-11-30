@@ -14,7 +14,7 @@ class Media
 	}
 	public function GetThumbnail()
 	{
-		return ROOT . THUMB_DIR . $this->path;
+		return ROOT . THUMB_DIR . $this->path . ".jpg";
 	}
 	public function GetPath()
 	{
@@ -65,10 +65,6 @@ class Media
 			return $data;
 		}
 	}
-	public static function GetPaged($dbc, $page, $pageSize)
-	{
-		$sql = "SELECT * FROM media LIMIT ";
-	}
 	public static function Delete($dbc, $index)
 	{
 		$sql = "DELETE FROM media WHERE media_id = ?";
@@ -89,7 +85,6 @@ class Media
 			$media->title = $request['title'];
 			$media->source = $request['source'];
 			$media->path = $request['path'];
-			//$media->index = $index;
 		}
 
 		if(is_numeric($index))
@@ -110,94 +105,6 @@ class Media
 			$statement->execute([$media->title, $media->source, $media->path]);
 			return $dbc->lastInsertId();
 		}
-	}
-
-	// public static function MapTag($dbc, $media, $tag)
-	// {
-	// 	// Add a tag to a media item.
-		
-	// 	// First, Get the media ID.
-	// 	if(is_integer($media))
-	// 		$media_id = $media;
-	// 	elseif ($media instanceof Media)
-	// 		$media_id = $media->media_id;
-
-	// 	// Next get the tag ID.
-	// 	if(is_integer($tag))
-	// 		$tag_id = $tag;
-	// 	elseif ($tag instanceof Tag)
-	// 		$tag_id = $tag->tag_id;
-	// 	/*elseif (is_string($tag))
-	// 	{
-	// 		// Looks like the tag is a slug...
-	// 		// TODO: Finish Implementation of slug support.
-	// 	}*/
-
-	// 	$sql = "INSERT INTO map (media_id, tag_id) VALUES (?, ?)";
-
-	// 	$statement = $dbc->prepare($sql);
-	// 	$statement->execute($media_id, $tag_id);
-	// }
-
-	// public static function UnmapTag($dbc, $media, $tag)
-	// {
-	// 	// Remove a tag from a media item.
-		
-	// 	// First, Get the media ID.
-	// 	if(is_integer($media))
-	// 		$media_id = $media;
-	// 	elseif ($media instanceof Media)
-	// 		$media_id = $media->media_id;
-
-	// 	// Next get the tag ID.
-	// 	if(is_integer($tag))
-	// 		$tag_id = $tag;
-	// 	elseif ($tag instanceof Tag)
-	// 		$tag_id = $tag->tag_id;
-	// 	elseif (is_string($tag))
-	// 	{
-	// 		// Looks like the tag is a slug...
-	// 		// TODO: Finish Implementation of slug support.
-	// 	}
-
-	// 	$sql = "DELETE FROM map WHERE media_id =? AND tag_id =?";
-
-	// 	$statement = $dbc->prepare($sql);
-	// 	$statement->execute($media_id, $tag_id);
-	// }
-	// public static function GetMappedTags($dbc, $media)
-	// {
-	// 	// Gets all tags that are mapped to a particular media item.
-	// 	// For this to work tags must be included.
-	// 	require_once("tag.php");
-
-	// 	// Get the media ID.
-	// 	if(is_integer($media))
-	// 		$media_id = $media;
-	// 	elseif ($media instanceof Media)
-	// 		$media_id = $media->media_id;
-
-	// 	// Merge three tables together and what not....
-	// 	$sql = "SELECT map.map_id, map.tag_id, tags.slug, tags.title FROM map
-	// 		INNER JOIN media ON map.media_id = media.media_id
-	// 		INNER JOIN tags ON map.tag_id = tags.tag_id
-	// 		WHERE media.media_id = ?";
-
-	// 	$statement = $dbc->prepare($sql);
-	// 	$statement->execute([$media_id]);
-
-	// 	// Convert rows from the database into Tag classes.
-	// 	while($data[] = $statement->fetchObject("Tag"));
-
-	// 	// Remove the last item in the list because it will return false due to
-	// 	// the way I'm looping.
-	// 	array_pop($data);
-
-	// 	return $data;
-	// }
-	// public static function SetMappedTags($dbc, $media, $tags)
-	// {
-		
-	// }
+	} 
 }
 ?>

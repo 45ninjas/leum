@@ -70,7 +70,7 @@ class Leum
 
 	public function GetDatabase()
 	{
-		if(!isset($my_db))
+		if(!isset($this->my_db))
 			$this->my_db = DBConnect();
 		return $this->my_db;
 	}

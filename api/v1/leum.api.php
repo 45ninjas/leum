@@ -4,6 +4,7 @@ require_once 'api.class.php';
 require_once 'mapping.php';
 require_once 'tag.php';
 require_once 'media.php';
+require_once 'browse.php';
 
 if(is_file('../../functions.php'))
 	require_once '../../functions.php';

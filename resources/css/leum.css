@@ -81,3 +81,26 @@
 	margin: 1em;
 	border-radius: 0.5em;
 }
+
+.items
+{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.items .item-tile
+{
+}
+
+.items .item-tile img
+{
+	width: 100%;
+	height: 100%;
+}
+
+.items .item-tile .missing-thumbnail
+{
+	color: #DDD;
+	position: absolute;
+}

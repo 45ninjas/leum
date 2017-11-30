@@ -30,9 +30,9 @@ class Page
 		<h1>Media</h1>
 	</div>
 	<div class="content">
-		<a class="pure-button pure-button-primary" href="<?php echo ROOT."edit/tag/new/" ?>">
-			<i class="fa fa-new"></i>
+		<a class="pure-button pure-button-primary" href="<?php echo ROOT."/edit/tag/new/" ?>">
 			Create New Tag
+			<i class="fa fa-plus"></i>
 		</a>
 		<?php
 		if(isset($this->tagItems) && $this->total > 0)

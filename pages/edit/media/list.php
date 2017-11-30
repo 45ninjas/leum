@@ -31,8 +31,8 @@ class Page
 	</div>
 	<div class="content">
 		<a class="pure-button pure-button-primary" href="<?php echo ROOT."/edit/media/new/" ?>">
-			<i class="fa fa-new"></i>
 			Insert New Media
+			<i class="fa fa-plus"></i>
 		</a>
 		<?php
 		if(isset($this->mediaItems) && $this->total > 0)

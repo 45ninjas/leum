@@ -63,7 +63,8 @@ class Page
 				<fieldset>
 					<legend>Media Information</legend>
 					<div class="pure-g">
-						<div class="pure-u-1 pure-u-md-1-2">
+
+						<div class="pure-u-1 pure-u-sm-1-2">
 							<label for="title">Title</label>
 							<input class="pure-u-1" tabindex="1" type="text" name="title" id="title" placeholder="Title" <?php $this->EchoValue($this->mediaItem->title); ?>>
 
@@ -73,20 +74,21 @@ class Page
 							<label for="source">Source</label>
 							<textarea class="pure-u-1 leum-textarea" tabindex="3" name="source" id="source" placeholder="Source of Media item"><?php if($this->modify) echo $this->mediaItem->source; ?></textarea>
 						</div>
-						<div class="pure-u-1 pure-u-md-1-2">
+
+						<div class="pure-u-1 pure-u-sm-1-2">
 							<div class="leum-content-container">
 								<?php $this->itemPreview->Show(); ?>
 							</div>
 						</div>
+
 					</div>
+
+					<label for="tag-input">Tags</label>
+					<?php $this->tagField->ShowInput("pure-u-1"); ?>
+					<?php $this->tagField->ShowField(); ?>
+					<br>
 				</fieldset>
-				<div class="pure-form">
-					<fieldset>
-						<legend>Tags</legend>
-						<?php $this->tagField->Show(); ?>
-					</fieldset>
-				</div>
-				<br>
+
 				<button form="media-edit" tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 			</form>
 		</div>

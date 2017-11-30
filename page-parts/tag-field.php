@@ -2,6 +2,7 @@
 class TagField
 {
 	private $tags;
+	private $templateDone = false;
 	function __construct($tags)
 	{
 		$this->tags = $tags;
@@ -12,14 +13,11 @@ class TagField
 		Leum::Instance()->RequireResource('resources/js/jquery.easy-autocomplete.min.js', '<script type="text/javascript" src="' . GetAsset('resources/js/jquery.easy-autocomplete.min.js') . '"></script>');
 	}
 
-	public function Show()
+	public function ShowField()
 	{
 		?>
 		<ul class="tagfield" id="tagfield">
-		<input id="tag-input" class="tag-input" type="text" list="known-tags" placeholder="Add Tag">
 		<?php
-		$this->TagTemplate();
-
 		foreach ($this->tags as $tag)
 		{
 			$this->ShowTag($tag);
@@ -27,6 +25,11 @@ class TagField
 		?>
 		</ul>
 		<?php
+	}
+	public function ShowInput($classText = "")
+	{
+		?><input id="tag-input" class="tag-input <?php echo $classText; ?>" type="text" list="known-tags" placeholder="Add Tag"><?php
+		$this->TagTemplate();
 	}
 	public function ShowTag($tag)
 	{
@@ -40,6 +43,11 @@ class TagField
 	}
 	private function TagTemplate()
 	{
+		// The template only needs to be shown one.
+		if($this->templateDone)
+			return;
+
+		$this->templateDone = true;
 		?>
 		<template id="tag-template">
 			<li class="leum-tag">

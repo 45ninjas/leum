@@ -1,5 +1,6 @@
 <?php
 require_once 'prefrences.php';
+require_once 'api/v1/leum.api.php';
 
 function DBConnect()
 {
@@ -35,4 +36,23 @@ function TheHead()
 {
 	Leum::Instance()->Head();
 }
+
+function CreateSlugString($tags)
+{
+	if(count($tags) == 0)
+		return;
+
+	if($tags[0] instanceof Tag)
+		$tags = array_map(create_function('$tg', 'return $tg->slug;'), $tags);
+
+	return implode('+', $tags);
+}
+function ParseSlugString($string)
+{
+	$string = preg_replace("[^A-Za-z0-9-]", "", $string);
+	$slugs = explode('+', $string);
+	$slugs = array_filter($slugs);
+	return $slugs;
+}
+
 ?>

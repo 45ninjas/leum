@@ -104,3 +104,12 @@
 	color: #DDD;
 	position: absolute;
 }
+
+.browse-bar .right
+{
+	display: inline-block;
+}
+.browse-bar .content
+{
+	margin-bottom: 0;
+}

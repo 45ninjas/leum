@@ -1,14 +1,16 @@
 ul.tagfield
 {
 	list-style: none;
+	display: inline;
 	padding: 0;
 	margin: 0;
+	width: auto;
 }
 
 ul.tagfield li
 {
-	display: inline-block;
 	background-color: #EEE;
+	display: inline-block;
 	border-radius: 2px;
 	padding: 0.35em;
 	margin: 0.25em;
@@ -18,4 +20,9 @@ ul.tagfield li a.tag-delete
 {
 	color: inherit;
 	margin-left: 0.35em;
+}
+
+.easy-autocomplete
+{
+	display: inline-block;
 }

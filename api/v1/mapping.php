@@ -92,11 +92,6 @@ class Mapping
 			$tag_id = $tag;
 		elseif ($tag instanceof Tag)
 			$tag_id = $tag->tag_id;
-		/*elseif (is_string($tag))
-		{
-			// Looks like the tag is a slug...
-			// TODO: Finish Implementation of slug support.
-		}*/
 
 		$sql = "INSERT INTO map (media_id, tag_id) VALUES (?, ?)";
 
@@ -159,8 +154,9 @@ class Mapping
 
 		return $data;
 	}
-	public static function SetMediaTags($dbc, $media, $newTags = null)
+	public static function SetMediaTags($dbc, $media, $newSlugs = null)
 	{
+		//TODO: Add proper comments to this function BEFORE I forget how it works 1/12/2017
 		if ($media instanceof Media)
 			$media_id = $media->media_id;
 		else
@@ -168,7 +164,7 @@ class Mapping
 
 
 		// If there is nothing in the user input, just remove all tags.
-		if(is_null($newTags) || count($newTags) == 0)
+		if(is_null($newSlugs) || count($newSlugs) == 0)
 		{
 			$sql = "DELETE from map where $media_id = ?";
 			$statement = $dbc->prepare($sql);
@@ -176,27 +172,29 @@ class Mapping
 			return;
 		}
 
+		// Get the tag_id's of the new slugs.
+		$placeHolder = str_repeat('?, ', count($newSlugs) - 1) . '?';
+		$sql = "SELECT tags.tag_id FROM tags WHERE tags.slug IN ( $placeHolder )";
+		$statement = $dbc->prepare($sql);
+		$statement->execute($newSlugs);
+
+		$newTags = $statement->fetchAll(PDO::FETCH_COLUMN);
+
 		// Looks like the user actually did something.
-		
-		// Make sure everything in the newtags array is an intger.
-		$newTags = array_map('intval', $newTags);
 
 		// See what tags are mapped.
-		$sql = "SELECT tag_id from map where media_id = ?";
+		$sql = "SELECT tags.tag_id from map inner join tags on map.tag_id = tags.tag_id where media_id = ?";
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media_id]);
-
-		$removeTags = array();
-
-		// Go over each tag in the database and figure out what to do with each one.
-		
 		$tagsInDb = $statement->fetchAll(PDO::FETCH_COLUMN);
 
+		$removeTags = array();
+		$addTags = $newTags;
 		foreach ($tagsInDb as $dbTag)
 		{
 			if(!in_array($dbTag, $newTags))
 				$removeTags[] = $dbTag;
-			unset($newTags[array_search($dbTag, $newTags)]);
+			unset($addTags[array_search($dbTag, $newTags)]);
 		}
 		// So now we know what to remove and add to the database. Let's start a transaction.
 		try
@@ -206,7 +204,7 @@ class Mapping
 			while ($tag = array_pop($removeTags))
 				Mapping::Unmap($dbc, $media_id, $tag);
 
-			while ($tag = array_pop($newTags))
+			while ($tag = array_pop($addTags))
 				Mapping::Map($dbc, $media_id, $tag);
 
 			$dbc->commit();

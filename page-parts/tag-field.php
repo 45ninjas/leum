@@ -4,9 +4,16 @@ class TagField
 	private $tags;
 	private $templateDone = false;
 	private $readOnly = false;
+
+	private $slugString;
+
+	const READ_ONLY = "read only";
+	
 	function __construct($tags, $readOnly = false)
 	{
 		$this->tags = $tags;
+		$this->slugString = CreateSlugString($tags);
+		
 		$this->readOnly = $readOnly;
 
 		Leum::Instance()->RequireResource('/resources/css/leum-tagfield.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-tagfield.css') . '">');
@@ -23,6 +30,7 @@ class TagField
 	{
 		?>
 		<ul class="tagfield" id="tagfield">
+			<input type="hidden" autocomplete="off" id="tags" name="tags" value="<?php echo $this->slugString ?>">
 		<?php
 		foreach ($this->tags as $tag)
 		{
@@ -37,14 +45,14 @@ class TagField
 		if($this->readOnly)
 			throw new Exception("Cannot edit this tagfield. This tagfield is in read-only mode", 1);
 			
-		?><input id="tag-input" class="tag-input <?php echo $classText; ?>" type="text" list="known-tags" placeholder="Add Tag"><?php
+		?><input id="tag-input" class="tag-input <?php echo $classText; ?>" type="text" placeholder="Add Tag"><?php
 		$this->TagTemplate();
 	}
 	private function ShowTag($tag)
 	{
 		?>
 		<li class="leum-tag">
-			<input type="hidden" name="tags[]" value="<?php echo $tag->tag_id; ?>">
+			<input type="hidden" value="<?php echo $tag->slug; ?>">
 			<span><?php echo $tag->title; ?></span>
 			<?php if(!$this->readOnly) { ?>
 			<a class="tag-delete"><i class="fa fa-close"></i></a>
@@ -62,10 +70,10 @@ class TagField
 		?>
 		<template id="tag-template">
 			<li class="leum-tag">
-				<input type="hidden" name="tags[]" value="">
+				<input type="hidden" value="">
 				<span></span>
 				<?php if(!$this->readOnly) { ?>
-				<a class="tag-delete" href=""><i class="fa fa-close"></i></a>
+				<a class="tag-delete"><i class="fa fa-close"></i></a>
 				<?php } ?>
 			</li>
 		</template>

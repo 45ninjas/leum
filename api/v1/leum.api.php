@@ -62,9 +62,9 @@ class LeumApi extends API
 	}
 	public function Find($args)
 	{
-		switch ($this->verb)
+		switch ($args[0])
 		{
-			case 'tags':
+			case "tags":
 					return Tag::FindTagsLike($this->db, $_GET['query']);
 				break;
 		}

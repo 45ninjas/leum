@@ -10,13 +10,12 @@ class Page
 	public $title = "Create Media";
 	private $mediaItem;
 	private $modify = false;
-	private $db;
 	private $itemPreview;
 	private $tagField;
 
 	public function __construct($arguments)
 	{
-		$this->db = Leum::Instance()->GetDatabase();
+		$dbc = Leum::Instance()->GetDatabase();
 
 		$mediaId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
@@ -25,24 +24,29 @@ class Page
 			$mediaId = $arguments[0];
 		}
 
-		if(isset($_POST['modify']) && isset($_POST['title']) && isset($_POST['path']) && isset($_POST['source']))
+		if(isset($_POST['modify']) && isset($_POST['title']) && isset($_POST['path']) && isset($_POST['source']) && isset($_POST['tags']))
 		{
 			$this->mediaItem = new Media();
 			$this->mediaItem->title = $_POST['title'];
 			$this->mediaItem->path = $_POST['path'];
 			$this->mediaItem->source = $_POST['source'];
 
-			$index = Media::Insert($this->db, $this->mediaItem,$mediaId);
+			$tags = ParseSlugString($_POST['tags']);
 
-			if(isset($_POST['tags']))
+			$index = Media::Insert($dbc, $this->mediaItem,$mediaId);
+			Mapping::SetMediaTags($dbc, $index, $tags);
+
+			/*if(isset($_POST['tags']))
+			{
 				Mapping::SetMediaTags($this->db, $index, $_POST['tags']);
+			}
 			else
-				Mapping::SetMediaTags($this->db, $index);
+				Mapping::SetMediaTags($this->db, $index);*/
 		}
 
 		if(isset($mediaId))
 		{
-			$this->mediaItem = Media::Get($this->db, $arguments[0]);
+			$this->mediaItem = Media::Get($dbc, $arguments[0]);
 			$this->title = "Edit Media";
 		}
 		else

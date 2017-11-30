@@ -35,7 +35,7 @@ class Page
 			$queryString = strtolower($_GET['tags']);
 
 			$queryString = preg_replace("[^A-Za-z0-9-]", "", $queryString);
-			$tagSlugs = explode(' ', $queryString);
+			$tagSlugs = ParseSlugString($queryString);
 			$tagSlugs = array_filter($tagSlugs);
 			$tags = Browse::GetTagsFromSlugs($dbc, $tagSlugs);
 		}
@@ -57,16 +57,24 @@ class Page
 	<div class="header">
 		<h1>Browse</h1>
 	</div>
-	<div class="content">
-		<?php $this->tagField->ShowField(); ?>
-		<?php echo "$this->totalResults results, $this->totalPages pages." ?>
+	<div class="browse-bar">
+		<div class="content">
+			<form class="right pure-form" method="GET" action="">
+				<?php $this->tagField->ShowInput(); ?>
+				<button class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
+				<?php $this->tagField->ShowField(); ?>
+			</form>
+		</div>
 	</div>
+	<div class="content">
+		<?php echo "<p>$this->totalResults results, $this->totalPages pages.</p>" ?>
+	</div>
+
 		<div class="items">
 			<?php foreach ($this->itemsToShow as $item)
 			{
 				$this->DoItem($item);	
 			} ?>
-			<!-- <span class="blank"></span> -->
 		</div>
 	<div class="content">
 		<?php if($this->totalPages > 1) $this->pageButtons->DoButtons(); ?>
@@ -74,11 +82,11 @@ class Page
 </div>
 
 <?php }
-function DoItem($mediItem)
+function DoItem($mediaItem)
 {
-	$thumbnailUrl = $mediItem->GetThumbnail();
+	$thumbnailUrl = $mediaItem->GetThumbnail();
 	?>
-	<a class="item-tile" src="">
+	<a class="item-tile" href="<?php echo ROOT . "/view/" . $mediaItem->media_id; ?>">
 		<img src="<?php echo $thumbnailUrl ?>">
 	</a>
 	<?php

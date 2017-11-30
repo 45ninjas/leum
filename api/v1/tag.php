@@ -11,10 +11,23 @@ class Tag
 		// BUG: Minimal does not do what it's supposed to do. It still produces
 		// variables in the JSON output just with nulls instead. :/
 
-		// --- Get a single item if the tag is defined ---
-		if(is_numeric($tag))
+		// ==== Get All tags ===
+		if(!isset($tag))
 		{
-			$sql = "SELECT * from tags where tag_id = ?";
+			$sql = "SELECT * from tags";
+
+			$data = array();
+			$statement = $dbc->query($sql);
+			
+			return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
+		}
+		// ==== Singular tags ====
+		if(!is_array($tag))
+		{
+			if(is_numeric($tag))
+				$sql = "SELECT * from tags where tag_id = ?";
+			else
+				$sql = "SELECT * from tags where slug = ?";
 		
 			// Execute the query
 			$statement = $dbc->prepare($sql);
@@ -24,25 +37,24 @@ class Tag
 			return $statement->fetchObject(__CLASS__);
 		}
 
-		// --- Get multiple items ---
+		// ==== Array of tags ===
 		else
 		{
-			// Make some SQL magic
-			$sql = "SELECT * from tags";
+			$placeHolder = str_repeat("?, ", count($tag) - 1) . "?";
+			if(is_numeric($tag))
+				$sql = "SELECT * from tags where tag_id in ( $placeHolder )";
+			else
+				$sql = "SELECT * from tags where slug = in ( $placeHolder )";
+		
+			// Execute the query
+			$statement = $dbc->prepare($sql);
+			$statement->execute($tag);
 
-			$data = array();
-			$statement = $dbc->query($sql);
-
-			// Convert rows from the database into Media classes.
-			while($data[] = $statement->fetchObject(__CLASS__));
-
-			// Remove the last item in the list because it will return false due to
-			// the way I'm looping.
-			array_pop($data);
-
-			// Return the data for the world to see.
-			return $data;
+			// Convert the row to a Media class and return it.
+			return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
 		}
+
+
 	}
 	public static function Delete($dbc, $index)
 	{

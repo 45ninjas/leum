@@ -1,15 +1,28 @@
 $(function()
 {
+	var slugInput = $("#tagfield #tags");
+	var slugs = new Array();
+
+	if(slugInput.val() != "")
+		var slugs = slugInput.val().split("+");
+	
+	ChangedTags();
+
 	// ==== Removing tags ====
-	$('.tag-delete').click(function(e)
+	$('.tagfield').on("click", ".tag-delete", function(e)
 	{
 		e.preventDefault();
 
 		// Get the index from the hidden input field's value.
-		var tagIndex = $(this).parent().find('input').val();
+		var tagSlug = $(this).parent().find('input').val();
 
 		// Remove the item from the list.
 		$(this).parent().remove();
+		
+		var tagIndex = slugs.indexOf(tagSlug);
+		slugs.splice(tagIndex, 1);
+
+		ChangedTags();
 	});
 
 	var autocompleteOptions =
@@ -28,18 +41,35 @@ $(function()
 				var tag = $("#tag-input").getSelectedItemData();
 				$("#tag-input").val('');
 				// Create a new tag.
+				CreateTag(tag);
 
-				var t = document.querySelector("#tag-template");
-				t.content.querySelector("input").value = tag.tag_id;
-				t.content.querySelector("span").textContent = tag.title;
-				
-				var tagField = document.querySelector("#tagfield");
-				var clone = document.importNode(t.content, true);
-				tagField.appendChild(clone);
 			}
 		}
 	};
 	$('#tag-input').easyAutocomplete(autocompleteOptions);
 
+	function CreateTag(tag)
+	{
+		var t = document.querySelector("#tag-template");
+		t.content.querySelector("input").value = tag.slug;
+		t.content.querySelector("span").textContent = tag.title;
+		
+		var tagField = document.querySelector("#tagfield");
+		var clone = document.importNode(t.content, true);
+		tagField.appendChild(clone);	
+
+		//slugInput.val(slugInput.val() + "+" + tag.slug);
+		slugs.push(tag.slug);
+		ChangedTags();
+
+	}
+
+	function ChangedTags()
+	{
+		slugInput.val(slugs.join('+'));
+		console.log("Tags changed to...");
+		console.log(slugs);
+		console.log("slug string:'" + slugInput.val() + "'");
+	}
 
 });

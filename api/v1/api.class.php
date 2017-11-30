@@ -16,7 +16,7 @@ abstract class API
 	 * An optional additional descriptor about the endpoint, used for things that can't
 	 * be handled by basic methods. Eg: /files/process
 	*/
-	protected $verb = '';
+	//protected $verb = '';
 	/**
 	 * Property: args
 	 * Any additional URI components after the endpoint and verb has been removed.
@@ -48,10 +48,10 @@ abstract class API
  		$this->endpoint = array_shift($this->args);
 
  		// Get the verb if it exists and is not a number.
- 		if(array_key_exists(0, $this->args) && !is_numeric($this->args[0]))
+ 		/*if(array_key_exists(0, $this->args) && !is_numeric($this->args[0]))
  		{
  			$this->verb = array_shift($this->args);
- 		}
+ 		}*/
 
  		// Get the method of the request.
  		$this->method = $_SERVER['REQUEST_METHOD'];

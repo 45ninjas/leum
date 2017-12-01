@@ -1,3 +1,41 @@
+
+var mediaId = GetMediaItemIndex();
+if(mediaId != null)
+    ShowMediaItemModal(mediaId);
+
+$(window).bind('hashchange', function()
+{
+    var mediaId = GetMediaItemIndex();
+    ShowMediaItemModal(mediaId);
+});
+
+function GetMediaItemIndex()
+{
+    var prefix = "#view";
+    var mediaId = location.hash.substring(prefix.length);
+    mediaId = parseInt(mediaId, 10);
+
+    return mediaId;
+}
+
+function ShowMediaItemModal(mediaIndex)
+{
+    // Step one, download the media information.
+    $()
+    // Create the content to show in the modal.
+    var contentNode = document.createTextNode("Hello World!");
+
+    // Create the modal.
+    var modal = new Modal(
+        "[Media Name]",
+        contentNode,
+        [new Button("Close", "pure-button-default", function() {modal.Close();})]
+    );
+}
+
+
+
+// Menu Hambuger
 (function (window, document) {
 
     var layout   = document.getElementById('layout'),

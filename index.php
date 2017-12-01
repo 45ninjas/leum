@@ -45,8 +45,8 @@ include_once 'leum.php';
 			</div>
 		</div>
 	</template>
-	<script type="text/javascript" src="<?php Asset("/resources/js/ui.js"); ?>"></script>
 	<script type="text/javascript" src="<?php Asset("/resources/js/modal.js"); ?>"></script>
+	<script type="text/javascript" src="<?php Asset("/resources/js/ui.js"); ?>"></script>
 
 </body>
 </html>

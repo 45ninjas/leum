@@ -19,6 +19,8 @@ class Page
 	private $totalPages;
 
 	private $tagField;
+
+	public $useModal = true;
 	
 	public function __construct($arguments)
 	{
@@ -85,8 +87,13 @@ class Page
 function DoItem($mediaItem)
 {
 	$thumbnailUrl = $mediaItem->GetThumbnail();
+
+	if($this->useModal)
+		$href = "#view$mediaItem->media_id";
+	else
+		$href = ROOT . "/view/$mediaItem->media_id"; 
 	?>
-	<a class="item-tile" href="<?php echo ROOT . "/view/" . $mediaItem->media_id; ?>">
+	<a class="item-tile" href="<?php echo $href; ?>">
 		<img src="<?php echo $thumbnailUrl ?>">
 	</a>
 	<?php

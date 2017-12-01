@@ -30,7 +30,7 @@ class Page
 
 		// Get the tags to search for.
 		$tags = array();
-		if(isset($_GET['tags']))
+		if(isset($_GET['tags']) && !empty($_GET['tags']))
 		{
 			$queryString = strtolower($_GET['tags']);
 

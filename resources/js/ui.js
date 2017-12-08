@@ -6,16 +6,21 @@ if(mediaId != null)
 $(window).bind('hashchange', function()
 {
     var mediaId = GetMediaItemIndex();
-    ShowMediaItemModal(mediaId);
+    
+    if(mediaId != null)
+        ShowMediaItemModal(mediaId);
 });
 
 function GetMediaItemIndex()
 {
     var prefix = "#view";
-    var mediaId = location.hash.substring(prefix.length);
-    mediaId = parseInt(mediaId, 10);
 
-    return mediaId;
+    var hash = location.hash;
+
+    if(hash.startsWith(prefix))
+        return parseInt(hash.substring(prefix.length), 10);
+    else
+        return null;
 }
 
 function ShowMediaItemModal(mediaIndex)

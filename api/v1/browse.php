@@ -69,7 +69,7 @@ class Browse
 		$media = Media::Get($dbc, $mediaId);
 
 		include "../../page-parts/item-preview.php";
-		$itemPreview = new ItemPreview($media);
+		$itemPreview = new ItemPreview($media, true);
 		ob_start();
 		$itemPreview->Show();
 		$media->html = ob_get_clean();

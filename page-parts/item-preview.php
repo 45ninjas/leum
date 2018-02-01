@@ -8,10 +8,12 @@ class ItemPreview
 	private $type = "undefined";
 	private $baseType;
 	private $isFile = false;
-	function __construct($mediaItem)
+	private $autoPlay = false;
+	function __construct($mediaItem, $autoPlay = false)
 	{
 		// Get the file of the media item and check it it's a real file.
 		$this->mediaItem = $mediaItem;
+		$this->autoPlay = $autoPlay;
 		$file = $this->mediaItem->GetPath();
 		if(is_file($file))
 		{
@@ -51,7 +53,7 @@ class ItemPreview
 	private function DoVideo()
 	{
 		?>
-		<video class="leum-content-item" controls src="<?php echo $this->mediaItem->GetLink(); ?>">
+		<video class="leum-content-item" <?php if($this->autoPlay) echo "autoplay";?> controls src="<?php echo $this->mediaItem->GetLink(); ?>">
 			<div class="leum-bad-type">
 				<span class="fa-stack fa-3x">
 					<i aria-hidden="true" class="fa fa-file-o fa-stack-2x"></i>

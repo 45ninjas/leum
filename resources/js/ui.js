@@ -34,7 +34,7 @@ function ShowMediaItemModal(mediaIndex)
     var modal = new Modal(
         "[Media Name]",
         contentNode,
-        [new Button("Close", "pure-button-default", function() {modal.Close();})]
+        [new Button("Close", "pure-button-default", function() {location.hash = ""; modal.Close();})]
     );
 }
 

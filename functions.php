@@ -55,4 +55,26 @@ function ParseSlugString($string)
 	return $slugs;
 }
 
+function ImageCreateFromImage($file)
+{
+	if(!file_exists($file))
+		throw new InvalidArgumentException("File '$file' not found.");
+	switch (strtolower(pathinfo($file, PATHINFO_EXTENSION)))
+	{
+		case 'jpeg':
+		case 'jpg':
+			return imagecreatefromjpeg($file);
+
+		case 'png':
+			return imagecreatefrompng($file);
+
+		case 'gif':
+			return imagecreatefromgif($file);
+	}
+
+	throw new InvalidArgumentException("File is not a png, jpg or gif");
+	
+		
+}
+
 ?>

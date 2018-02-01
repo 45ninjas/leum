@@ -7,6 +7,7 @@ class Media
 	public $source;
 	public $path;
 	public $date;
+	public $type;
 
 	public function GetLink()
 	{
@@ -14,7 +15,12 @@ class Media
 	}
 	public function GetThumbnail()
 	{
-		return ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
+		$thumb = THUMB_DIR . "/" . $this->path . ".jpg";
+		
+		if(file_exists(SYS_ROOT . $thumb))
+			return ROOT. $thumb;
+		else
+			return null;
 	}
 	public function GetPath()
 	{
@@ -24,6 +30,12 @@ class Media
 	{
 		$dbc = Leum::Instance()->GetDatabase();
 		return Mapping::GetMediaTags($dbc, $this->media_id);
+	}
+	public function GetMimeType()
+	{
+		//TODO: Allow external modification of the mimetypes.
+		//TODO: Save this in the database.
+		return mime_content_type($this->GetPath());
 	}
 
 	public static function Get($dbc,$index = null)

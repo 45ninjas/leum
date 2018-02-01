@@ -5,6 +5,7 @@ require_once 'mapping.php';
 require_once 'tag.php';
 require_once 'media.php';
 require_once 'browse.php';
+require_once 'ingest.php';
 
 if(is_file('../../functions.php'))
 	require_once '../../functions.php';
@@ -66,6 +67,14 @@ class LeumApi extends API
 		{
 			case "tags":
 					return Tag::FindTagsLike($this->db, $_GET['query']);
+				break;
+		}
+	}
+	public function Ingest($args)
+	{
+		switch ($args[0]) {
+			case 'process':
+					return Ingest::Process($this->db, $args[1]);
 				break;
 		}
 	}

@@ -87,11 +87,14 @@ class Page
 function DoItem($mediaItem)
 {
 	$thumbnailUrl = $mediaItem->GetThumbnail();
+	if($thumbnailUrl == null)
+		$thumbnailUrl = GetAsset("/resources/graphics/no-thumb.png");
 
 	if($this->useModal)
 		$href = "#view$mediaItem->media_id";
 	else
 		$href = ROOT . "/view/$mediaItem->media_id"; 
+
 	?>
 	<a class="item-tile" href="<?php echo $href; ?>">
 		<img src="<?php echo $thumbnailUrl ?>">

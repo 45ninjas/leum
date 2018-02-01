@@ -1,6 +1,6 @@
 <?php
 if(!defined('SYS_ROOT'))
-	define('SYS_ROOT', realpath(__DIR__ . "../../.."));
+	define('SYS_ROOT', realpath(__DIR__ . "/../.."));
 
 require_once 'api.class.php';
 

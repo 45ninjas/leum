@@ -42,9 +42,9 @@ class LeumApi extends API
 			//TODO: Create Put as well and separate the creation and modification of media.
 			case 'POST':
 				if(isset($args[0]))
-					return Media::Post($this->db, $this->request, $args[0]);
+					return Media::Insert($this->db, $this->request, $args[0]);
 				else
-					return Media::Post($this->db, $this->request);
+					return Media::Insert($this->db, $this->request);
 				break;
 		}
 	}

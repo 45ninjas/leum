@@ -64,5 +64,17 @@ class Browse
 		$statement->execute();
 		return $statement->fetch()["FOUND_ROWS()"];*/
 	}
+	public static function GetModalItem($dbc, $mediaId)
+	{
+		$media = Media::Get($dbc, $mediaId);
+
+		include "../../page-parts/item-preview.php";
+		$itemPreview = new ItemPreview($media);
+		ob_start();
+		$itemPreview->Show();
+		$media->html = ob_get_clean();
+
+		return $media;
+	}
 }
 ?>

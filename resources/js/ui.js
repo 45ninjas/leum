@@ -1,3 +1,7 @@
+function GetRootDir()
+{
+    return document.head.querySelector("[property=site-root]").content;
+}
 
 var mediaId = GetMediaItemIndex();
 if(mediaId != null)
@@ -23,24 +27,50 @@ function GetMediaItemIndex()
         return null;
 }
 
-function ShowMediaItemModal(mediaIndex)
+function HtmlToElement(htmlString)
 {
-    // Step one, download the media information.
-    $()
-    // Create the content to show in the modal.
-    var contentNode = document.createTextNode("Hello World!");
-
-    // Create the modal.
-    var modal = new Modal(
-        "[Media Name]",
-        contentNode,
-        [new Button("Close", "pure-button-default", function() {location.hash = ""; modal.Close();})]
-    );
+    var template = document.createElement('template');
+    htmlString = htmlString.trim();
+    template.innerHTML = htmlString;
+    return template.content;
 }
 
+function ShowMediaItemModal(mediaIndex)
+{
+    var url = GetRootDir() + "/api/v1/browse/media-modal/" + mediaIndex;
+    SetModalBack(true);
+    var modal = new Modal();
+    // Step one, download the media information.
+    var jqxhr = $.getJSON(url, function(data)
+    {
+        if(data != false)
+        {
+            modal.Show(
+                data["title"],
+                HtmlToElement(data["html"]),
+                [
+                    new Button("Close", "button-warning", function() { location.hash =""; modal.Close(); }),
+                    new Button("Edit", "", function() { window.location.href = GetRootDir() + "/edit/media/" + mediaIndex; })
+                ],
+                "media-modal"
+            );
+        }
+        else
+            modal.Show("Error", "There was an error getting the media information. (Invalid Media_ID)");
+    })
 
+    .fail(function()
+    {
+        modal.Show("Error", "There was an error getting the media information.");
+    })
 
-// Menu Hambuger
+    .always(function()
+    {
+        //console.log("Remove loading things here I guess.");
+    });
+}
+
+// Menu Hambuger stuff.
 (function (window, document) {
 
     var layout   = document.getElementById('layout'),

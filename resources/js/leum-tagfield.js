@@ -58,7 +58,6 @@ $(function()
 		var clone = document.importNode(t.content, true);
 		tagField.appendChild(clone);	
 
-		//slugInput.val(slugInput.val() + "+" + tag.slug);
 		slugs.push(tag.slug);
 		ChangedTags();
 
@@ -67,9 +66,6 @@ $(function()
 	function ChangedTags()
 	{
 		slugInput.val(slugs.join('+'));
-		console.log("Tags changed to...");
-		console.log(slugs);
-		console.log("slug string:'" + slugInput.val() + "'");
 	}
 
 });

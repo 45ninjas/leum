@@ -1,8 +1,8 @@
 <?php 
+define('SYS_ROOT', __DIR__);
 require_once 'prefrences.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
-define('SYS_ROOT', __DIR__);
 $leum = new Leum();
 
 class Leum

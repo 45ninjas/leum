@@ -1,4 +1,7 @@
 <?php
+if(!defined('SYS_ROOT'))
+	define('SYS_ROOT', realpath(__DIR__ . "../../.."));
+
 require_once 'api.class.php';
 
 require_once 'mapping.php';
@@ -8,7 +11,15 @@ require_once 'browse.php';
 require_once 'ingest.php';
 
 if(is_file('../../functions.php'))
+{
 	require_once '../../functions.php';
+	require_once '../../prefrences.php';
+}
+else
+{
+	require_once 'functions.php';
+	require_once 'prefrences.php';	
+}
 
 class LeumApi extends API
 {
@@ -75,6 +86,14 @@ class LeumApi extends API
 		switch ($args[0]) {
 			case 'process':
 					return Ingest::Process($this->db, $args[1]);
+				break;
+		}
+	}
+	public function Browse($args)
+	{
+		switch ($args[0]) {
+			case 'media-modal':
+					return Browse::GetModalItem($this->db, $args[1]);
 				break;
 		}
 	}

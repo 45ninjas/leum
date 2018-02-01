@@ -15,6 +15,7 @@ include_once 'leum.php';
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, inital-scale=1.0">
 	<title><?php TheTitle(); ?></title>
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/pure-min.css"); ?>">
@@ -24,12 +25,15 @@ include_once 'leum.php';
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/font-awesome.min.css"); ?>">
 	<script type="text/javascript" src="<?php Asset("/resources/js/jquery-3.2.1.min.js"); ?>"></script>
+	<meta property="site-root" content="<?php echo ROOT; ?>">
 	<?php TheHead(); ?>
 </head>
 <body>
 	<div id="layout">
 		<?php include "page-parts/side-bar.php"; ?>
-		<?php TheContent(); ?>
+		<div id="main">
+			<?php TheContent(); ?>			
+		</div>
 	</div>
 
 

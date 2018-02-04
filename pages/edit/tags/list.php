@@ -1,11 +1,11 @@
 <?php
-require_once('api/v1/tag.php');
+require_once SYS_ROOT . "/core/tag.php";
 /**
-* View Media
+* View Tags
 */
 class Page
 {
-	public $title = "Tags";
+	public $title = "Edit Tags";
 	private $tagItems = array();
 	private $total;
 	public function __construct($arguments)
@@ -13,12 +13,12 @@ class Page
 		$db = Leum::Instance()->GetDatabase();
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{
-			$item = Media::Get($db, $arguments[0]);
+			$item = Tag::GetSingle($db, $arguments[0]);
 			if($item)
 				$this->tagItems[] = $item;
 		}
 		else
-			$this->tagItems = Tag::Get($db);	
+			$this->tagItems = Tag::GetAll($db);	
 
 		$this->total = count($this->tagItems);
 	}
@@ -27,7 +27,7 @@ class Page
 
 <div class="main">
 	<div class="header">
-		<h1>Media</h1>
+		<h1>Tag</h1>
 	</div>
 	<div class="content">
 		<a class="pure-button pure-button-primary" href="<?php echo ROOT."/edit/tag/new/" ?>">

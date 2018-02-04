@@ -5,7 +5,7 @@ require_once SYS_ROOT . "/core/media.php";
 */
 class Page
 {
-	public $title = "Media";
+	public $title = "Edit Media";
 	private $mediaItems = array();
 	private $total;
 	public function __construct($arguments)

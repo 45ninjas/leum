@@ -1,8 +1,8 @@
 <?php
 /**
-* Default page
+* Edit tag page
 */
-require_once 'api/v1/tag.php';
+require_once SYS_ROOT . "/core/tag.php";
 class Page
 {
 	public $title = "Create Tag";
@@ -26,12 +26,12 @@ class Page
 			$this->tagItem = new Tag();
 			$this->tagItem->title = $_POST['title'];
 			$this->tagItem->slug = $_POST['slug'];
-			Tag::Insert($this->db, $this->tagItem,$tagId);
+			Tag::InsertSingle($this->db, $this->tagItem,$tagId);
 		}
 
 		if(isset($tagId))
 		{
-			$this->tagItem = Tag::Get($this->db, $tagId);
+			$this->tagItem = Tag::GetSingle($this->db, $tagId);
 			$this->title = "Edit Media";
 		}
 		else

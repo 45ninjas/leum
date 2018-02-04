@@ -6,7 +6,6 @@ if(!defined('SYS_ROOT'))
 require_once SYS_ROOT . "/api/v1/api.class.php";
 
 require_once SYS_ROOT . "/api/v1/mapping.php";
-require_once SYS_ROOT . "/api/v1/tag.php";
 require_once SYS_ROOT . "/api/v1/browse.php";
 require_once SYS_ROOT . "/api/v1/ingest.php";
 
@@ -15,8 +14,8 @@ require_once SYS_ROOT . "/prefrences.php";
 
 // Newer Leum Core Includes.
 require_once SYS_ROOT . "/core/media.php";
-// require_once '../../core/tag.php';
-// require_once '../../core/mapper.php'
+require_once SYS_ROOT . "/core/tag.php";
+// require_once SYS_ROOT . "/core/mapper.php";
 
 class LeumApi extends API
 {
@@ -51,21 +50,21 @@ class LeumApi extends API
 		{
 			case 'GET':
 				if(isset($args[0]))
-					return Tag::Get($this->db, $args[0]);
+					return Tag::GetSingle($this->db, $args[0]);
 				else
-					return Tag::Get($this->db);
+					return Tag::GetAll($this->db);
 				break;
 			case 'DELETE':
 				if(isset($args[0]))
-					return Tag::Delete($this->db, $args[0]);
+					return Tag::DeleteSingle($this->db, $args[0]);
 				else
 					throw new Exception("Invalid Arguments");
 				break;
 			case 'POST':
 				if(isset($args[0]))
-					return Tag::Insert($this->db, $this->request, $args[0]);
+					return Tag::InsertSingle($this->db, $this->request, $args[0]);
 				else
-					return Tag::Insert($this->db, $this->request);
+					return Tag::InsertSingle($this->db, $this->request);
 				break;
 		}
 	}
@@ -74,7 +73,7 @@ class LeumApi extends API
 		switch ($args[0])
 		{
 			case "tags":
-					return Tag::FindTagsLike($this->db, $_GET['query']);
+					return Tag::FindLike($this->db, $_GET['query']);
 				break;
 		}
 	}

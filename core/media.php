@@ -1,5 +1,4 @@
 <?php
-//include_once "leum.api.php";
 class Media
 {
 	public $media_id;
@@ -115,6 +114,8 @@ class Media
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media]);
+
+		return $statement->rowCount();
 	}
 
 	static function DeleteMultiple($dbc, $indexes)
@@ -127,10 +128,12 @@ class Media
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute($indexes);
+
+		return $statement->rowCount();
 	}
 	public static function InsertSingle($dbc, $mediaData, $index = null)
 	{
-		if($request instanceof Media)
+		if($mediaData instanceof Media)
 		{
 			$media = $mediaData;
 			$index = $mediaData->media_id;

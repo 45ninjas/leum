@@ -2,7 +2,7 @@
 /**
 * Default page
 */
-require_once 'api/v1/leum.api.php';
+require_once SYS_ROOT . "/core/media.php";
 require_once 'page-parts/item-preview.php';
 require_once 'page-parts/tag-field.php';
 class Page
@@ -35,18 +35,11 @@ class Page
 
 			$index = Media::Insert($dbc, $this->mediaItem,$mediaId);
 			Mapping::SetMediaTags($dbc, $index, $tags);
-
-			/*if(isset($_POST['tags']))
-			{
-				Mapping::SetMediaTags($this->db, $index, $_POST['tags']);
-			}
-			else
-				Mapping::SetMediaTags($this->db, $index);*/
 		}
 
 		if(isset($mediaId))
 		{
-			$this->mediaItem = Media::Get($dbc, $arguments[0]);
+			$this->mediaItem = Media::GetSingle($dbc, $arguments[0]);
 			$this->title = "Edit Media";
 		}
 		else

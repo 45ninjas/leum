@@ -66,7 +66,7 @@ class Browse
 	}
 	public static function GetModalItem($dbc, $mediaId)
 	{
-		$media = Media::Get($dbc, $mediaId);
+		$media = Media::GetSingle($dbc, $mediaId);
 
 		include "../../page-parts/item-preview.php";
 		$itemPreview = new ItemPreview($media, true);

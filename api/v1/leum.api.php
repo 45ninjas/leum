@@ -2,24 +2,21 @@
 if(!defined('SYS_ROOT'))
 	define('SYS_ROOT', realpath(__DIR__ . "/../.."));
 
-require_once 'api.class.php';
+// Old Leum API includes
+require_once SYS_ROOT . "/api/v1/api.class.php";
 
-require_once 'mapping.php';
-require_once 'tag.php';
-require_once 'media.php';
-require_once 'browse.php';
-require_once 'ingest.php';
+require_once SYS_ROOT . "/api/v1/mapping.php";
+require_once SYS_ROOT . "/api/v1/tag.php";
+require_once SYS_ROOT . "/api/v1/browse.php";
+require_once SYS_ROOT . "/api/v1/ingest.php";
 
-if(is_file('../../functions.php'))
-{
-	require_once '../../functions.php';
-	require_once '../../prefrences.php';
-}
-else
-{
-	require_once 'functions.php';
-	require_once 'prefrences.php';	
-}
+require_once SYS_ROOT . "/functions.php";
+require_once SYS_ROOT . "/prefrences.php";
+
+// Newer Leum Core Includes.
+require_once SYS_ROOT . "/core/media.php";
+// require_once '../../core/tag.php';
+// require_once '../../core/mapper.php'
 
 class LeumApi extends API
 {
@@ -29,22 +26,22 @@ class LeumApi extends API
 		{
 			case 'GET':
 				if(isset($args[0]))
-					return Media::Get($this->db, $args[0]);
+					return Media::GetSingle($this->db, $args[0]);
 				else
-					return Media::Get($this->db, null);
+					return Media::GetAll($this->db, null);
 				break;
 			case 'DELETE':
 				if(isset($args[0]))
-					return Media::Delete($this->db, $args[0]);
+					return Media::DeleteSingle($this->db, $args[0]);
 				else
 					throw new Exception("Invalid Arguments");
 				break;
 			//TODO: Create Put as well and separate the creation and modification of media.
 			case 'POST':
 				if(isset($args[0]))
-					return Media::Insert($this->db, $this->request, $args[0]);
+					return Media::InsertSingle($this->db, $this->request, $args[0]);
 				else
-					return Media::Insert($this->db, $this->request);
+					return Media::InsertSingle($this->db, $this->request);
 				break;
 		}
 	}

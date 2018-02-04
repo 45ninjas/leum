@@ -1,5 +1,5 @@
 <?php
-require_once('api/v1/media.php');
+require_once SYS_ROOT . "/core/media.php";
 /**
 * View Media
 */
@@ -13,12 +13,12 @@ class Page
 		$db = Leum::Instance()->GetDatabase();
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{
-			$item = Media::Get($db, $arguments[0]);
+			$item = Media::GetSingle($db, $arguments[0]);
 			if($item)
 				$this->mediaItems[] = $item;
 		}
 		else
-			$this->mediaItems = Media::Get($db);	
+			$this->mediaItems = Media::GetAll($db);	
 
 		$this->total = count($this->mediaItems);
 	}

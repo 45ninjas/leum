@@ -34,7 +34,6 @@ class Page
 			$this->mediaItem->source = $_POST['source'];
 
 			$tags = ParseSlugString($_POST['tags']);
-
 			$index = Media::InsertSingle($dbc, $this->mediaItem,$mediaId);
 			Mapping::SetMappedTags($dbc, $index, $tags);
 		}

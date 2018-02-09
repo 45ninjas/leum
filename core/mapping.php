@@ -187,7 +187,7 @@ class Mapping
 	public static function SetMappedTags($dbc, $media, $newSlugs = null)
 	{
 		$media_id = Mapping::GetMediaId($media);
-		var_dump($newSlugs);
+		echo "Set Tags:\t" . implode(",\t", $newSlugs);
 
 		// Looks like there are no tags so let's delete all maps for this item.
 		if(is_null($newSlugs) || count($newSlugs) == 0)
@@ -205,6 +205,7 @@ class Mapping
 
 		// See what tags are already mapped.
 		$sql = "SELECT tags.tag_id from map inner join tags on map.tag_id = tags.tag_id where media_id = ?";
+		echo "\n $media_id";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media_id]);
@@ -213,6 +214,8 @@ class Mapping
 		$removeTags = array();
 		$addTags = $newTags;
 
+		echo "\ntag_ID:\t\t" . implode(",\t", $newTags);
+		echo "\ntagsInDb:\t\t" . implode(",\t", $tagsInDb);
 		foreach ($tagsInDb as $dbTag)
 		{
 			// Add the slug to the list of tags to remove (and remove from add list) if
@@ -224,6 +227,8 @@ class Mapping
 
 		if($dbc->beginTransaction())
 		{
+			echo "\n\nremove:\t\t" . implode(",\t", $removeTags);
+			echo "\nadd:\t\t" . implode(",\t", $addTags);
 			// Try and to remove and add to the database.
 			try
 			{

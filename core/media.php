@@ -136,7 +136,8 @@ class Media
 		if($mediaData instanceof Media)
 		{
 			$media = $mediaData;
-			$index = $mediaData->media_id;
+			if(isset($mediaData->media_id))
+				$index = $mediaData->media_id;
 		}
 		else
 		{
@@ -145,7 +146,6 @@ class Media
 			$media->source = $mediaData['source'];
 			$media->path = $mediaData['path'];
 		}
-
 		if(is_numeric($index))
 		{
 			// Updating existing media

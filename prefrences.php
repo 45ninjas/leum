@@ -8,7 +8,7 @@ define('ROOT', '/leum');
 // The title of the app.
 define('APP_TITLE', 'Leum');
 
-define('PAGE_SIZE', 20);
+define('PAGE_SIZE', 100);
 
 //	=== Database ===
 //	

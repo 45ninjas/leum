@@ -148,14 +148,22 @@ class Mapping
 	}
 	public static function UnmapMultiple($dbc, $media, $tags)
 	{
+		// Not working correctly, it's been marked as not implemented
+		// as it's not essential to the functionality of leum at the moment.
+		throw new Exception("UnmapMultiple function not Implemented");
+		if($tags == null || count($tags) == 0)
+			return 0;
+
 		$media_id = Mapping::GetMediaId($media);
 
 		$indexPlaceholder = Mapping::PDOPlaceHolder($tags);
-		$sql = "DELETE from map where media_id =? and tag_id in ('$indexPlaceholder')";
+		$sql = "DELETE from map where media_id = ? and tag_id in ('$indexPlaceholder')";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute(array_unshift($tags, $media_id));
-
+		
+		array_unshift($tags, $media_id);
+		var_dump($tags);
+		$statement->execute($tags);
 		return $statement->rowCount();
 	}
 	public static function UnmapAll($dbc, $media)
@@ -187,7 +195,6 @@ class Mapping
 	public static function SetMappedTags($dbc, $media, $newSlugs = null)
 	{
 		$media_id = Mapping::GetMediaId($media);
-		echo "Set Tags:\t" . implode(",\t", $newSlugs);
 
 		// Looks like there are no tags so let's delete all maps for this item.
 		if(is_null($newSlugs) || count($newSlugs) == 0)
@@ -195,6 +202,7 @@ class Mapping
 			Mapping::UnmapAll($dbc, $media_id);
 			return;
 		}
+
 		// Get the tag_id's of the new slugs.
 		$indexPlaceholder = Mapping::PDOPlaceHolder($newSlugs);
 		$sql = "SELECT tags.tag_id FROM tags WHERE tags.slug IN ( $indexPlaceholder )";
@@ -203,33 +211,32 @@ class Mapping
 
 		$newTags = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-		// See what tags are already mapped.
+		// Get the tags that are already mapped to this media item.
 		$sql = "SELECT tags.tag_id from map inner join tags on map.tag_id = tags.tag_id where media_id = ?";
-		echo "\n $media_id";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media_id]);
 		$tagsInDb = $statement->fetchAll(PDO::FETCH_COLUMN);
 
+		// Set-up our remove and add tag arrays.
 		$removeTags = array();
 		$addTags = $newTags;
 
-		echo "\ntag_ID:\t\t" . implode(",\t", $newTags);
-		echo "\ntagsInDb:\t\t" . implode(",\t", $tagsInDb);
+		// Iterate over each tag that's currently mapped.
 		foreach ($tagsInDb as $dbTag)
 		{
-			// Add the slug to the list of tags to remove (and remove from add list) if
-			// they are not found in the database.
+			// if a tag is not in the list of new tags, remove it.
 			if(!in_array($dbTag, $newTags))
 				$removeTags[] = $dbTag;
+
+			// Otherwise remove the current tag from the list of new tags.
+			// we don't have to add tags that are already mapped.
 			unset($addTags[array_search($dbTag, $newTags)]);
 		}
 
 		if($dbc->beginTransaction())
 		{
-			echo "\n\nremove:\t\t" . implode(",\t", $removeTags);
-			echo "\nadd:\t\t" . implode(",\t", $addTags);
-			// Try and to remove and add to the database.
+			// Apply the changes.
 			try
 			{
 				while ($tag = array_pop($removeTags))

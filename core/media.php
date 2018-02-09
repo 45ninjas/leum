@@ -41,7 +41,7 @@ class Media
 	}
 	public function Update()
 	{
-		$dbc = Leum::Instance()->GetInsatnce();
+		$dbc = Leum::Instance()->GetDatabase();
 		Media::UpdateSingle($dbc, $this);
 	}
 
@@ -84,22 +84,16 @@ class Media
 
 		return $items;
 	}
-	static function GetAll($dbc)
+	static function GetAll($dbc, $page = 0, $pageSize = PAGE_SIZE)
 	{
+		$offset = $pageSize * $page;
 		// Get ALL items
-		$sql = "SELECT * from media";
+		$sql = "SELECT sql_calc_found_rows * from media limit ? offset ?";
 
-		$statement = $dbc->query($sql);
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$pageSize, $offset]);
 
-		// Convert those multiple items into instances.
-		$items = array();
-
-		while($items[] = $statement->fetchObject(__CLASS__));
-
-		// Remove the empy object placed on the end from the while loop.
-		array_pop($items);
-
-		return $items;
+		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
 	}
 
 	static function DeleteSingle($dbc, $media)

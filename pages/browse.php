@@ -2,9 +2,9 @@
 /**
 * Default page
 */
-require_once "page-parts/page-buttons.php";
-require_once "page-parts/tag-field.php";
-require_once "api/v1/leum.api.php";
+require_once SYS_ROOT . "/page-parts/page-buttons.php";
+require_once SYS_ROOT . "/page-parts/tag-field.php";
+require_once SYS_ROOT . "/core/leum-core.php";
 class Page
 {
 	public $title = "Browse";
@@ -45,7 +45,7 @@ class Page
 		// Get the items and total items to know how many pages we need.
 		$this->itemsToShow = Browse::GetItems($dbc, $tags, $this->pageNum, $this->pageSize);
 
-		$this->totalResults = Browse::GetTotalItems($dbc);
+		$this->totalResults = LeumCore::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
 
 		$this->pageButtons = new PageButtons($this->totalPages,$this->pageNum + 1);

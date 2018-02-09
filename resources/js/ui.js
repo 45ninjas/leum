@@ -37,7 +37,7 @@ function HtmlToElement(htmlString)
 
 function ShowMediaItemModal(mediaIndex)
 {
-    var url = GetRootDir() + "/api/v1/browse/media-modal/" + mediaIndex;
+    var url = GetRootDir() + "/api/v2/media/" + mediaIndex + "?usage=modal";
     SetModalBack(true);
     var modal = new Modal();
     // Step one, download the media information.

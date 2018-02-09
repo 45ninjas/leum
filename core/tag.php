@@ -117,8 +117,10 @@ class Tag
 			$tag->title = $tagData['title'];
 		}
 
-		if(!isset($tag->slug) && isset($tag->title))
+		if(empty($tag->slug) && isset($tag->title))
 			$tag->slug = self::CreateSlug($tag->title);
+		else
+			$tag->slug = self::CreateSlug($tag->slug);
 
 		if(isset($index) && is_numeric($index))
 		{
@@ -135,7 +137,7 @@ class Tag
 			$sql = "INSERT INTO tags (slug, title) VALUES (?, ?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$tag->slug, $tag->slug]);
+			$statement->execute([$tag->slug, $tag->title]);
 			return $dbc->lastInsertId();
 		}
 	}

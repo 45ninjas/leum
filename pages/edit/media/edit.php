@@ -4,6 +4,7 @@
 */
 require_once SYS_ROOT . "/core/media.php";
 require_once SYS_ROOT . "/core/mapping.php";
+require_once SYS_ROOT . "/core/tag.php";
 
 require_once 'page-parts/item-preview.php';
 require_once 'page-parts/tag-field.php';

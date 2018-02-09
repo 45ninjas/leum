@@ -3,6 +3,8 @@ if(!defined('SYS_ROOT'))
 	define('SYS_ROOT', realpath(__DIR__ . "/../.."));
 define('API_ROOT', __DIR__);
 
+require_once SYS_ROOT . "/core/leum-core.php";
+
 include_once API_ROOT . "/resource/media.php";
 include_once API_ROOT . "/resource/tags.php";
 include_once API_ROOT . "/resource/content.php";

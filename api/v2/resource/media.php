@@ -1,5 +1,4 @@
 <?php namespace API;
-require SYS_ROOT . "/core/media.php";
 use Media as CoreMedia;
 class Media
 {
@@ -34,7 +33,7 @@ class Media
 			$mediaItems = CoreMedia::GetAll($this->dbc, $data['page'], $data['page size']);
 
 			// Get the count of total items.
-			$totalItems = $this->dbc->query("SELECT found_rows()")->fetch()["found_rows()"];
+			$totalItems = \LeumCore::GetTotalItems($this->dbc);
 			$data['total'] = $totalItems;
 
 			// Finally, return the stuff.
@@ -45,10 +44,22 @@ class Media
 		else if($this->IsArgNumber())
 		{
 			$index = $this->api->args[0];
-			if(!is_numeric($index) || $index < 0)
-				$data = CoreMedia::GetSingle($this->dbc, $index);
+			$data = CoreMedia::GetSingle($this->dbc, $index);
+			
+			if(isset($this->api->data['usage']))
+			{
+				if($this->api->data['usage'] === "modal")
+				{
+					include SYS_ROOT . "/page-parts/item-preview.php";
+					$itemPreview = new \ItemPreview($data, true);
+					ob_start();
+					$itemPreview->Show();
+					$data->html = trim(ob_get_clean());
+				}
+			}
 
-			if($data == null)
+
+			if(!isset($data))
 				throw new \Exception("Media not found");
 		}
 		else

@@ -47,11 +47,7 @@ class Media
 
 	static function GetSingle($dbc, $media)
 	{
-		if($media instanceof Media)
-			$media = $media->media_id;
-
-		if(!is_numeric($media))
-			die("bad input");
+		$media = GetID($media);
 
 		// Make some SQL magic.
 		$sql = "SELECT * from media where media_id = ?";
@@ -98,11 +94,7 @@ class Media
 
 	static function DeleteSingle($dbc, $media)
 	{
-		if($media instanceof Media)
-			$media = $media->media_id;
-
-		if(!is_numeric($media))
-			die("bad input");
+		$media = GetID($media);
 
 		$sql = "DELETE from media where media_id = ?";
 
@@ -159,5 +151,35 @@ class Media
 			return $dbc->lastInsertId();
 		}
 	} 
+	public static function GetWithTags($dbc, $tags, $excludeTags, $page, $pageSize = PAGE_SIZE)
+	{
+		$offset = $page * $pageSize;
+
+		$tagPlaceholder = LeumCore::PDOPlaceholder($tags);
+		$excludePlaceholder = LeumCore::PDOPlaceholder($tags);
+
+		$sql = "SELECT sql_calc_found_rows media.* from map
+		inner join media on map.media_id = media.media_id
+		inner join tags on map.tag_id = tags.tag_id
+		where tags.slug in ( $tagPlaceholder )
+		and tags.slug not in ( $excludePlaceholder )
+		limit ? offset ?";
+
+		$args = array_merge($tags, $excludeTags, $pageSize, $offset);
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute($args);
+
+		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+	}
+	private static function GetID($media)
+	{
+		if($media instanceof Media)
+			return $media->media_id;
+		else if(is_numeric($media))
+			return $media;
+
+		throw new Exception("Bad index input");
+	}
 }
 ?>

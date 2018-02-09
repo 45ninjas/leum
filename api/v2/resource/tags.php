@@ -1,5 +1,4 @@
 <?php namespace API;
-require SYS_ROOT . "/core/Tag.php";
 use Tag as CoreTag;
 class Tags
 {

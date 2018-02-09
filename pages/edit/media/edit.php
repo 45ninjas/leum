@@ -3,6 +3,8 @@
 * Default page
 */
 require_once SYS_ROOT . "/core/media.php";
+require_once SYS_ROOT . "/core/mapping.php";
+
 require_once 'page-parts/item-preview.php';
 require_once 'page-parts/tag-field.php';
 class Page
@@ -33,8 +35,8 @@ class Page
 
 			$tags = ParseSlugString($_POST['tags']);
 
-			$index = Media::Insert($dbc, $this->mediaItem,$mediaId);
-			Mapping::SetMediaTags($dbc, $index, $tags);
+			$index = Media::InsertSingle($dbc, $this->mediaItem,$mediaId);
+			Mapping::SetMappedTags($dbc, $index, $tags);
 		}
 
 		if(isset($mediaId))
@@ -70,6 +72,8 @@ class Page
 
 							<label for="source">Source</label>
 							<textarea class="pure-u-1 leum-textarea" tabindex="3" name="source" id="source" placeholder="Source of Media item"><?php if($this->modify) echo $this->mediaItem->source; ?></textarea>
+
+							<label><?php echo "media_id: ". $this->mediaItem->media_id; ?></label>
 						</div>
 
 						<div class="pure-u-1 pure-u-sm-1-2">

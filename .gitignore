@@ -1,2 +1,4 @@
 /content/media/*
 /content/thumbs/*
+*.sublime-project
+*.sublime-workspace

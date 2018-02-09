@@ -5,7 +5,6 @@ if(!defined('SYS_ROOT'))
 // Old Leum API includes
 require_once SYS_ROOT . "/api/v1/api.class.php";
 
-require_once SYS_ROOT . "/api/v1/mapping.php";
 require_once SYS_ROOT . "/api/v1/browse.php";
 require_once SYS_ROOT . "/api/v1/ingest.php";
 
@@ -15,7 +14,7 @@ require_once SYS_ROOT . "/prefrences.php";
 // Newer Leum Core Includes.
 require_once SYS_ROOT . "/core/media.php";
 require_once SYS_ROOT . "/core/tag.php";
-// require_once SYS_ROOT . "/core/mapper.php";
+require_once SYS_ROOT . "/core/mapping.php";
 
 class LeumApi extends API
 {

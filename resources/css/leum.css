@@ -1,10 +1,14 @@
-.debug-head
+#debug-head
 {
 	background-color: wheat;
 }
-.debug-head pre
+pre#debug-head
 {
 	margin: 0;
+}
+#debug-head:empty
+{
+	display: none;
 }
 
 .leum-page-buttons

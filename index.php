@@ -1,5 +1,7 @@
 <?php
+ob_start();
 include_once 'leum.php';
+$leumContent = trim(ob_get_clean());
 // Leum.
 // The simple local media tagging system.
 // Designed to store your webm, gif and other content.
@@ -31,11 +33,11 @@ include_once 'leum.php';
 <body>
 	<div id="layout">
 		<?php include "page-parts/side-bar.php"; ?>
+		<pre id="debug-head"><?php echo $leumContent; ?></pre>
 		<div id="main">
 			<?php TheContent(); ?>			
 		</div>
 	</div>
-
 
 	<!-- Modal Stuff -->
 	<div id="modal-background" hidden></div>

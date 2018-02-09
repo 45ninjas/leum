@@ -7,6 +7,8 @@ class Tag
 
 	public static function GetSingle($dbc,$tag)
 	{
+		// TODO: Add support for slugs.
+
 		// If the tag is a tag item, use it's tag_id field.
 		if($tag instanceof Tag)
 			$tag = $tag->tag_id;
@@ -27,6 +29,7 @@ class Tag
 	}
 	public static function GetMultiple($dbc, $tags)
 	{
+		// TODO: Add support for slugs.
 		if($tag instanceof Tag)
 			die("Getting multiple tags using a tag class is currently not supported.");
 
@@ -44,6 +47,7 @@ class Tag
 	}
 	public static function GetAll($dbc)
 	{
+		// TODO: Add support for slugs.
 		$sql = "SELECT * from tags";
 
 		$data = array();
@@ -53,6 +57,7 @@ class Tag
 	}
 	public static function DeleteSingle($dbc, $tagId)
 	{
+		// TODO: Add support for slugs.
 		$sql = "DELETE FROM tags WHERE tag_id = ?";
 
 		$statement = $dbc->prepare($sql);
@@ -62,6 +67,7 @@ class Tag
 	}
 	public static function DeleteMultiple($dbc, $tagIds)
 	{
+		// TODO: Add support for slugs.
 		if(!is_array($tagIds))
 			die("Indexes is not an array");
 
@@ -75,6 +81,7 @@ class Tag
 	}
 	public static function InsertSingle($dbc, $tagData, $index = null)
 	{
+		// TODO: Add support for slugs.
 		if($tagData instanceof Tag)
 		{
 			$tag = $tagData;

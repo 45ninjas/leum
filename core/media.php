@@ -28,7 +28,7 @@ class Media
 	public function GetTags()
 	{
 		$dbc = Leum::Instance()->GetDatabase();
-		return Mapping::GetMediaTags($dbc, $this->media_id);
+		return Mapping::GetMappedTags($dbc, $this->media_id);
 	}
 	public function GetMimeType()
 	{

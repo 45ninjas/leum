@@ -5,6 +5,19 @@ class Mapping
 	public $tag_id;
 	public $media_id;
 
+	public static function CreateTable($dbc)
+	{
+		$sql = "CREATE table map
+		(
+			map_id int unsigned auto_increment primary key,
+			tag_id int unsigned not null,
+			media_id int unsigned not null,
+			foreign key (media_id) references media(media_id) on delete cascade,
+			foreign key (tag_id) references tags(tag_id) on delete cascade
+		)";
+		$dbc->exec($sql);
+	}
+
 	public static function GetSingle($dbc, $index)
 	{
 		$sql = "SELECT * from map where map_id = ?";

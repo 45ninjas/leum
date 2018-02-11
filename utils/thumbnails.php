@@ -5,6 +5,10 @@ require_once SYS_ROOT . "/functions.php";
 
 class Thumbnails
 {
+	public static function BatchMake($dbc, $media)
+	{
+		
+	}
 	public static function MakeFor($dbc, $media)
 	{
 		// Get the media item's path;

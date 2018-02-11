@@ -1,49 +1,58 @@
 <?php 
+if(!defined('SYS_ROOT'))
+	define('SYS_ROOT', __DIR__);
 // Leum setup. Run this the first time you install leum.
 
-include_once "functions.php";
+require_once SYS_ROOT . "/functions.php";
+require_once SYS_ROOT . "/core/leum-core.php";
+require_once SYS_ROOT . "/core/leum-core.php";
 
-$db = DBConnect();
-echo "Connected to database successfully\n";
+$dbc = DBConnect();
 
-// === Media Table ===
-$sql = "CREATE TABLE media
-(
-	media_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(256) NOT NULL,
-	source TEXT NOT NULL,
-	path VARCHAR(256) NOT NULL,
-	date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)";
+header("Content-Type: text/plain");
 
-$db->exec($sql);
-echo "Created the media table.\n";
+if(!TableExists($dbc, "media"))
+{
+	echo "Creating the media table\n";
+	Media::CreateTable($dbc);
+}
+else
+	echo "media table already exists, skipping\n";
 
+if(!TableExists($dbc, "tags"))
+{
+	echo "Creating the tags table\n";
+	Tag::CreateTable($dbc);
+}
+else
+	echo "tags table already exists, skipping\n";
 
-$sql = "CREATE TABLE tags
-(
-	tag_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	slug VARCHAR(32) NOT NULL UNIQUE KEY,
-	title VARCHAR(256) NOT NULL
-)";
+if(!TableExists($dbc, "map"))
+{
+	echo "Creating the map table\n";
+	Mapping::CreateTable($dbc);
+}
+else
+	echo "map table already exists, skipping\n";
 
-$db->exec($sql);
-echo "Created the tags table.\n";
+if(!TableExists($dbc, "task"))
+{
+	echo "Creating the task table\n";
+	Task::CreateTable($dbc);
+}
+else
+	echo "task table already exists, skipping\n";
 
-$sql = "CREATE TABLE map
-(
-	map_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	tag_id INT UNSIGNED NOT NULL,
-	media_id INT UNSIGNED NOT NULL,
-	FOREIGN KEY (media_id) REFERENCES media(media_id)
-		ON DELETE CASCADE,
-	FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
-		ON DELETE CASCADE
-)";
+function TableExists($dbc, $tableName)
+{
+	$sql = "SELECT * from information_schema.tables
+	where table_schema = ? and table_name = ?
+	limit 1";
 
-$db->exec($sql);
-echo "Created the map table.\n";
+	$statement = $dbc->prepare($sql);
+	$statement->execute([DB_NAME, $tableName]);
 
-echo "\nDone\n";
+	return $statement->fetch() != false;
+}
 
 ?>

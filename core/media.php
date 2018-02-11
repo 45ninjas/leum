@@ -52,6 +52,20 @@ class Media
 		Media::UpdateSingle($dbc, $this);
 	}
 
+	public static function CreateTable($dbc)
+	{
+		$sql = "CREATE table media
+		(
+			media_id int unsigned auto_increment primary key,
+			title varchar(256) not null,
+			source text not null,
+			path text not null,
+			date timestamp default current_timestamp
+		)";
+
+		$dbc->exec($sql);
+	}
+
 	static function GetSingle($dbc, $media)
 	{
 		$media = self::GetID($media);

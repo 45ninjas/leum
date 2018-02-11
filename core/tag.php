@@ -5,6 +5,18 @@ class Tag
 	public $slug;
 	public $title;
 
+	public static function CreateTable($dbc)
+	{
+		$sql = "CREATE table tags
+		(
+			tag_id int unsigned auto_increment primary key,
+			slug varchar(32) not null unique key,
+			title varchar(256) not null
+		)";
+
+		$dbc->exec($sql);
+	}
+
 	public static function CreateSlug($string)
 	{
 		// https://web.archive.org/web/20130208144021/http://neo22s.com/slug

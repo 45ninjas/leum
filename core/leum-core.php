@@ -6,8 +6,6 @@ require_once SYS_ROOT . "/core/query.php";
 
 require_once SYS_ROOT . "/utils/thumbnails.php";
 
-LeumCore::RegisterTasks();
-
 class LeumCore
 {
 	public static function PDOPlaceholder($array)

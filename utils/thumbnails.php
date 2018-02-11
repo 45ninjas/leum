@@ -19,7 +19,7 @@ class Thumbnails
 		$targetFile = $media->GetThumbPath();
 
 		if(!is_dir(dirname($targetFile)))
-			mkdir(dirname($targetFile));
+			mkdir(dirname($targetFile), 0770, true);
 
 		$baseType = explode('/', $media->GetMimeType())[0];
 
@@ -34,7 +34,7 @@ class Thumbnails
 			$tmp = SYS_ROOT . THUMB_DIR . "/tmp/ffmpeg-working.png";
 			
 			if(!is_dir(dirname($tmp)))
-				mkdir(dirname($tmp));
+				mkdir(dirname($tmp), 0770, true);
 
 			self::SnapshotVideo($media->GetPath(), $tmp);
 			self::CreateThumbnailFromImg($tmp, $targetFile);

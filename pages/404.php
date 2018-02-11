@@ -2,12 +2,16 @@
 /**
 * 404 Page
 */
-class Page
+class Error404 extends Page
 {
 	public $title = "404 - File not found.";
+	protected $message;
 	public function __construct($arguments)
 	{
 		http_response_code(404);
+
+		if(isset($arguments[0]) && is_string($arguments[0]))
+			$this->message = $arguments[0];
 	}
 	public function Content()
 	{?>
@@ -18,9 +22,11 @@ class Page
 	</div>
 
 	<div class="content">
+		<?php if(isset($this->message)): ?><h2 class="content-subhead"><?=$this->message;?></h2><?php endif; ?>
 		<h2 class="content-subhead">Things that could have gone wrong</h2>
 			<ul>
 				<li>A file has been moved.</li>
+				<li>The database has been modified without your or it's consent.</li>
 				<li>You typed the wrong URL, go check it.</li>
 				<li>The server's media directory has been configured incorrectly.</li>
 				<li>Symlinks to the media directory have failed.</li>

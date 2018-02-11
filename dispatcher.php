@@ -86,9 +86,7 @@ class Dispatcher
 			$args[0] = "pages/$args[0]";
 			return $args;
 		}
-		else
-		{
-			return ["pages/404.php"];
-		}
+		
+		return false;
 	}
 }

@@ -10,6 +10,7 @@ class Leum
 	private static $_instance = null;
 	public $dispatcher;
 	public $page;
+	public $error = null;
 
 	public $title = APP_TITLE;
 	public $request = "";
@@ -44,6 +45,12 @@ class Leum
 
 		// Get the page from the dispatcher.
 		$arguments = $this->dispatcher->GetPage($this->request);
+
+		if($arguments == false)
+		{
+			self::Show404Page();
+			return;
+		}
 
 		$pageFile = array_shift($arguments);
 		
@@ -89,10 +96,22 @@ class Leum
 	}
 	public function Output()
 	{
-		//$this->Debug();
+		if(isset($this->error))
+		{
+			include SYS_ROOT . "/pages/404.php";
+			$this->page = new Error404([$this->error]);
+			$this->arguments = [$this->error];
+		}
+		
 		$this->page->Content();
 	}
-
+	public function Show404Page($message = null)
+	{
+		if(isset($message))
+			$this->error = $message;
+		else
+			$this->error = true;
+	}
 	private function Debug()
 	{
 		?>

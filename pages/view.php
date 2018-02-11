@@ -2,9 +2,9 @@
 /**
 * View individual pages.
 */
-require_once 'api/v1/media.php';
-require_once 'page-parts/item-preview.php';
-require_once 'page-parts/tag-field.php';
+require_once SYS_ROOT . '/core/leum-core.php';
+require_once SYS_ROOT . '/page-parts/item-preview.php';
+require_once SYS_ROOT . '/page-parts/tag-field.php';
 class Page
 {
 	public $title = "View";
@@ -21,7 +21,7 @@ class Page
 		{
 			$mediaId = $arguments[0];
 		
-			$this->mediaItem = Media::Get($dbc, $arguments[0]);
+			$this->mediaItem = Media::GetSingle($dbc, $arguments[0]);
 			$this->title = $this->mediaItem->title;
 		}
 		$this->itemPreview = new ItemPreview($this->mediaItem);

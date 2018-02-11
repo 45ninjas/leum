@@ -31,7 +31,7 @@ class Page
 			$this->pageNum = $_GET['page'] - 1;
 
 		// Get the tags to search for.
-		$tags = array();
+		/*$tags = array();
 		if(isset($_GET['tags']) && !empty($_GET['tags']))
 		{
 			$queryString = strtolower($_GET['tags']);
@@ -40,10 +40,20 @@ class Page
 			$tagSlugs = ParseSlugString($queryString);
 			$tagSlugs = array_filter($tagSlugs);
 			$tags = Browse::GetTagsFromSlugs($dbc, $tagSlugs);
+		}*/
+
+		$unwantedTags = null;
+		$wantedTags = null;
+
+		if(isset($_GET['q']) && !empty($_GET['q']))
+		{
+			$query = new QueryReader($_GET['q']);
+			$unwantedTags = $query->unwantedTags;
+			$wantedTags = $query->wantedTags;
 		}
 
 		// Get the items and total items to know how many pages we need.
-		$this->itemsToShow = Browse::GetItems($dbc, $tags, $this->pageNum, $this->pageSize);
+		$this->itemsToShow = Media::GetWithTags($dbc, $wantedTags, $unwantedTags, $this->pageNum, $this->pageSize);
 
 		$this->totalResults = LeumCore::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);

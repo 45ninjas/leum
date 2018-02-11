@@ -1,6 +1,6 @@
 <?php namespace API;
 use Media as CoreMedia;
-class Media
+class Content
 {
 	private $dbc;
 	private $invalidInput;

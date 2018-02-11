@@ -32,7 +32,13 @@ class Page
 		if(isset($tagId))
 		{
 			$this->tagItem = Tag::GetSingle($this->db, $tagId);
-			$this->title = "Edit Media";
+			$this->title = "Edit Tag";
+
+			if($this->tagItem == null)
+			{
+				Leum::Instance()->Show404Page("Tag $tagId does not exist in the database.");
+				return;
+			}
 		}
 		else
 			$this->tagItem = new Tag();
@@ -59,6 +65,13 @@ class Page
 					</div>
 				</fieldset>
 				<button tabindex="3" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
+				<?php if($this->modify): ?>
+				<a class="pure-button button-delete" data-title="<?php echo $this->tagItem->title; ?>" href="<?php echo ROOT."/api/v2/tags/" .$this->tagItem->tag_id; ?>">
+					<i class="fa fa-trash"></i>
+					Delete
+				</a>
+				<?php endif; ?>
+				<script type="text/javascript" src="<?php Asset("/resources/js/deleter.js");?>"></script>
 			</form>
 		</div>
 	</div>

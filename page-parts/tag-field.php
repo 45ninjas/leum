@@ -32,9 +32,10 @@ class TagField
 		<ul class="tagfield" id="tagfield">
 			<input type="hidden" autocomplete="off" id="tags" name="tags" value="<?php echo $this->slugString ?>">
 		<?php
-		foreach ($this->tags as $tag)
+		if(isset($this->tags))
 		{
-			$this->ShowTag($tag);
+			foreach ($this->tags as $tag)
+				$this->ShowTag($tag);
 		}
 		?>
 		</ul>

@@ -23,6 +23,7 @@ define('DB_NAME', 'leum');
 // The directory where the media is stored relative to this directory. (no trailing slash)
 define('MEDIA_DIR', '/content/media');
 define('THUMB_DIR', '/content/thumbs');
+define('THUMB_SIZE', 196);
 
 // === Routes ===
 // 

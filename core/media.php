@@ -14,10 +14,8 @@ class Media
 	}
 	public function GetThumbnail()
 	{
-		$thumb = THUMB_DIR . "/" . $this->path . ".jpg";
-		
-		if(file_exists(SYS_ROOT . $thumb))
-			return ROOT. $thumb;
+		if(is_file($this->GetThumbPath()))
+			return ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
 		else
 			return null;
 	}
@@ -25,10 +23,19 @@ class Media
 	{
 		return SYS_ROOT . MEDIA_DIR . "/" . $this->path;
 	}
+	public function GetThumbPath()
+	{
+		return SYS_ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
+	}
 	public function GetTags()
 	{
-		$dbc = Leum::Instance()->GetDatabase();
-		return Mapping::GetMappedTags($dbc, $this->media_id);
+		if(isset($this->media_id))
+		{
+			$dbc = Leum::Instance()->GetDatabase();
+			return Mapping::GetMappedTags($dbc, $this->media_id);
+		}
+		else
+			return null;
 	}
 	public function GetMimeType()
 	{
@@ -47,7 +54,7 @@ class Media
 
 	static function GetSingle($dbc, $media)
 	{
-		$media = GetID($media);
+		$media = self::GetID($media);
 
 		// Make some SQL magic.
 		$sql = "SELECT * from media where media_id = ?";
@@ -94,7 +101,7 @@ class Media
 
 	static function DeleteSingle($dbc, $media)
 	{
-		$media = GetID($media);
+		$media = self::GetID($media);
 
 		$sql = "DELETE from media where media_id = ?";
 
@@ -154,21 +161,44 @@ class Media
 	public static function GetWithTags($dbc, $tags, $excludeTags, $page, $pageSize = PAGE_SIZE)
 	{
 		$offset = $page * $pageSize;
+		$hasTags = false;
 
-		$tagPlaceholder = LeumCore::PDOPlaceholder($tags);
-		$excludePlaceholder = LeumCore::PDOPlaceholder($tags);
+		$parameters = array();
 
-		$sql = "SELECT sql_calc_found_rows media.* from map
-		inner join media on map.media_id = media.media_id
-		inner join tags on map.tag_id = tags.tag_id
-		where tags.slug in ( $tagPlaceholder )
-		and tags.slug not in ( $excludePlaceholder )
-		limit ? offset ?";
+		// Create the sql string.
+		$sql = "SELECT sql_calc_found_rows media.* from media
+		left join map on media.media_id = map.media_id
+		left join tags on map.tag_id = tags.tag_id";
 
-		$args = array_merge($tags, $excludeTags, $pageSize, $offset);
+		// Add the required tags to the query.
+		if(isset($tags) && count($tags) > 0)
+		{
+			$tagPlaceholder = LeumCore::PDOPlaceholder($tags);
+			$sql .= " where tags.slug in ( $tagPlaceholder )";
+			$parameters = array_merge($parameters, $tags);
+
+			$hasTags = true;
+		}
+		// Add the excluded tags to the query.
+		if(isset($excludeTags) && count($excludeTags) > 0)
+		{
+			$excludePlaceholder = LeumCore::PDOPlaceholder($excludeTags);
+
+			if($hasTags)
+				$sql .= " and tags.slug not in ( $excludePlaceholder )";
+			else
+				$sql .= " where tags.slug not in ( $excludePlaceholder )";
+
+			$parameters = array_merge($parameters, $excludeTags);
+		}
+
+		// Group and limit the query.
+		$sql .= " GROUP BY media_id limit ? offset ?";
+		array_push($parameters, $pageSize);
+		array_push($parameters, $offset);
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute($args);
+		$statement->execute($parameters);
 
 		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
 	}

@@ -39,7 +39,25 @@ class Media
 	}
 	public function GetMimeType()
 	{
-			return mime_content_type($this->GetPath());
+		return mime_content_type($this->GetPath());
+	}
+	public function GetType()
+	{
+		$type = $this->GetMimeType();
+		
+		if($type == false)
+			return null;
+		
+		$strings = explode('/', $this->GetMimeType());
+
+		if(isset($strings[0]))
+		{
+			$type = strtolower($strings[0]);
+			$this->type = $type;
+			return $type;
+		}
+
+		return false;
 	}
 	public function Delete()
 	{

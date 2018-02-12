@@ -5,6 +5,8 @@
 require_once SYS_ROOT . "/page-parts/page-buttons.php";
 require_once SYS_ROOT . "/page-parts/tag-field.php";
 require_once SYS_ROOT . "/core/leum-core.php";
+require_once SYS_ROOT . "/page-parts/media-viewer.php";
+
 class Page
 {
 	public $title = "Browse";
@@ -20,27 +22,23 @@ class Page
 
 	private $tagField;
 
+	private $viewer;
+	private $itm;
+
 	public $useModal = true;
 	
 	public function __construct($arguments)
 	{
 		$dbc = Leum::Instance()->GetDatabase();
 
-		// Get the page number.
+		$this->itm = Media::GetSingle($dbc, 104);
+		$this->viewer = new MediaViewer($this->itm, false, false, true, true, false);
+
+		if(Leum::Instance() !== null)
+			Leum::Instance()->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
+
 		if(isset($_GET['page']) && is_numeric($_GET['page']))
 			$this->pageNum = $_GET['page'] - 1;
-
-		// Get the tags to search for.
-		/*$tags = array();
-		if(isset($_GET['tags']) && !empty($_GET['tags']))
-		{
-			$queryString = strtolower($_GET['tags']);
-
-			$queryString = preg_replace("[^A-Za-z0-9-]", "", $queryString);
-			$tagSlugs = ParseSlugString($queryString);
-			$tagSlugs = array_filter($tagSlugs);
-			$tags = Browse::GetTagsFromSlugs($dbc, $tagSlugs);
-		}*/
 
 		$unwantedTags = null;
 		$wantedTags = null;
@@ -59,8 +57,6 @@ class Page
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
 
 		$this->pageButtons = new PageButtons($this->totalPages,$this->pageNum + 1);
-
-		$this->tagField = new TagField($tags, false);
 	}
 	public function Content()
 	{ ?>
@@ -71,11 +67,11 @@ class Page
 	</div>
 	<div class="browse-bar">
 		<div class="content">
-			<form class="right pure-form" method="GET" action="">
-				<?php $this->tagField->ShowInput(); ?>
+			<!-- <form class="right pure-form" method="GET" action="">
+				<?php // $this->tagField->ShowInput(); ?>
 				<button class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
-				<?php $this->tagField->ShowField(); ?>
-			</form>
+				<?php // $this->tagField->ShowField(); ?>
+			</form> -->
 		</div>
 	</div>
 	<div class="content">
@@ -93,7 +89,9 @@ class Page
 	</div>
 </div>
 
-<?php }
+<?php
+$this->MediaViewer();
+}
 function DoItem($mediaItem)
 {
 	$thumbnailUrl = $mediaItem->GetThumbnail();
@@ -111,5 +109,25 @@ function DoItem($mediaItem)
 	</a>
 	<?php
 }
+function MediaViewer()
+{ ?>
+<div id="media-viewer" class="media-viewer full">
+	<h1 id="media-title" class="title"><?=$this->itm->title;?></h1>
+	<?php $this->viewer->ShowContent(); ?>	
+	<div class="footer">
+		<span class="tags">Tag 1, Tag 2, Tag 3, Tag 4, Tag 5 more</span>
+		<a id="media-edit-link" class="pure-button button-stealth" href="">
+			<i class="fa fa-edit"></i>
+		</a>
+	</div>
+</div>
+<a href="#" id="media-viewer-close">&times;</a>
+<script language="javascript" type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function()
+	{
+		SetModalBack(true);
+	}, false);
+</script>
+<?php }
 }
 ?>

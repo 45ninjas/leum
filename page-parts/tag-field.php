@@ -7,8 +7,6 @@ class TagField
 
 	private $slugString;
 
-	const READ_ONLY = "read only";
-	
 	function __construct($tags, $readOnly = false)
 	{
 		$this->tags = $tags;
@@ -16,13 +14,15 @@ class TagField
 		
 		$this->readOnly = $readOnly;
 
-		Leum::Instance()->RequireResource('/resources/css/leum-tagfield.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-tagfield.css') . '">');
-
-		if(!$readOnly)
+		if(Leum::Insatnce() !== null)
 		{
-			Leum::Instance()->RequireResource('/resources/js/leum-tagfield.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/leum-tagfield.js') . '"></script>');
-			Leum::Instance()->RequireResource('/resources/css/easy-autocomplete.min.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/easy-autocomplete.min.css') . '">');
-			Leum::Instance()->RequireResource('/resources/js/jquery.easy-autocomplete.min.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/jquery.easy-autocomplete.min.js') . '"></script>');
+			Leum::Instance()->RequireResource('/resources/css/leum-tagfield.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-tagfield.css') . '">');
+			if(!$readOnly)
+			{
+				Leum::Instance()->RequireResource('/resources/js/leum-tagfield.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/leum-tagfield.js') . '"></script>');
+				Leum::Instance()->RequireResource('/resources/css/easy-autocomplete.min.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/easy-autocomplete.min.css') . '">');
+				Leum::Instance()->RequireResource('/resources/js/jquery.easy-autocomplete.min.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/jquery.easy-autocomplete.min.js') . '"></script>');
+			}
 		}
 	}
 
@@ -63,7 +63,7 @@ class TagField
 	}
 	private function TagTemplate()
 	{
-		// The template only needs to be shown one.
+		// The template only needs to be shown once.
 		if($this->templateDone)
 			return;
 

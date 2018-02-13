@@ -33,7 +33,7 @@ class Media
 		{
 			if(!isset($dbc))
 				$dbc = Leum::Instance()->GetDatabase();
-			
+
 			return Mapping::GetMappedTags($dbc, $this->media_id, $slugsOnly);
 		}
 		else
@@ -107,6 +107,7 @@ class Media
 		// Get multiple items.
 		$indexPlaceholder = join(',', array_fill(0, count($media_ids), '?'));
 		$sql = "SELECT * from media where media_id in ('$indexPlaceholder')";
+		$sql .= " order by date desc";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media_ids]);
@@ -125,7 +126,7 @@ class Media
 	{
 		$offset = $pageSize * $page;
 		// Get ALL items
-		$sql = "SELECT sql_calc_found_rows * from media limit ? offset ?";
+		$sql = "SELECT sql_calc_found_rows * from media order by date desc limit ? offset ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$pageSize, $offset]);
@@ -227,7 +228,7 @@ class Media
 		}
 
 		// Group and limit the query.
-		$sql .= " GROUP BY media_id limit ? offset ?";
+		$sql .= " GROUP BY media_id order by date desc limit ? offset ?";
 		array_push($parameters, $pageSize);
 		array_push($parameters, $offset);
 

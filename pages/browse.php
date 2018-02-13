@@ -107,7 +107,7 @@ function DoItem($mediaItem)
 		$href = ROOT . "/view/$mediaItem->media_id"; 
 
 	?>
-	<a class="item-tile" href="<?php echo $href; ?>">
+	<a id="view<?php echo $mediaItem->media_id; ?>" class="item-tile" href="<?php echo $href; ?>">
 		<img src="<?php echo $thumbnailUrl ?>">
 	</a>
 	<?php

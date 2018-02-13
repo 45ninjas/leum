@@ -14,7 +14,7 @@ class TagField
 		
 		$this->readOnly = $readOnly;
 
-		if(Leum::Insatnce() !== null)
+		if(Leum::Instance() !== null)
 		{
 			Leum::Instance()->RequireResource('/resources/css/leum-tagfield.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-tagfield.css') . '">');
 			if(!$readOnly)

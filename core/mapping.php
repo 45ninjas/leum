@@ -191,19 +191,26 @@ class Mapping
 		return $statement->rowCount();
 	}
 	// TODO: Move this to media?
-	public static function GetMappedTags($dbc, $media)
+	public static function GetMappedTags($dbc, $media, $slugsOnly = false)
 	{
 		$media_id = Mapping::GetMediaId($media);
 
-		$sql = "SELECT map.map_id, map.tag_id, tags.slug, tags.title from map
-		inner join media ON map.media_id = media.media_id
-		inner join tags on map.tag_id = tags.tag_id
-		where media.media_id = ?";
+		if($slugsOnly)
+			$sql = "SELECT tags.slug from map";
+		else
+			$sql = "SELECT map.map_id, map.tag_id, tags.slug, tags.title from map";
+
+		$sql .= " inner join media ON map.media_id = media.media_id";
+		$sql .= " inner join tags on map.tag_id = tags.tag_id";
+		$sql .= " where media.media_id = ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media_id]);
 
-		return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
+		if($slugsOnly)
+			return $statement->fetchAll(PDO::FETCH_COLUMN);
+		else
+			return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
 	}
 	public static function SetMappedTags($dbc, $media, $newSlugs = null)
 	{

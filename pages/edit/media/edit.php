@@ -6,14 +6,14 @@ require_once SYS_ROOT . "/core/media.php";
 require_once SYS_ROOT . "/core/mapping.php";
 require_once SYS_ROOT . "/core/tag.php";
 
-require_once 'page-parts/item-preview.php';
+require_once 'page-parts/media-viewer.php';
 require_once 'page-parts/tag-field.php';
 class Page
 {
 	public $title = "Create Media";
 	private $mediaItem;
 	private $modify = false;
-	private $itemPreview;
+	private $viewer;
 	private $tagField;
 
 	public function __construct($arguments)
@@ -60,7 +60,7 @@ class Page
 		else
 			$this->mediaItem = new Media();
 
-		$this->itemPreview = new ItemPreview($this->mediaItem);
+		$this->viewer = new MediaViewer($this->mediaItem, true);
 		$this->tagField = new TagField($this->mediaItem->GetTags());
 	}
 	public function Content()
@@ -90,9 +90,7 @@ class Page
 						</div>
 
 						<div class="pure-u-1 pure-u-sm-1-2">
-							<div class="leum-content-container">
-								<?php $this->itemPreview->Show(); ?>
-							</div>
+							<?php $this->viewer->ShowPreview(); ?>
 						</div>
 
 					</div>
@@ -110,8 +108,8 @@ class Page
 					Delete
 				</a>
 				<button tabindex="6" type="submit" name="modify" value="generate-thumbnail" class="pure-button">Generate Thumbnail</button>
-				<?php endif; ?>
 				<script type="text/javascript" src="<?php Asset("/resources/js/deleter.js");?>"></script>
+				<?php endif; ?>
 			</form>
 		</div>
 	</div>

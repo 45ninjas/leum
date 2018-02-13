@@ -16,20 +16,6 @@
 	max-height: 100%;
 }
 
-.media-viewer .button-stealth
-{
-	color: white;
-	background-color: #00000000;
-	border: 1px solid #FFFFFF30;
-	border-radius: 2px;
-	font-size: 85%;
-	padding: 0.3em 0.6em;
-}
-.media-viewer .button-stealth:hover
-{
-	background-color: #FFFFFF30;
-}
-
 .media-viewer.full
 {
 	z-index: 300;
@@ -44,18 +30,15 @@
 	margin: 0;
 	font-weight: lighter;
 	font-size: 140%;
-	width: 100%;
 }
 .media-viewer.full .footer
 {
 	display: flex;
 	justify-content: space-between;
-	width: 100%;
 }
-.media-viewer.full .footer .tags
+.media-viewer.full .tags
 {
 	flex-grow: 1;
-	display: block;
 }
 .media-viewer.full .media-item
 {

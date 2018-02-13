@@ -46,18 +46,8 @@ class Media
 			$index = $this->api->args[0];
 			$data = CoreMedia::GetSingle($this->dbc, $index);
 			
-			if(isset($this->api->data['usage']))
-			{
-				if($this->api->data['usage'] === "modal")
-				{
-					include SYS_ROOT . "/page-parts/item-preview.php";
-					$itemPreview = new \ItemPreview($data, true);
-					ob_start();
-					$itemPreview->Show();
-					$data->html = trim(ob_get_clean());
-				}
-			}
-
+			if(isset($this->api->data['usage']) && $this->api->data['usage'] === "viewer")
+					return $this->GetViewer($data);
 
 			if(!isset($data))
 				throw new \Exception("Media not found");
@@ -66,6 +56,24 @@ class Media
 			throw $this->inputException;
 
 		return $data;
+	}
+	public function GetViewer($media)
+	{
+		if(!isset($media))
+			return false;
+
+		$response["title"] = $media->media_id;
+		$response["edit link"] = ROOT . "/edit/media/$media->media_id";
+		$response["id"] = $media->media_id;
+		$response["tag slugs"] = $media->GetTags($this->dbc, true);
+
+		require_once SYS_ROOT . "/page-parts/media-viewer.php";
+		$viewer = new \MediaViewer($media, false, true, true, true, true);
+		ob_start();
+		$viewer->ShowContent();
+		$response["content"] = trim(ob_get_clean());
+
+		return $response;
 	}
 	public function Post()
 	{

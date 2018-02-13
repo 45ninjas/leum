@@ -3,7 +3,7 @@ function GetRootDir()
     return document.head.querySelector("[property=site-root]").content;
 }
 
-var mediaId = GetMediaItemIndex();
+/*var mediaId = GetMediaItemIndex();
 if(mediaId != null)
     ShowMediaItemModal(mediaId);
 
@@ -13,7 +13,7 @@ $(window).bind('hashchange', function()
     
     if(mediaId != null)
         ShowMediaItemModal(mediaId);
-});
+});*/
 
 function GetMediaItemIndex()
 {

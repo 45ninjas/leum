@@ -27,12 +27,14 @@ class Media
 	{
 		return SYS_ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
 	}
-	public function GetTags()
+	public function GetTags($dbc = null, $slugsOnly = false)
 	{
 		if(isset($this->media_id))
 		{
-			$dbc = Leum::Instance()->GetDatabase();
-			return Mapping::GetMappedTags($dbc, $this->media_id);
+			if(!isset($dbc))
+				$dbc = Leum::Instance()->GetDatabase();
+			
+			return Mapping::GetMappedTags($dbc, $this->media_id, $slugsOnly);
 		}
 		else
 			return null;

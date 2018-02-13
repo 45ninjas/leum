@@ -77,6 +77,39 @@ pre#debug-head
 	justify-content: center;
 }
 
+ul.tags
+{
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+ul.tags li
+{
+	display: inline-block;
+}
+
+ul.tags li,
+.button-stealth
+{
+	color: white;
+	background-color: #00000000;
+	border: 1px solid #FFFFFF30;
+	border-radius: 2px;
+	font-size: 85%;
+	padding: 0.3em 0.6em;
+}
+ul.tags li a,
+.button-stealth a
+{
+	color: white;
+}
+
+.button-stealth:hover
+{
+	background-color: #FFFFFF30;
+}
+
 .items .item-tile
 {
 }

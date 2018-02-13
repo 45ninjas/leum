@@ -12,7 +12,7 @@ class MediaViewer
 
 	public function __construct($media, $canEdit = false, $autoPlay = false, $loop = true, $controls = true, $ajax = false)
 	{
-		if(Leum::Instance() !== null)
+		if(class_exists('Leum') && Leum::Instance() !== null)
 			Leum::Instance()->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
 		$this->media = $media;
 		$this->edit = $canEdit === true;

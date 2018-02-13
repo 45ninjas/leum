@@ -35,7 +35,10 @@ class Page
 		$this->viewer = new MediaViewer($this->itm, false, false, true, true, false);
 
 		if(Leum::Instance() !== null)
+		{
 			Leum::Instance()->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
+			Leum::Instance()->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
+		}
 
 		if(isset($_GET['page']) && is_numeric($_GET['page']))
 			$this->pageNum = $_GET['page'] - 1;
@@ -111,23 +114,21 @@ function DoItem($mediaItem)
 }
 function MediaViewer()
 { ?>
-<div id="media-viewer" class="media-viewer full">
+<div id="media-viewer" class="media-viewer full" hidden>
 	<h1 id="media-title" class="title"><?=$this->itm->title;?></h1>
-	<?php $this->viewer->ShowContent(); ?>	
 	<div class="footer">
-		<span class="tags">Tag 1, Tag 2, Tag 3, Tag 4, Tag 5 more</span>
-		<a id="media-edit-link" class="pure-button button-stealth" href="">
+		<a id="media-edit-link" class="button-stealth" href="#">
 			<i class="fa fa-edit"></i>
 		</a>
+		<ul class="tags">
+			<li>tag-1</li>
+			<li>tag-2</li>
+			<li>tag-3</li>
+			<li>tag-4</li>
+		</ul>
 	</div>
 </div>
 <a href="#" id="media-viewer-close">&times;</a>
-<script language="javascript" type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function()
-	{
-		SetModalBack(true);
-	}, false);
-</script>
 <?php }
 }
 ?>

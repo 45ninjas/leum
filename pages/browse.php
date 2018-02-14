@@ -23,16 +23,12 @@ class Page
 	private $tagField;
 
 	private $viewer;
-	private $itm;
 
 	public $useModal = true;
 	
 	public function __construct($arguments)
 	{
 		$dbc = Leum::Instance()->GetDatabase();
-
-		$this->itm = Media::GetSingle($dbc, 104);
-		$this->viewer = new MediaViewer($this->itm, false, false, true, true, false);
 
 		if(Leum::Instance() !== null)
 		{
@@ -114,7 +110,7 @@ function DoItem($mediaItem)
 function MediaViewer()
 { ?>
 <div id="media-viewer" class="media-viewer full" hidden>
-	<h1 id="media-title" class="title"><?=$this->itm->title;?></h1>
+	<h1 id="media-title" class="title"></h1>
 	<div class="footer">
 		<a id="media-edit-link" class="button-stealth" href="#">
 			<i class="fa fa-edit"></i>

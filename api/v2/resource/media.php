@@ -62,7 +62,7 @@ class Media
 		if(!isset($media))
 			return false;
 
-		$response["title"] = $media->media_id;
+		$response["title"] = $media->title;
 		$response["edit link"] = ROOT . "/edit/media/$media->media_id";
 		$response["id"] = $media->media_id;
 		$response["tag slugs"] = $media->GetTags($this->dbc, true);

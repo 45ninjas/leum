@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function ()
 	{
 		allIndexes.push(parseInt(items[i].dataset.mediaIndex));
 	}
-	console.log(allIndexes);
 
 	itemContainer.addEventListener("click", function(e)
 	{
@@ -70,7 +69,9 @@ function MediaViewer()
 			mediaIndex = parseInt(mediaIndex);
 
 		activeIndexIndex = allIndexes.indexOf(parseInt(mediaIndex));
-		console.log(activeIndexIndex);
+
+		location.hash = "#view" + mediaIndex;
+
 		viewer = document.querySelector("#media-viewer");
 		var url = GetRootDir() + "/api/v2/media/" + mediaIndex + "?usage=viewer";
 		var jqxhr = $.getJSON(url, function(data)
@@ -107,9 +108,9 @@ function MediaViewer()
 	function SetTitle(title)
 	{
 		if(title == null)
-			viewer.querySelector("#media-title").content = "";
+			viewer.querySelector("#media-title").innerHTML = "";
 		else
-			viewer.querySelector("#media-title").content = title;
+			viewer.querySelector("#media-title").innerHTML = title;
 	}
 	function SetContent(content)
 	{

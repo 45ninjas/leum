@@ -44,15 +44,36 @@
 {
 	padding: 0.5em 0;
 }
-#media-viewer-close
+.viewer-button
 {
+	font-family: monospace;
+	text-shadow: 2px 2px 4px black;
 	z-index: 500;
 	display: block;
 	font-size: 60px;
 	position: fixed;
-	right: 0;
-	top: 0;
-	width: 1em;
+	padding: 0 0.25em;
 	color: white;
 	text-decoration: none;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.viewer-button:hover
+{
+	color: #AAA;
+}
+#media-viewer-close
+{
+	top: 0;
+	right: 0;
+}
+#media-viewer-next
+{
+	top: 50%;
+	right: 0;
+}
+#media-viewer-prev
+{
+	top: 50%;
+	left: 0;
 }

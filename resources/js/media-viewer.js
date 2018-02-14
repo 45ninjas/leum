@@ -1,4 +1,6 @@
 var activeViewer = new MediaViewer();
+var allIndexes = [];
+var activeIndexIndex = 0;
 function GetRootDir()
 {
     return document.head.querySelector("[property=site-root]").content;
@@ -6,11 +8,45 @@ function GetRootDir()
 
 document.addEventListener("DOMContentLoaded", function ()
 {
-	activeViewer.IndexChanged();
-	$(window).bind('hashchange', function()
+	// Set the close button.
+	var closeButton = document.querySelector("#media-viewer-close");
+	closeButton.addEventListener("click", function()
 	{
-		activeViewer.IndexChanged();
+		activeViewer.Close();
 	});
+
+	// Register media click callbacks.
+	var itemContainer = document.querySelector(".main .items");
+	var items = itemContainer.children;
+	for (var i = 0; i < items.length; i++)
+	{
+		allIndexes.push(parseInt(items[i].dataset.mediaIndex));
+	}
+	console.log(allIndexes);
+
+	itemContainer.addEventListener("click", function(e)
+	{
+		var target = e.target.parentElement;
+		if(target && target.matches(".item-tile"))
+		{
+			var index = target.dataset.mediaIndex;
+			activeViewer.Show(index);
+		}
+	});
+
+	var nextButton = document.querySelector("#media-viewer-next");
+	var prevButton = document.querySelector("#media-viewer-prev");
+
+	nextButton.addEventListener("click", function()
+	{
+		activeViewer.Show(allIndexes[activeIndexIndex + 1]);
+	});
+	prevButton.addEventListener("click", function()
+	{
+		activeViewer.Show(allIndexes[activeIndexIndex - 1]);
+	});
+
+	activeViewer.IndexChanged();
 });
 
 function MediaViewer()
@@ -23,13 +59,18 @@ function MediaViewer()
 		if(index != null)
 		{
 			if(lastIndex != index)
-				Show(index);
+				this.Show(index);
 		}
 		else
-			Close();
+			this.Close();
 	}
-	function Show(mediaIndex)
+	this.Show = function(mediaIndex)
 	{
+		if(typeof mediaIndex === 'string' || mediaIndex instanceof String)
+			mediaIndex = parseInt(mediaIndex);
+
+		activeIndexIndex = allIndexes.indexOf(parseInt(mediaIndex));
+		console.log(activeIndexIndex);
 		viewer = document.querySelector("#media-viewer");
 		var url = GetRootDir() + "/api/v2/media/" + mediaIndex + "?usage=viewer";
 		var jqxhr = $.getJSON(url, function(data)
@@ -40,9 +81,9 @@ function MediaViewer()
 				SetContent(data["content"]);
 				SetTags(data["tag slugs"]);
 				SetEditLink(data["edit link"]);
-				
+				SetHidden(false);
 				SetModalBack(true);
-				viewer.removeAttribute("hidden","");
+				UpdateButtons();
 			}
 			else
 			{
@@ -56,12 +97,12 @@ function MediaViewer()
 			modal.Show("Error", "There was an error getting the media information.");
 		});
 	}
-	function Close()
+	this.Close = function()
 	{
 		viewer = document.querySelector("#media-viewer");
 		SetModalBack(false);
 		SetContent(null);
-		viewer.setAttribute("hidden","");
+		SetHidden(true);
 	}
 	function SetTitle(title)
 	{
@@ -130,5 +171,29 @@ function MediaViewer()
         	return parseInt(hash.substring(prefix.length), 10);
     	else
         	return null;
+	}
+	function SetHidden(hidden)
+	{
+		if(!hidden)
+		{
+			viewer.removeAttribute("hidden");
+			document.querySelector("#media-viewer-close").removeAttribute("hidden");
+			document.querySelector("#media-viewer-next").removeAttribute("hidden");
+			document.querySelector("#media-viewer-prev").removeAttribute("hidden");
+		}
+		else
+		{
+			viewer.setAttribute("hidden","");
+			document.querySelector("#media-viewer-close").setAttribute("hidden","");
+			document.querySelector("#media-viewer-next").setAttribute("hidden","");
+			document.querySelector("#media-viewer-prev").setAttribute("hidden","");
+		}
+	}
+	function UpdateButtons()
+	{
+		if(activeIndexIndex < 1)
+			document.querySelector("#media-viewer-prev").setAttribute("hidden","");
+		if(activeIndexIndex == allIndexes.length - 1)
+			document.querySelector("#media-viewer-next").setAttribute("hidden","");
 	}
 }

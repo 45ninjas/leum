@@ -80,13 +80,12 @@ class Page
 	<div class="content">
 		<?php echo "<p>$this->totalResults results, $this->totalPages pages.</p>" ?>
 	</div>
-
-		<div class="items">
-			<?php foreach ($this->itemsToShow as $item)
-			{
-				$this->DoItem($item);	
-			} ?>
-		</div>
+	<div class="items">
+		<?php foreach ($this->itemsToShow as $item)
+		{
+			$this->DoItem($item);	
+		} ?>
+	</div>
 	<div class="content">
 		<?php if($this->totalPages > 1) $this->pageButtons->DoButtons(); ?>
 	</div>
@@ -102,13 +101,13 @@ function DoItem($mediaItem)
 		$thumbnailUrl = GetAsset("/resources/graphics/no-thumb.png");
 
 	if($this->useModal)
-		$href = "#view$mediaItem->media_id";
+		$href = "view$mediaItem->media_id";
 	else
-		$href = ROOT . "/view/$mediaItem->media_id"; 
+		$href = ROOT . "/view/$mediaItem->media_id";
 
 	?>
-	<a id="view<?php echo $mediaItem->media_id; ?>" class="item-tile" href="<?php echo $href; ?>">
-		<img src="<?php echo $thumbnailUrl ?>">
+	<a id=<?=$href;?> data-media-index="<?=$mediaItem->media_id;?>" class="item-tile" href="#<?=$href;?>">
+		<img src="<?=$thumbnailUrl;?>">
 	</a>
 	<?php
 }
@@ -121,14 +120,17 @@ function MediaViewer()
 			<i class="fa fa-edit"></i>
 		</a>
 		<ul class="tags">
-			<li>tag-1</li>
-			<li>tag-2</li>
-			<li>tag-3</li>
-			<li>tag-4</li>
+		</ul>
+	</div>
+	<div id="media-editor" hidden>
+		<input type="text" name="newTag">
+		<ul class="tags">
 		</ul>
 	</div>
 </div>
-<a href="#" id="media-viewer-close">&times;</a>
+<a id="media-viewer-close" class="viewer-button" hidden>&times;</a>
+<a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
+<a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
 <?php }
 }
 ?>

@@ -54,7 +54,7 @@ class TagField
 		?>
 		<li class="leum-tag">
 			<input type="hidden" value="<?php echo $tag->slug; ?>">
-			<span><?php echo $tag->title; ?></span>
+			<span><?php echo $tag->slug; ?></span>
 			<?php if(!$this->readOnly) { ?>
 			<a class="tag-delete"><i class="fa fa-close"></i></a>
 			<?php } ?>

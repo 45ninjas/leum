@@ -16,6 +16,26 @@ class Mapping
 			foreign key (tag_id) references tags(tag_id) on delete cascade
 		)";
 		$dbc->exec($sql);
+
+		echo "Adding tag_count";
+		$sql = "CREATE PROCEDURE tag_count (IN tagId int)
+			BEGIN
+				SELECT count(tag_id) INTO @ammount from map where tag_id = tagId;
+				UPDATE tags SET count = @ammount where tag_id = tagId;
+			END";
+		$dbc->exec($sql);
+
+		echo "Adding update trigger\n";
+		$sql = "CREATE trigger count_tags_updated AFTER UPDATE ON map FOR EACH ROW CALL tag_count(NEW.tag_id);";
+		$dbc->exec($sql);
+
+		echo "Adding delete trigger\n";
+		$sql = "CREATE trigger count_tags_delete AFTER DELETE ON map FOR EACH ROW CALL tag_count(OLD.tag_id);";
+		$dbc->exec($sql);
+
+		echo "Adding insert trigger\n";
+		$sql = "CREATE trigger count_tags_insert AFTER INSERT ON map FOR EACH ROW CALL tag_count(NEW.tag_id);";
+		$dbc->exec($sql);
 	}
 
 	public static function GetSingle($dbc, $index)
@@ -198,7 +218,7 @@ class Mapping
 		if($slugsOnly)
 			$sql = "SELECT tags.slug from map";
 		else
-			$sql = "SELECT map.map_id, map.tag_id, tags.slug, tags.title from map";
+			$sql = "SELECT map.map_id, map.tag_id, tags.slug, tags.count from map";
 
 		$sql .= " inner join media ON map.media_id = media.media_id";
 		$sql .= " inner join tags on map.tag_id = tags.tag_id";

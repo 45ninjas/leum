@@ -31,7 +31,7 @@ $(function()
 		{
 			return "leum/api/v1/find/tags?query=" + phrase;
 		},
-		getValue: "title",
+		getValue: "slug",
 		requestDelay: 500,
 
 		list:
@@ -52,7 +52,7 @@ $(function()
 	{
 		var t = document.querySelector("#tag-template");
 		t.content.querySelector("input").value = tag.slug;
-		t.content.querySelector("span").textContent = tag.title;
+		t.content.querySelector("span").textContent = tag.slug;
 		
 		var tagField = document.querySelector("#tagfield");
 		var clone = document.importNode(t.content, true);

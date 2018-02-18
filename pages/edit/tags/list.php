@@ -43,8 +43,8 @@ class Page
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>Title</th>
 					<th>Slug</th>
+					<th>Item Count</th>
 					<th>Tasks</th>
 				</tr>
 			</thead>
@@ -55,21 +55,18 @@ class Page
 				?>
 				<tr>
 					<td><?php echo $item->tag_id; ?></td>
-					<td><?php echo $item->title; ?></td>
 					<td><?php echo $item->slug; ?></td>
+					<td><?php echo $item->count; ?></td>
 					<td>
 						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/tag/$item->tag_id"; ?>">
 							<i class="fa fa-edit"></i>
-							Edit
 						</a>
 						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/tag/$item->tag_id"; ?>">
 							<i class="fa fa-trash"></i>
-							Delete
 						</a>
-<!-- 						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/view/$item->tag_id"; ?>">
+						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/browse/?q=$item->slug"; ?>">
 							<i class="fa fa-eye"></i>
-							View
-						</a> -->
+						</a>
 					</td>
 				</tr>
 				<?php

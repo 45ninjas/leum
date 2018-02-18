@@ -24,6 +24,7 @@ if(!TableExists($dbc, "tags"))
 	echo "Creating the tags table\n";
 	Tag::CreateTable($dbc);
 }
+
 else
 	echo "tags table already exists, skipping\n";
 

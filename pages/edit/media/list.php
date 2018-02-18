@@ -39,12 +39,12 @@ class Page
 		{
 		?>
 		<p>Found <?php echo $this->total; ?> results.</p>
-		<table class="pure-table pure-table-striped full-width">
+		<table class="pure-table pure-table-striped full-width media-edit">
 			<thead>
 				<tr>
 					<th>ID</th>
 					<th>Title</th>
-					<th>File</th>
+					<th>Path</th>
 					<th>Date Created</th>
 					<th>Tasks</th>
 				</tr>
@@ -55,22 +55,19 @@ class Page
 				{
 				?>
 				<tr>
-					<td><?php echo $item->media_id; ?></td>
-					<td><?php echo $item->title; ?></td>
-					<td><?php echo $item->path; ?></td>
-					<td><?php echo $item->date; ?></td>
+					<td class= "id" ><?php echo $item->media_id; ?></td>
+					<td class="title" title="<?=$item->title?>"><?php echo $item->title; ?></td>
+					<td class="path" title="<?=$item->path?>"><?php echo $item->path; ?></td>
+					<td class="date" ><?php echo $item->GetDate("Y-m-d"); ?></td>
 					<td>
 						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/media/$item->media_id"; ?>">
 							<i class="fa fa-edit"></i>
-							Edit
 						</a>
 						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/media/$item->media_id"; ?>">
 							<i class="fa fa-trash"></i>
-							Delete
 						</a>
 						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/view/$item->media_id"; ?>">
 							<i class="fa fa-eye"></i>
-							View
 						</a>
 					</td>
 				</tr>

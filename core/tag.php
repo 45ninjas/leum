@@ -3,7 +3,7 @@ class Tag
 {
 	public $tag_id;
 	public $slug;
-	public $title;
+	public $count;
 
 	public static function CreateTable($dbc)
 	{
@@ -11,9 +11,8 @@ class Tag
 		(
 			tag_id int unsigned auto_increment primary key,
 			slug varchar(32) not null unique key,
-			title varchar(256) not null
+			count int not null default '0'
 		)";
-
 		$dbc->exec($sql);
 	}
 
@@ -90,13 +89,18 @@ class Tag
 		
 		return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
 	}
-	public static function DeleteSingle($dbc, $tagId)
+	public static function DeleteSingle($dbc, $tag)
 	{
-		// TODO: Add support for slugs.
-		$sql = "DELETE FROM tags WHERE tag_id = ?";
+		if($tag instanceof Tag)
+			$tag = $tag->tag_id;
+
+		if(is_numeric($tag))
+			$sql = "DELETE FROM tags WHERE tag_id = ?";
+		elseif(is_string($tag))
+			$sql = "DELETE FROM tags WHERE slug = ?";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$tagId]);
+		$statement->execute([$tag]);
 
 		return $statement->rowCount();
 	}
@@ -116,40 +120,39 @@ class Tag
 	}
 	public static function InsertSingle($dbc, $tagData, $index = null)
 	{
-		// TODO: Add support for slugs.
+		// Get the slug and index based on the data type of the tagData.
 		if($tagData instanceof Tag)
 		{
-			$tag = $tagData;
-			$index = $tagData->tag_id;
+			$slug = $tagData->slug;
+			if(isset($tagData->tag_id))
+				$index = $tagData->tag_id;
 		}
-		else
+		else if(isset($tagData['slug']))
 		{
-			$tag = new Tag();
-			$tag->slug = $tagData['slug'];
-			$tag->title = $tagData['title'];
+			$slug = $tagData['slug'];
 		}
-
-		if(empty($tag->slug) && isset($tag->title))
-			$tag->slug = self::CreateSlug($tag->title);
 		else
-			$tag->slug = self::CreateSlug($tag->slug);
+			$slug = $tagData;
+		
+		// Clean the slug.
+		$slug = self::CreateSlug($slug);
 
 		if(isset($index) && is_numeric($index))
 		{
 			// Updating existing tags
-			$sql = "UPDATE tags SET slug = ?, title = ? WHERE tag_id = ?";
+			$sql = "UPDATE tags SET slug = ? WHERE tag_id = ?";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$tag->slug, $tag->title, $index]);
+			$statement->execute([$slug, $index]);
 			return $index;
 		}
 		else
 		{
 			// Inserting a new tag item into the database
-			$sql = "INSERT INTO tags (slug, title) VALUES (?, ?)";
+			$sql = "INSERT INTO tags (slug) VALUES (?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$tag->slug, $tag->title]);
+			$statement->execute([$tag->slug]);
 			return $dbc->lastInsertId();
 		}
 	}
@@ -158,7 +161,7 @@ class Tag
 	{
 		$queryString = strtolower($queryString);
 		$queryString = "%$queryString%";
-		$sql = "SELECT * FROM tags WHERE title LIKE ?";
+		$sql = "SELECT * FROM tags WHERE slug LIKE ?";
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$queryString]);
 		return $statement->fetchAll();

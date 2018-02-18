@@ -39,6 +39,14 @@ class Media
 		else
 			return null;
 	}
+	public function GetDate($format = null)
+	{
+		$dateTime = new DateTime($this->date);
+		if(!isset($format))
+			return $dateTime;
+		else
+			return $dateTime->format($format);
+	}
 	public function GetMimeType()
 	{
 		return mime_content_type($this->GetPath());

@@ -93,7 +93,6 @@ function MediaViewer()
 			}
 		}).fail(function()
 		{
-			console.log();
 			var modal = new Modal();
 			modal.Show("Error", "There was an error getting the media information.");
 		});

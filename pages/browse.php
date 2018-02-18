@@ -118,7 +118,7 @@ function MediaViewer()
 		<ul class="tags">
 		</ul>
 	</div>
-	<div id="media-editor" hidden>
+	<div id="media-editor">
 		<input type="text" name="newTag">
 		<ul class="tags">
 		</ul>

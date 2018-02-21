@@ -71,6 +71,10 @@ class Page
 				<button class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
 				<?php // $this->tagField->ShowField(); ?>
 			</form> -->
+			<form class="pure-form" method="GET" action="">
+				<input type="text" name="q">
+				<button class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
+			</form>
 		</div>
 	</div>
 	<div class="content">

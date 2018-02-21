@@ -16,7 +16,7 @@ class Thumbnails
 		{	
 			try
 			{
-				if($override || is_file($item->GetThumbnail()))
+				if($override || !is_file($item->GetThumbnail()))
 				{
 					self::MakeFor($dbc, $item);
 					$results["success"] ++;
@@ -27,7 +27,7 @@ class Thumbnails
 			catch( Exception $e)
 			{
 				$results["failed"] ++;
-				echo "Failed to process $item->media_id. $e\n";
+				echo "Failed to process $item->media_id. ".$e->getMessage()."\n";
 			}
 		}
 		return $results;
@@ -77,7 +77,7 @@ class Thumbnails
 
 		// The the duration of the media.
 		$ffprobe = "ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $input";
-		exec(escapeshellcmd($ffprobe), $ffprobeOut, $exit_code);
+		exec($ffprobe, $ffprobeOut, $exit_code);
 
 		if($exit_code)
 			throw new Exception("FFprobe Error, " . implode('\n\r', $ffprobeOut));
@@ -93,7 +93,7 @@ class Thumbnails
 
 		// Actually get the picture
 		$command = "ffmpeg -ss $time -i $input -vframes 1 -vcodec png -y $output";
-		exec(escapeshellcmd($command), $ffmpegOut, $exit_code);
+		exec($command, $ffmpegOut, $exit_code);
 
 		if($exit_code)
 			throw new Exception("FFmpeg Error, " . implode('\n\r', $ffmpegOut));

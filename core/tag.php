@@ -89,6 +89,16 @@ class Tag
 		
 		return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
 	}
+	public static function GetAllSlugs($dbc)
+	{
+				// TODO: Add support for slugs.
+		$sql = "SELECT slug from tags";
+
+		$data = array();
+		$statement = $dbc->query($sql);
+		
+		return $statement->fetchAll(PDO::FETCH_COLUMN);
+	}
 	public static function DeleteSingle($dbc, $tag)
 	{
 		if($tag instanceof Tag)
@@ -152,7 +162,7 @@ class Tag
 			$sql = "INSERT INTO tags (slug) VALUES (?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$tag->slug]);
+			$statement->execute([$slug]);
 			return $dbc->lastInsertId();
 		}
 	}

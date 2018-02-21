@@ -28,12 +28,16 @@ class Page
 <div class="main">
 	<div class="header">
 		<h1>Media</h1>
+		<div class="pure-menu pure-menu-horizontal">
+			<ul class="pure-menu">
+				<li class="pure-menu-item"><a href="<?=ROOT."/edit/";?>" class="pure-menu-link">&#10094; Edit</a></li>
+				<li class="pure-menu-item"><a href="<?=ROOT."/edit/media/new";?>" class="pure-menu-link">Create New</a></li>
+				<li class="pure-menu-item"><a href="<?=ROOT."/utils/thumbnails-all.php";?>" class="pure-menu-link">All Thumbnails</a></li>
+				<li class="pure-menu-item"><a href="<?=ROOT."/utils/tags-all.php";?>" class="pure-menu-link">All Tags</a></li>
+			</ul>
+		</div>
 	</div>
 	<div class="content">
-		<a class="pure-button pure-button-primary" href="<?php echo ROOT."/edit/media/new/" ?>">
-			Insert New Media
-			<i class="fa fa-plus"></i>
-		</a>
 		<?php
 		if(isset($this->mediaItems) && $this->total > 0)
 		{

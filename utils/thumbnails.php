@@ -5,9 +5,12 @@ require_once SYS_ROOT . "/functions.php";
 
 class Thumbnails
 {
-	public static function BatchMake($dbc, $media)
+	public static function MakeForMultiple($dbc, $mediaItems)
 	{
-		
+		foreach ($mediaItems as $item)
+		{	
+			self::MakeFor($dbc, $item);
+		}
 	}
 	public static function MakeFor($dbc, $media)
 	{

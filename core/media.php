@@ -141,7 +141,6 @@ class Media
 
 		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
 	}
-
 	static function DeleteSingle($dbc, $media)
 	{
 		$media = self::GetID($media);

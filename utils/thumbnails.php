@@ -5,12 +5,32 @@ require_once SYS_ROOT . "/functions.php";
 
 class Thumbnails
 {
-	public static function MakeForMultiple($dbc, $mediaItems)
+	public static function MakeForMultiple($dbc, $mediaItems, $override = false)
 	{
+		$results = array(
+			'skipped'		=> 0,
+			'failed'		=> 0,
+			'success'		=> 0,
+		);
 		foreach ($mediaItems as $item)
 		{	
-			self::MakeFor($dbc, $item);
+			try
+			{
+				if($override || is_file($item->GetThumbnail()))
+				{
+					self::MakeFor($dbc, $item);
+					$results["success"] ++;
+				}
+				else
+					$results["skipped"] ++;
+			}
+			catch( Exception $e)
+			{
+				$results["failed"] ++;
+				echo "Failed to process $item->media_id. $e\n";
+			}
 		}
+		return $results;
 	}
 	public static function MakeFor($dbc, $media)
 	{

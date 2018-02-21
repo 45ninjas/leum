@@ -6,22 +6,36 @@ require_once SYS_ROOT . "/core/leum-core.php";
 
 $dbc = DBConnect();
 
+$overwrite = isset($_GET['overwrite']);
+
 $batch = 0;
 $batchCount = 1;
 $batchSize = 100;
 
-$items = Media::GetAll($dbc, $batch, $batchSize);
-$totalBatches = LeumCore::GetTotalItems($dbc) / $batchSize;
+DoBatch($batch, $batchSize);
+
+$totalBatches = ceil(LeumCore::GetTotalItems($dbc) / $batchSize);
 echo "Batch $batchCount of $totalBatches\n";
 flush();
 Thumbnails::MakeForMultiple($dbc, $items);
 
 for ($batch = 1; $batch < $totalBatches; $batch++, $batchCount++)
-{ 
+{
 	$items = Media::GetAll($dbc, $batch, $batchSize);
 	echo "Batch $batchCount of $totalBatches\n";
 	flush();
-	Thumbnails::MakeForMultiple($dbc, $items);
+	$result = Thumbnails::MakeForMultiple($dbc, $items, $overwrite);
 }
-echo "Done";
+
+function DoBatch($batch, $size)
+{
+	global $totalBatches;
+	$result = Media::GetAll($dbc, $batch, $size);
+	list($result);
+	echo "Batch \t$batch of \t$totalBatches.\n";
+	echo "\tFailed: $failed\n";
+	echo "\tSkipped: $skipped\n";
+	echo "\tSuccess: $success\n";
+}
+echo "Done\n";
 ?>

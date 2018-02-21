@@ -17,6 +17,7 @@ $totalBatches = null;
 
 DoBatch($dbc, $batch, $batchSize);
 flush();
+die();
 
 for ($batch = 1; $batch < $totalBatches; $batch++, $batchCount++)
 {

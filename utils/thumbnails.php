@@ -16,7 +16,7 @@ class Thumbnails
 		{	
 			try
 			{
-				if($override || !is_file($item->GetThumbnail()))
+				if($override || !is_file($item->GetThumbPath()))
 				{
 					self::MakeFor($dbc, $item);
 					$results["success"] ++;

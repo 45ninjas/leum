@@ -4,6 +4,8 @@ if(!defined('SYS_ROOT'))
 require_once SYS_ROOT . "/utils/thumbnails-all.php";
 require_once SYS_ROOT . "/core/leum-core.php";
 
+header("Content-Type: text/plain");
+
 $dbc = DBConnect();
 
 $overwrite = isset($_GET['overwrite']);
@@ -11,31 +13,32 @@ $overwrite = isset($_GET['overwrite']);
 $batch = 0;
 $batchCount = 1;
 $batchSize = 100;
+$totalBatches = null;
 
-DoBatch($batch, $batchSize);
-
-$totalBatches = ceil(LeumCore::GetTotalItems($dbc) / $batchSize);
-echo "Batch $batchCount of $totalBatches\n";
+DoBatch($dbc, $batch, $batchSize);
 flush();
-Thumbnails::MakeForMultiple($dbc, $items);
 
 for ($batch = 1; $batch < $totalBatches; $batch++, $batchCount++)
 {
-	$items = Media::GetAll($dbc, $batch, $batchSize);
-	echo "Batch $batchCount of $totalBatches\n";
+	DoBatch($dbc, $batch, $batchSize);
 	flush();
-	$result = Thumbnails::MakeForMultiple($dbc, $items, $overwrite);
 }
 
-function DoBatch($batch, $size)
+function DoBatch($dbc, $batch, $size)
 {
-	global $totalBatches;
-	$result = Media::GetAll($dbc, $batch, $size);
-	list($result);
-	echo "Batch \t$batch of \t$totalBatches.\n";
-	echo "\tFailed: $failed\n";
-	echo "\tSkipped: $skipped\n";
-	echo "\tSuccess: $success\n";
+	global $totalBatches, $overwrite;
+
+	$items = Media::GetAll($dbc, $batch, $size);
+	
+	if($totalBatches == null)
+		$totalBatches = ceil(LeumCore::GetTotalItems($dbc) / $size);
+
+	echo "Batch " . ($batch + 1) . " of $totalBatches\n";
+
+	$result = Thumbnails::MakeForMultiple($dbc, $items, $overwrite);
+	echo "\tFailed: " . $result['failed'] . "\n";
+	echo "\tSkipped: " . $result['skipped'] . "\n";
+	echo "\tSuccess: " . $result['success'] . "\n";
 }
 echo "Done\n";
 ?>

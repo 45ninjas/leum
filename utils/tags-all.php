@@ -43,14 +43,12 @@ function DoBatch($dbc, $batch, $size)
 function DoSingle($dbc, $media)
 {
 	global $allKnownTags;
-	
+
 	$tags = $media->GetTags($dbc, true);
-	var_dump($tags);
 
 	$dirname = str_replace('\\', '/', dirname($media->path));
 
 	$fileTags = explode('/', $dirname);
-	var_dump($fileTags);
 
 	foreach ($fileTags as $value)
 	{
@@ -58,7 +56,6 @@ function DoSingle($dbc, $media)
 
 		if(!in_array($slug, $tags))
 		{
-			echo "$slug\n";
 			array_push($tags, $slug);
 
 			if(!in_array($slug, $allKnownTags))
@@ -83,5 +80,6 @@ function AddTag($dbc, $slug)
 		throw new Exception("Failed to create tag");
 
 }
+
 echo "Done\n";
 ?>

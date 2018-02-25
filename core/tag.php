@@ -36,7 +36,7 @@ class Tag
 		$string = preg_replace ($find, $repl, $string);
 
 		//return the friendly url
-		return $string; 
+		return substr($string, 0, 32);
 	}
 
 	public static function GetSingle($dbc,$tag)

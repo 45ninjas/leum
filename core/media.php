@@ -253,5 +253,14 @@ class Media
 
 		throw new Exception("Bad index input");
 	}
+
+	public static function GetFromPath($dbc, $path)
+	{
+		$sql = "SELECT media_id from media where path = ?";
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$path]);
+
+		return $statement->fetchAll(PDO::FETCH_COLUMN);
+	}
 }
 ?>

@@ -22,7 +22,7 @@ $batchCount = 1;
 $batchSize = 100;
 $totalBatches = null;
 
-$allKnownTags = Tag::GetAll($dbc);
+$allKnownTags = Tag::GetAllSlugs($dbc);
 
 DoBatch($dbc, $batch, $batchSize);
 flush();
@@ -63,6 +63,9 @@ function DoSingle($dbc, $media)
 	foreach ($fileTags as $value)
 	{
 		$slug = Tag::CreateSlug($value);
+
+		if(empty($slug))
+			continue;
 
 		if(!in_array($slug, $tags))
 		{

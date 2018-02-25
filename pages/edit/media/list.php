@@ -34,6 +34,7 @@ class Page
 				<li class="pure-menu-item"><a href="<?=ROOT."/edit/media/new";?>" class="pure-menu-link">Create New</a></li>
 				<li class="pure-menu-item"><a href="<?=ROOT."/utils/thumbnails-all.php";?>" class="pure-menu-link">All Thumbnails</a></li>
 				<li class="pure-menu-item"><a href="<?=ROOT."/utils/tags-all.php";?>" class="pure-menu-link">All Tags</a></li>
+				<li class="pure-menu-item"><a href="<?=ROOT."/utils/importer.php";?>" class="pure-menu-link">Import</a></li>
 			</ul>
 		</div>
 	</div>

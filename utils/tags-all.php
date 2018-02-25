@@ -5,6 +5,16 @@ require_once SYS_ROOT . "/core/leum-core.php";
 
 header("Content-Type: text/plain");
 
+$defaultTags = array();
+
+if(isset($_GET['defaults']))
+{
+  foreach(explode(',',$_GET['defaults']) as $item)
+  {
+    $defaultTags[] = Tag::CreateSlug($item);  
+  }
+}
+
 $dbc = DBConnect();
 
 $batch = 0;

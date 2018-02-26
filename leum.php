@@ -59,7 +59,7 @@ class Leum
 		$this->arguments = $arguments;
 	}
 
-	public function RequireResource($file, $html)
+	public function RequireResource($file, $html, $head = true)
 	{
 		if(!array_key_exists($file, $this->headIncludes))
 		{

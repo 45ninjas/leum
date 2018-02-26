@@ -1,6 +1,7 @@
 var activeViewer = new MediaViewer();
 var allIndexes = [];
 var activeIndexIndex = 0;
+var tagEditor;
 function GetRootDir()
 {
     return document.head.querySelector("[property=site-root]").content;
@@ -8,6 +9,7 @@ function GetRootDir()
 
 document.addEventListener("DOMContentLoaded", function ()
 {
+	tagEditor = new TagEditor(true);
 	// Set the close button.
 	var closeButton = document.querySelector("#media-viewer-close");
 	closeButton.addEventListener("click", function()
@@ -80,8 +82,11 @@ function MediaViewer()
 			{
 				SetTitle(data["title"]);
 				SetContent(data["content"]);
-				SetTags(data["tag slugs"]);
 				SetEditLink(data["edit link"]);
+
+				tagEditor.SetTags(data['tags']);
+				tagEditor.SetMediaId(mediaIndex);
+
 				SetHidden(false);
 				SetModalBack(true);
 				UpdateButtons();
@@ -103,6 +108,7 @@ function MediaViewer()
 		SetModalBack(false);
 		SetContent(null);
 		SetHidden(true);
+		tagEditor.SetMediaId(null);
 	}
 	function SetTitle(title)
 	{

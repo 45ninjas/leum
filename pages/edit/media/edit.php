@@ -14,7 +14,8 @@ class Page
 	private $mediaItem;
 	private $modify = false;
 	private $viewer;
-	private $tagField;
+
+	private $tagString = "";
 
 	public function __construct($arguments)
 	{
@@ -49,6 +50,7 @@ class Page
 		if(isset($mediaId))
 		{
 			$this->mediaItem = Media::GetSingle($dbc, $mediaId);
+			$this->tagString = implode(',', $this->mediaItem->GetTags($dbc, true));
 			$this->title = "Edit Media";
 
 			if($this->mediaItem == null)
@@ -61,7 +63,8 @@ class Page
 			$this->mediaItem = new Media();
 
 		$this->viewer = new MediaViewer($this->mediaItem, true);
-		$this->tagField = new TagField($this->mediaItem->GetTags());
+
+		Leum::Instance()->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 	}
 	public function Content()
 	{ ?>
@@ -94,12 +97,17 @@ class Page
 						</div>
 
 					</div>
-
-					<label for="tag-input">Tags</label>
-					<?php $this->tagField->ShowInput("pure-u-1"); ?>
-					<?php $this->tagField->ShowField(); ?>
-					<br>
 				</fieldset>
+
+				<label for="tag-input-field">Tags</label>
+				<div class="tag-input">
+					<input class="pure-u-1" tabindex="4" type="text" id="tag-input-field" placeholder="tag">
+					<ul class="suggestion-box" id="suggestion-box" hidden>
+					</ul>
+				</div>
+				<input id="tag-input" type="hidden" name="tags" value="<?=$this->tagString;?>">
+				<div id="tag-editor-field" class="tags tag-field">
+				</div>
 
 				<button form="media-edit" tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 				<?php if($this->modify): ?>
@@ -107,10 +115,21 @@ class Page
 					<i class="fa fa-trash"></i>
 					Delete
 				</a>
-				<button tabindex="6" type="submit" name="modify" value="generate-thumbnail" class="pure-button">Generate Thumbnail</button>
+				<button form="media-edit" tabindex="6" type="submit" name="modify" value="generate-thumbnail" class="pure-button">Generate Thumbnail</button>
 				<script type="text/javascript" src="<?php Asset("/resources/js/deleter.js");?>"></script>
 				<?php endif; ?>
 			</form>
+			<script type="text/javascript">
+				window.onload = function()
+				{
+					var tags = document.querySelector("input#tag-input");
+					var slugs = tags.value.split(',');
+
+					editor = new TagEditor();
+
+					editor.SetTags(slugs);
+				};
+			</script>
 		</div>
 	</div>
 

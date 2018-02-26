@@ -25,6 +25,7 @@ define('MEDIA_DIR', '/content/media');
 define('THUMB_DIR', '/content/thumbs');
 define('THUMB_SIZE', 196);
 define('LOG_DIR', SYS_ROOT . '/logs');
+define('API_URL', ROOT . "/api");
 
 // === Routes ===
 // 

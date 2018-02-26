@@ -28,6 +28,7 @@ $leumContent = trim(ob_get_clean());
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/font-awesome.min.css"); ?>">
 	<script type="text/javascript" src="<?php Asset("/resources/js/jquery-3.2.1.min.js"); ?>"></script>
 	<meta property="site-root" content="<?php echo ROOT; ?>">
+	<meta property="api-url" content="<?php echo API_URL; ?>">
 	<?php TheHead(); ?>
 </head>
 <body>

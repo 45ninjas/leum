@@ -50,7 +50,7 @@ function CreateSlugString($tags)
 function ParseSlugString($string)
 {
 	$string = preg_replace("[^A-Za-z0-9-]", "", $string);
-	$slugs = explode('+', $string);
+	$slugs = explode(',', $string);
 	$slugs = array_filter($slugs);
 	return $slugs;
 }

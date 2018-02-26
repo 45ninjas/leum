@@ -14,18 +14,31 @@ class Tags
 	{
 		if(count($this->api->args) == 0)
 		{
-			// Get all the paginated
-			$data = array();
+			if(isset($_GET["q"]))
+			{
+				$limit;
 
-			$tags = CoreTag::GetAll($this->dbc);
+				if(isset($_GET['limit']) && is_numeric($_GET['limit']))
+					$limit = $_GET['limit'];
 
-			// Get the count of total items.
-			$totalItems = $this->dbc->query("SELECT found_rows()")->fetch()["found_rows()"];
-			$data['total'] = $totalItems;
+				$slug = CoreTag::CreateSlug($_GET['q']);
+				return CoreTag::FindLike($this->dbc, $slug, false, $limit);
+			}
+			else
+			{
+				// Get all the paginated
+				$data = array();
 
-			// Finally, return the stuff.
-			$data['tags'] = $tags;
-			return $data;
+				$tags = CoreTag::GetAll($this->dbc);
+
+				// Get the count of total items.
+				$totalItems = $this->dbc->query("SELECT found_rows()")->fetch()["found_rows()"];
+				$data['total'] = $totalItems;
+
+				// Finally, return the stuff.
+				$data['tags'] = $tags;
+				return $data;
+			}
 		}
 		// Return only one tags item because the first argument is a number.
 		else if($this->IsArgNumber())

@@ -77,43 +77,105 @@ pre#debug-head
 	justify-content: center;
 }
 
-ul.tags
+.suggestion-box li
+{
+	display: flex;
+}
+.suggestion-box li .tag-count
+{
+	opacity: 0.5;
+}
+.suggestion-box li .tag-slug
+{
+	flex: 1;
+}
+
+.tags
 {
 	display: block;
-	list-style: none;
-	margin: 0;
-	padding: 0;
+	margin: 0.5em 0;
 }
-ul.tags li
+.tag
 {
-	display: inline-block;
+	margin-right: 0.3em;
 }
-
-ul.tags li,
-.button-stealth
-{
-	color: white;
-	background-color: #00000000;
-	border: 1px solid #FFFFFF30;
-	border-radius: 2px;
-	font-size: 85%;
-	padding: 0.3em 0.6em;
-}
-ul.tags li a,
-.button-stealth a
-{
-	color: white;
-}
-
 .button-stealth:hover
 {
 	background-color: #FFFFFF30;
 }
-
-.items .item-tile
+.tag-input .suggestion-box
 {
+	display: inline-block;
+	left: 0;
+	right: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	position: absolute;
+	background-color: white;
+}
+.footer .button-stealth:hover
+{
+	background-color: #00000030;
 }
 
+.button-stealth,
+.footer .tag,
+.footer input,
+.footer .suggestion-box
+{
+	color: white;
+	background-color: #00000000;
+	border: 1px solid #FFFFFF30;
+	border-radius: 4px;
+	font-size: 85%;
+	padding: 0.3em 0.6em;
+
+	display: inline-block;
+	margin-right: 0.3em;
+	margin: 0.5 1em;
+}
+.footer .suggestion-box
+{
+	bottom: 2em;
+	background-color: #000000CC;
+}
+.button-stealth:empty
+{
+	display: none;
+}
+.button-stealth a
+{
+	color: white;
+}
+.tag-input
+{
+	widows: 100%;
+	position: relative;
+	display: block;
+}
+.footer .tags
+{
+	margin: 0;
+}
+.footer input
+{
+	width: 160px;
+}
+.tag-input li
+{
+	padding: .5em .6em;
+}
+.footer .tag-input li:hover
+{
+	background-color: #EEEEEE0C;
+}
+.tag-input li:hover
+{
+	background-color: #EEE;
+}
 .items .item-tile img
 {
 	width: 100%;

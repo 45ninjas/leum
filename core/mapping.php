@@ -240,7 +240,7 @@ class Mapping
 		if(is_null($newSlugs) || count($newSlugs) == 0)
 		{
 			Mapping::UnmapAll($dbc, $media_id);
-			return;
+			return "deleted all tags";
 		}
 
 		// Get the tag_id's of the new slugs.

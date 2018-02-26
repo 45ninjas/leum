@@ -56,6 +56,8 @@ class Page
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
 
 		$this->pageButtons = new PageButtons($this->totalPages,$this->pageNum + 1);
+
+		Leum::Instance()->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 	}
 	public function Content()
 	{ ?>
@@ -116,16 +118,17 @@ function MediaViewer()
 <div id="media-viewer" class="media-viewer full" hidden>
 	<h1 id="media-title" class="title"></h1>
 	<div class="footer">
+		<div class="tag-input">
+			<input type="text" id="tag-input-field" placeholder="new tag">
+			<ul class="suggestion-box" id="suggestion-box" hidden>
+			</ul>
+		</div>
+		<input id="tag-input" type="hidden" name="tags" value="">
+		<div id="tag-editor-field" class="tags tag-field">
+		</div>
 		<a id="media-edit-link" class="button-stealth" href="#">
 			<i class="fa fa-edit"></i>
 		</a>
-		<ul class="tags">
-		</ul>
-	</div>
-	<div id="media-editor">
-		<input type="text" name="newTag">
-		<ul class="tags">
-		</ul>
 	</div>
 </div>
 <a id="media-viewer-close" class="viewer-button" hidden>&times;</a>

@@ -1,5 +1,6 @@
 <?php namespace API;
 use Media as CoreMedia;
+use Mapping as CoreMapping;
 class Media
 {
 	private $dbc;
@@ -45,12 +46,14 @@ class Media
 		{
 			$index = $this->api->args[0];
 			$data = CoreMedia::GetSingle($this->dbc, $index);
-			
+
 			if(isset($this->api->data['usage']) && $this->api->data['usage'] === "viewer")
 					return $this->GetViewer($data);
 
 			if(!isset($data))
 				throw new \Exception("Media not found");
+
+			// $data->tags = $data->GetTags($dbc, true);
 		}
 		else
 			throw $this->inputException;
@@ -65,7 +68,7 @@ class Media
 		$response["title"] = $media->title;
 		$response["edit link"] = ROOT . "/edit/media/$media->media_id";
 		$response["id"] = $media->media_id;
-		$response["tag slugs"] = $media->GetTags($this->dbc, true);
+		$response["tags"] = $media->GetTags($this->dbc, true);
 
 		require_once SYS_ROOT . "/page-parts/media-viewer.php";
 		$viewer = new \MediaViewer($media, false, true, true, true, true);
@@ -78,17 +81,28 @@ class Media
 	public function Post()
 	{
 		$data = $this->api->data;
-		
+
 		$mediaItem = new CoreMedia();
-		$mediaItem->title = $data['title'];
-		$mediaItem->path = $data['path'];
-		$mediaItem->source = $data['source'];
+		if(isset($data['title']) && isset($data['path']) && isset($data['source']))
+		{
+			$mediaItem->title = $data['title'];
+			$mediaItem->path = $data['path'];
+			$mediaItem->source = $data['source'];
+		}
 
 		if($this->IsArgNumber())
 		{
-			$index = $this->api->args[0];
 			$mediaItem->media_id = $this->api->args[0];
-			return (int)CoreMedia::InsertSingle($this->dbc, $mediaItem);
+			if(isset($data['set-tags']))
+			{
+				$newSlugs = explode(',', $data['set-tags']);
+				return CoreMapping::SetMappedTags($this->dbc,$mediaItem, $newSlugs);
+			}
+			else
+			{
+				
+				return (int)CoreMedia::InsertSingle($this->dbc, $mediaItem);
+			}
 		}
 		else
 			return (int)CoreMedia::InsertSingle($this->dbc, $mediaItem);

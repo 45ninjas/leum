@@ -167,14 +167,27 @@ class Tag
 		}
 	}
 
-	public static function FindLike($dbc, $queryString)
+	public static function FindLike($dbc, $queryString, $singular = false, $limit = null)
 	{
+		$arguments = array();
 		$queryString = strtolower($queryString);
-		$queryString = "%$queryString%";
-		$sql = "SELECT * FROM tags WHERE slug LIKE ?";
+		$arguments[] = "%$queryString%";
+ 
+		$sql = "SELECT * FROM tags WHERE slug LIKE ? ORDER BY count DESC";
+
+		if(isset($limit) && is_numeric($limit))
+		{
+			$sql .= " LIMIT ?";
+			$arguments[] = $limit;
+		}
+
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$queryString]);
-		return $statement->fetchAll();
+		$statement->execute($arguments);
+		
+		if($singular)
+			return $statement->fetch();
+		else
+			return $statement->fetchAll();
 	}
 }
 ?>

@@ -50,7 +50,8 @@ class Page
 		}
 
 		// Get the items and total items to know how many pages we need.
-		$this->itemsToShow = Media::GetWithTags($dbc, $wantedTags, $unwantedTags, $this->pageNum, $this->pageSize);
+		//$this->itemsToShow = Media::GetWithTags($dbc, $wantedTags, $unwantedTags, $this->pageNum, $this->pageSize);
+		$this->itemsToShow = Media::GetWithTags($dbc, $unwantedTags, $wantedTags, $this->pageNum, $this->pageSize);
 
 		$this->totalResults = LeumCore::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);

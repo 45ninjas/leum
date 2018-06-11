@@ -79,7 +79,7 @@ function TagEditor(update = false)
 		$.getJSON(url, function(data)
 		{
 			ClearSugestions();
-			if(data !== false || "error" in data)
+			if(data !== false)
 			{
 				ShowSugestions(data);
 			}
@@ -116,13 +116,22 @@ function TagEditor(update = false)
 	function ShowSugestions(data)
 	{
 		sugestionBox.removeAttribute("hidden");
+		console.log(data);
+
+		var exists = false;
+		var input = textInput.value.toLowerCase();
+
 		for (var i = 0; i < data.length; i++)
 		{
 			if(i == 0)
 				topResult = data[i]['slug'];
 			AddSugestion(data[i]);
+			if(data[i].slug == input)
+				exists = true;
 		}
-		console.log(data);
+		if(!exists)
+			AddSugestion({ tag_id: -1, slug: input, count: "Create New" });
+
 	}
 	function ClearSugestions()
 	{
@@ -219,7 +228,7 @@ function TagEditor(update = false)
     	{
     		console.log("Updating");
 			var url = apiUrl + "/v2/media/" + mediaId;
-			$.post(url, {'set-tags':tagString}, function(data)
+			$.post(url, {'set-tags':tagString, 'add-new':true}, function(data)
 			{
 				console.log(data);
 			});

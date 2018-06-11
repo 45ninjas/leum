@@ -100,6 +100,10 @@ class Thumbnails
 
 		return true;		
 	}
+	public static function SnapshotAudio($input, $output, $waveform = false)
+	{
+		
+	}
 	private static function CreateThumbnailFromImg($input, $output)
 	{
 		// Check the file actually exists.

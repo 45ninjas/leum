@@ -38,7 +38,7 @@ class Page
 
 			$tags = ParseSlugString($_POST['tags']);
 			$index = Media::InsertSingle($dbc, $this->mediaItem,$mediaId);
-			Mapping::SetMappedTags($dbc, $index, $tags);
+			Mapping::SetMappedTags($dbc, $index, $tags, true);
 
 			if($_POST['modify'] === "generate-thumbnail")
 			{

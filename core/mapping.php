@@ -232,7 +232,7 @@ class Mapping
 		else
 			return $statement->fetchAll(PDO::FETCH_CLASS, 'Tag');
 	}
-	public static function SetMappedTags($dbc, $media, $newSlugs = null)
+	public static function SetMappedTags($dbc, $media, $newSlugs = null, $allowTagCreation = false)
 	{
 		$media_id = Mapping::GetMediaId($media);
 
@@ -249,29 +249,50 @@ class Mapping
 		$statement = $dbc->prepare($sql);
 		$statement->execute($newSlugs);
 
-		$newTags = $statement->fetchAll(PDO::FETCH_COLUMN);
+		$newTagIds = $statement->fetchAll(PDO::FETCH_COLUMN);
 
 		// Get the tags that are already mapped to this media item.
 		$sql = "SELECT tags.tag_id from map inner join tags on map.tag_id = tags.tag_id where media_id = ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media_id]);
-		$tagsInDb = $statement->fetchAll(PDO::FETCH_COLUMN);
+		$tagIdsInDb = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+		// Add any new tags.
+		if($allowTagCreation == true && count($newTagIds) != count($newSlugs))
+		{
+			// Looks like we've got tags to add.
+			// Figure out what slugs need to be created.
+			$indexPlaceholder = Mapping::PDOPlaceHolder($newSlugs);
+			$sql = "SELECT tags.slug FROM tags WHERE tags.slug IN ( $indexPlaceholder )";
+			$statement = $dbc->prepare($sql);
+			$statement->execute($newSlugs);
+			$existingSlugs = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+			foreach ($newSlugs as $newSlug)
+			{
+				if(!in_array($newSlug, $existingSlugs))
+				{
+					$tagId = Tag::InsertSingle($dbc, $newSlug);
+					$newTagIds[] = $tagId;
+				}
+			}
+		}
 
 		// Set-up our remove and add tag arrays.
 		$removeTags = array();
-		$addTags = $newTags;
+		$addTags = $newTagIds;
 
 		// Iterate over each tag that's currently mapped.
-		foreach ($tagsInDb as $dbTag)
+		foreach ($tagIdsInDb as $dbTag)
 		{
 			// if a tag is not in the list of new tags, remove it.
-			if(!in_array($dbTag, $newTags))
+			if(!in_array($dbTag, $newTagIds))
 				$removeTags[] = $dbTag;
 
 			// Otherwise remove the current tag from the list of new tags.
 			// we don't have to add tags that are already mapped.
-			unset($addTags[array_search($dbTag, $newTags)]);
+			unset($addTags[array_search($dbTag, $newTagIds)]);
 		}
 
 		if($dbc->beginTransaction())

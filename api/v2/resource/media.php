@@ -96,7 +96,8 @@ class Media
 			if(isset($data['set-tags']))
 			{
 				$newSlugs = explode(',', $data['set-tags']);
-				return CoreMapping::SetMappedTags($this->dbc,$mediaItem, $newSlugs);
+				$addNew = $data['add-new'] == true;
+				return CoreMapping::SetMappedTags($this->dbc,$mediaItem, $newSlugs, $addNew);
 			}
 			else
 			{

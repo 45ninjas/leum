@@ -14,6 +14,7 @@ class Tags
 	{
 		if(count($this->api->args) == 0)
 		{
+			// Search Query
 			if(isset($_GET["q"]))
 			{
 				$limit;

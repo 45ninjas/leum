@@ -216,7 +216,7 @@ class Media
 		if(isset($tags) && count($tags) > 0)
 		{
 			$tagPlaceholder = LeumCore::PDOPlaceholder($tags);
-			$sql .= " where tags.slug in ( $tagPlaceholder )";
+			$sql .= "\nWHERE tags.slug IN ( $tagPlaceholder )";
 			$parameters = array_merge($parameters, $tags);
 
 			$hasTags = true;
@@ -227,20 +227,23 @@ class Media
 			$excludePlaceholder = LeumCore::PDOPlaceholder($excludeTags);
 
 			if($hasTags)
-				$sql .= " and tags.slug not in ( $excludePlaceholder )";
+				$sql .= "\nAND";
 			else
-				$sql .= " where tags.slug not in ( $excludePlaceholder )";
+				$sql .= "\nWHERE";
+
+			$sql .= " tags.slug NOT IN ( $excludePlaceholder )";
 
 			$parameters = array_merge($parameters, $excludeTags);
 		}
 
 		// Group and limit the query.
-		$sql .= " GROUP BY media_id order by date desc limit ? offset ?";
+		$sql .= "\nGROUP BY media_id order by date desc limit ? offset ?";
 		array_push($parameters, $pageSize);
 		array_push($parameters, $offset);
 
 		$statement = $dbc->prepare($sql);
 		var_dump($sql);
+		var_dump($parameters);
 		$statement->execute($parameters);
 
 		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);

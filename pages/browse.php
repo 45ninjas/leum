@@ -24,6 +24,9 @@ class Page
 
 	private $viewer;
 
+	private $wantedTags;
+	private $unwantedTags;
+
 	public $useModal = true;
 	
 	public function __construct($arguments)
@@ -32,26 +35,31 @@ class Page
 
 		if(Leum::Instance() !== null)
 		{
-			Leum::Instance()->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
-			Leum::Instance()->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
+			$leum = Leum::Instance();
+			$leum->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
+			$leum->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
+			$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 		}
 
+		// Get the page number.
 		if(isset($_GET['page']) && is_numeric($_GET['page']))
 			$this->pageNum = $_GET['page'] - 1;
 
-		$unwantedTags = null;
-		$wantedTags = null;
+		// Get the wantedTags/IncludeTags.
+		$this->wantedTags = null;
+		if(isset($_GET['t']) && !empty($_GET['t']))
+			$this->wantedTags = explode(',', $_GET['t']);
 
-		if(isset($_GET['q']) && !empty($_GET['q']))
-		{
-			$query = new QueryReader($_GET['q']);
-			$unwantedTags = $query->unwantedTags;
-			$wantedTags = $query->wantedTags;
-		}
+		// Get the unwantedTags/ExcludeTags.
+		$this->unwantedTags = null;
+		if(isset($_GET['et']) && !empty($_GET['et']))
+			$this->unwantedTags = explode(',', $_GET['et']);
 
-		// Get the items and total items to know how many pages we need.
-		//$this->itemsToShow = Media::GetWithTags($dbc, $wantedTags, $unwantedTags, $this->pageNum, $this->pageSize);
-		$this->itemsToShow = Media::GetWithTags($dbc, $unwantedTags, $wantedTags, $this->pageNum, $this->pageSize);
+		var_dump($this->wantedTags);
+		var_dump($this->unwantedTags);
+
+		// Get media items based on the unwanted tags, wanted tags and page number.
+		$this->itemsToShow = Media::GetWithTags($dbc, $this->wantedTags, $this->unwantedTags, $this->pageNum, $this->pageSize);
 
 		$this->totalResults = LeumCore::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
@@ -66,21 +74,14 @@ class Page
 <div class="main">
 	<div class="header">
 		<h1>Browse</h1>
-	</div>
-	<div class="browse-bar">
-		<div class="content">
-			<!-- <form class="right pure-form" method="GET" action="">
-				<?php // $this->tagField->ShowInput(); ?>
-				<button class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
-				<?php // $this->tagField->ShowField(); ?>
-			</form> -->
-			<form class="pure-form" method="GET" action="">
-				<input type="text" name="q">
-				<button class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
-			</form>
+		<div class="pure-menu pure-menu-horizontal">
+			<ul class="pure-menu">
+				<li class="pure-menu-item"><a class="pure-menu-link">Filter <i class="fa fa-filter"></i></a></li>
+			</ul>
 		</div>
 	</div>
 	<div class="content">
+		<?php $this->FilterBox(); ?>
 		<?php echo "<p>$this->totalResults results, $this->totalPages pages.</p>" ?>
 	</div>
 	<div class="items">
@@ -120,11 +121,11 @@ function MediaViewer()
 	<h1 id="media-title" class="title"></h1>
 	<div class="footer">
 		<div class="tag-input">
+			<input id="tag-input" type="hidden" name="tags" value="">
 			<input type="text" id="tag-input-field" placeholder="new tag">
 			<ul class="suggestion-box" id="suggestion-box" hidden>
 			</ul>
 		</div>
-		<input id="tag-input" type="hidden" name="tags" value="">
 		<div id="tag-editor-field" class="tags tag-field">
 		</div>
 		<a id="media-edit-link" class="button-stealth" href="#">
@@ -136,5 +137,75 @@ function MediaViewer()
 <a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
 <a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
 <?php }
+function FilterBox()
+{
+$wantedText = "";
+$unwantedText = "";
+
+if(isset($this->unwantedTags))
+	$unwantedText = implode(',', $this->unwantedTags);
+
+if(isset($this->wantedTags))
+	$wantedText = implode(',', $this->wantedTags);
+?>
+<div id="tag-filter" class="tag-filter">
+	<form class="pure-form" method="GET">
+		<label for ="contain-tag-input">Include Tags</label>
+		<div class="contain-tags">
+			<div class="tag-input">
+				<input id="contain-tags" type="hidden" name="t" value="<?=$wantedText?>">
+				<input class="pure-u-1" type="text" id="contain-tag-input" placeholder="tag">
+				<br>
+				<ul class="suggestion-box" id="contain-suggestion-box" hidden>
+				</ul>
+			</div>
+			<div id="contain-tag-field" class="tags tag-field">
+			</div>
+		</div>
+		<label for ="contain-tag-input">Exclude Tags</label>
+		<div class="exclude-tags">
+			<div class="tag-input">
+				<input id="exclude-tags" type="hidden" name="et" value="<?=$unwantedText?>">
+				<input class="pure-u-1" type="text" id="exclude-tag-input" placeholder="tag" disabled="">
+				<br>
+				<ul class="suggestion-box" id="exclude-suggestion-box" hidden>
+				</ul>
+			</div>
+			<div id="exclude-tag-field" class="tags tag-field">
+			</div>
+		</div>
+		<button type="submit" class="pure-button pure-button-primary">Apply</button>
+		<button type="submit" class="pure-button" id="tag-filter-clear">Clear</button>
+	</form>
+</div>
+<script type="text/javascript">
+	window.onload = function()
+	{
+		var Tags = document.querySelector("#tag-filter #contain-tags");
+		var Input = document.querySelector("#tag-filter #contain-tag-input");
+		var Field = document.querySelector("#tag-filter #contain-tag-field");
+		var SuggestionBox = document.querySelector("#tag-filter #contain-suggestion-box");
+
+		containEditor = new TagEditor(Input, Field,Tags, SuggestionBox);
+		containEditor.SetTags(Tags.value.split(','));
+
+		Tags = document.querySelector("#tag-filter #exclude-tags");
+		Input = document.querySelector("#tag-filter #exclude-tag-input");
+		Field = document.querySelector("#tag-filter #exclude-tag-field");
+		SuggestionBox = document.querySelector("#tag-filter #exclude-suggestion-box");
+
+		excludeEditor = new TagEditor(Input, Field,Tags, SuggestionBox);
+		excludeEditor.SetTags(Tags.value.split(','));
+
+		var clearButton = document.querySelector("#tag-filter #tag-filter-clear");
+		clearButton.onclick = function()
+		{
+			excludeEditor.Clear();
+			containEditor.Clear();
+		};
+	}
+</script>
+<?php
+}
 }
 ?>

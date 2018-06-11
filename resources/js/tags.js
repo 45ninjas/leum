@@ -205,10 +205,12 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
     }
     this.RemoveTag = function(slug)
     {
+    	console.log("Removing: " +  slug);
+    	console.log(tags);
     	if(InArray(tags, slug))
     	{
     		// Remove the slug from the list of tags.
-    		var index = tags.indexOf(5);
+    		var index = tags.indexOf(slug);
     		// if(index > -1)   This statement is redundant as the only way to execute this code is if the item is in the array.
     		tags.splice(index, 1);
 
@@ -224,7 +226,7 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
     {
     	for (var i = 0; i < tags.length; i++)
     	{
-    		RemoveTag(tags[i].slug);
+    		this.RemoveTag(tags[i]);
     	}
     }
     function InArray(array, value)
@@ -235,15 +237,16 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
     function TagsChanged()
     {
     	tagString = tags.join(seperator);
+    	console.log(tagString);
     	if(tagInput != null)
     			tagInput.value = tagString;
     	if(editor.autoUpdate && mediaId != null)
     	{
-    		console.log("Updating");
+    		// console.log("Updating");
 			var url = apiUrl + "/v2/media/" + mediaId;
 			$.post(url, {'set-tags':tagString, 'add-new':true}, function(data)
 			{
-				console.log(data);
+				// console.log(data);
 			});
     	}
     }

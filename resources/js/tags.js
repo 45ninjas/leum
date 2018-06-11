@@ -1,4 +1,4 @@
-function TagEditor(update = false)
+function TagEditor(textBox, tagField, tagInput, suggestionBox)
 {
 	var mediaId;
 
@@ -7,16 +7,21 @@ function TagEditor(update = false)
 		mediaId = id;
 	}
 
-	var autoUpdate = update;
+	var autoUpdate = false;
+	var allowNew = false;
+	var resultLimit = 10;
+	var seperator = ',';
+	var apiUrl = document.head.querySelector("[property=api-url]").content;	
+
 	var tagString;
-	var apiUrl = document.head.querySelector("[property=api-url]").content;
 
 	var tags = new Array();
 
-	var textInput = document.querySelector("#tag-input-field");
-	var tagInput = document.querySelector("#tag-input");
-	var sugestionBox = document.querySelector("#suggestion-box");
-	var tagField = document.querySelector("#tag-editor-field");
+	var textInput = textBox;
+	var tagInput = tagInput;
+	var sugestionBox = suggestionBox;
+	var field = tagField;
+
 
 	// Text inputs.
 	var timer;
@@ -49,7 +54,7 @@ function TagEditor(update = false)
 		600);
 	});
 
-	tagField.addEventListener("click", function(e)
+	field.addEventListener("click", function(e)
 	{
 		if(e.target.parentElement.matches(".remove-button"))
 		{
@@ -73,7 +78,7 @@ function TagEditor(update = false)
 
 	function DoTextSearch()
 	{
-		var url = apiUrl + "/v2/tags?limit=10&q=" + textInput.value;
+		var url = apiUrl + "/v2/tags?limit=" + editor.resultLimit + "&q=" + textInput.value;
 
 		// TODO: Remove jquery dependency.
 		$.getJSON(url, function(data)
@@ -116,7 +121,6 @@ function TagEditor(update = false)
 	function ShowSugestions(data)
 	{
 		sugestionBox.removeAttribute("hidden");
-		console.log(data);
 
 		var exists = false;
 		var input = textInput.value.toLowerCase();
@@ -126,10 +130,12 @@ function TagEditor(update = false)
 			if(i == 0)
 				topResult = data[i]['slug'];
 			AddSugestion(data[i]);
-			if(data[i].slug == input)
+
+			if(editor.allowNew && data[i].slug == input)
 				exists = true;
 		}
-		if(!exists)
+
+		if(editor.allowNew && !exists)
 			AddSugestion({ tag_id: -1, slug: input, count: "Create New" });
 
 	}
@@ -148,9 +154,9 @@ function TagEditor(update = false)
 		if(tags != null)
 		{
 			tags = new Array();
-			while (tagField.firstChild)
+			while (field.firstChild)
 			{
-				tagField.removeChild(tagField.firstChild);
+				field.removeChild(field.firstChild);
 			}
     	}
     	// Add the new tags.
@@ -189,7 +195,7 @@ function TagEditor(update = false)
 	    	tagRemove.classList.add("remove-button");
 	    	tagElement.appendChild(tagRemove);
 
-	    	tagField.appendChild(tagElement);
+	    	field.appendChild(tagElement);
 
 	    	if(!inital)
     			TagsChanged();
@@ -207,12 +213,19 @@ function TagEditor(update = false)
     		tags.splice(index, 1);
 
     		// Remove the visual tag.
-    		var tag = tagField.querySelector("[data-slug=\"" + slug + "\"]");
-    		tagField.removeChild(tag);
+    		var tag = field.querySelector("[data-slug=\"" + slug + "\"]");
+    		field.removeChild(tag);
     		TagsChanged();
     	}
     	else
     		console.log("Slug " + slug + " does not exist, can't remove.");
+    }
+    this.Clear = function()
+    {
+    	for (var i = 0; i < tags.length; i++)
+    	{
+    		RemoveTag(tags[i].slug);
+    	}
     }
     function InArray(array, value)
     {
@@ -221,10 +234,10 @@ function TagEditor(update = false)
 
     function TagsChanged()
     {
-    	tagString = tags.join(',');
+    	tagString = tags.join(seperator);
     	if(tagInput != null)
     			tagInput.value = tagString;
-    	if(autoUpdate && mediaId != null)
+    	if(editor.autoUpdate && mediaId != null)
     	{
     		console.log("Updating");
 			var url = apiUrl + "/v2/media/" + mediaId;

@@ -9,7 +9,18 @@ function GetRootDir()
 
 document.addEventListener("DOMContentLoaded", function ()
 {
-	tagEditor = new TagEditor(true);
+		var tags = document.querySelector("#media-viewer #tag-input");
+		var input = document.querySelector("#media-viewer #tag-input-field");
+		var field = document.querySelector("#media-viewer #tag-editor-field");
+		var suggestionBox = document.querySelector("#media-viewer #suggestion-box");
+
+		tagEditor = new TagEditor(input, field, tags, suggestionBox);
+		tagEditor.allowNew = true;
+		tagEditor.autoUpdate = true;
+		tagEditor.resultLimit = 10;
+		tagEditor.SetTags(tags.value.split(','));
+
+	//tagEditor = new TagEditor(true);
 	// Set the close button.
 	var closeButton = document.querySelector("#media-viewer-close");
 	closeButton.addEventListener("click", function()

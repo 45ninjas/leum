@@ -101,12 +101,12 @@ class Page
 
 				<label for="tag-input-field">Tags</label>
 				<div class="tag-input">
-					<input class="pure-u-1" tabindex="4" type="text" id="tag-input-field" placeholder="tag">
+					<input class="pure-u-1" tabindex="4" type="text" id="tag-input-text" placeholder="tag">
+					<input id="tag-input" type="hidden" name="tags" value="<?=$this->tagString;?>">
 					<ul class="suggestion-box" id="suggestion-box" hidden>
 					</ul>
 				</div>
-				<input id="tag-input" type="hidden" name="tags" value="<?=$this->tagString;?>">
-				<div id="tag-editor-field" class="tags tag-field">
+				<div id="tag-field" class="tags tag-field">
 				</div>
 
 				<button form="media-edit" tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
@@ -122,13 +122,16 @@ class Page
 			<script type="text/javascript">
 				window.onload = function()
 				{
-					var tags = document.querySelector("input#tag-input");
-					var slugs = tags.value.split(',');
+					var tags = document.querySelector("#tag-input");
+					console.log(tags);
+					var input = document.querySelector("#tag-input-text");
+					var field = document.querySelector("#tag-field");
+					var suggestionBox = document.querySelector("#suggestion-box");
 
-					editor = new TagEditor();
-
-					editor.SetTags(slugs);
-				};
+					tagEditor = new TagEditor(input, field, tags, suggestionBox);
+					tagEditor.allowNew = true;
+					tagEditor.SetTags(tags.value.split(','));
+				}
 			</script>
 		</div>
 	</div>

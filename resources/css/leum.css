@@ -115,6 +115,7 @@ pre#debug-head
 	border-radius: 4px;
 	position: absolute;
 	background-color: white;
+	z-index: 100;
 }
 .footer .button-stealth:hover
 {

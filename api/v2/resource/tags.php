@@ -17,7 +17,7 @@ class Tags
 			// Search Query
 			if(isset($_GET["q"]))
 			{
-				$limit;
+				$limit = null;
 
 				if(isset($_GET['limit']) && is_numeric($_GET['limit']))
 					$limit = $_GET['limit'];

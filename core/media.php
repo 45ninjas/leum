@@ -242,8 +242,6 @@ class Media
 		array_push($parameters, $offset);
 
 		$statement = $dbc->prepare($sql);
-		var_dump($sql);
-		var_dump($parameters);
 		$statement->execute($parameters);
 
 		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);

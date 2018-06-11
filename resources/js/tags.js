@@ -29,7 +29,7 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 
 	var editor = this;
 
-	textInput.addEventListener("keypress", function(e)
+	textInput.addEventListener("input", function(e)
 	{
 		if(e.keyCode == 13)
 		{
@@ -52,6 +52,9 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 				DoTextSearch();
 		},
 		600);
+
+		if(e.keyCode == 13)
+			return false;
 	});
 
 	field.addEventListener("click", function(e)

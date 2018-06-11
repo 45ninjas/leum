@@ -55,9 +55,6 @@ class Page
 		if(isset($_GET['et']) && !empty($_GET['et']))
 			$this->unwantedTags = explode(',', $_GET['et']);
 
-		var_dump($this->wantedTags);
-		var_dump($this->unwantedTags);
-
 		// Get media items based on the unwanted tags, wanted tags and page number.
 		$this->itemsToShow = Media::GetWithTags($dbc, $this->wantedTags, $this->unwantedTags, $this->pageNum, $this->pageSize);
 
@@ -76,7 +73,7 @@ class Page
 		<h1>Browse</h1>
 		<div class="pure-menu pure-menu-horizontal">
 			<ul class="pure-menu">
-				<li class="pure-menu-item"><a class="pure-menu-link">Filter <i class="fa fa-filter"></i></a></li>
+				<!-- <li class="pure-menu-item"><a class="pure-menu-link">Filter <i class="fa fa-filter"></i></a></li> -->
 			</ul>
 		</div>
 	</div>
@@ -154,26 +151,26 @@ if(isset($this->wantedTags))
 		<div class="contain-tags">
 			<div class="tag-input">
 				<input id="contain-tags" type="hidden" name="t" value="<?=$wantedText?>">
-				<input class="pure-u-1" type="text" id="contain-tag-input" placeholder="tag">
-				<br>
+				<input class="pure-u-1" type="text" id="contain-tag-input" placeholder="tag" autocomplete="off">
+				<!--  -->
 				<ul class="suggestion-box" id="contain-suggestion-box" hidden>
 				</ul>
 			</div>
 			<div id="contain-tag-field" class="tags tag-field">
 			</div>
 		</div>
-		<label for ="contain-tag-input">Exclude Tags</label>
+		<!-- <label for ="contain-tag-input">Exclude Tags</label>
 		<div class="exclude-tags">
 			<div class="tag-input">
 				<input id="exclude-tags" type="hidden" name="et" value="<?=$unwantedText?>">
-				<input class="pure-u-1" type="text" id="exclude-tag-input" placeholder="tag" disabled="">
+				<input class="pure-u-1" type="text" id="exclude-tag-input" placeholder="tag" disabled="" autocomplete="off">
 				<br>
 				<ul class="suggestion-box" id="exclude-suggestion-box" hidden>
 				</ul>
 			</div>
 			<div id="exclude-tag-field" class="tags tag-field">
 			</div>
-		</div>
+		</div> -->
 		<button type="submit" class="pure-button pure-button-primary">Apply</button>
 		<button type="submit" class="pure-button" id="tag-filter-clear">Clear</button>
 	</form>
@@ -188,6 +185,7 @@ if(isset($this->wantedTags))
 
 		containEditor = new TagEditor(Input, Field,Tags, SuggestionBox);
 		containEditor.SetTags(Tags.value.split(','));
+		containEditor.resultLimit = 10;
 
 		Tags = document.querySelector("#tag-filter #exclude-tags");
 		Input = document.querySelector("#tag-filter #exclude-tag-input");
@@ -196,6 +194,7 @@ if(isset($this->wantedTags))
 
 		excludeEditor = new TagEditor(Input, Field,Tags, SuggestionBox);
 		excludeEditor.SetTags(Tags.value.split(','));
+		containEditor.resultLimit = 10;
 
 		var clearButton = document.querySelector("#tag-filter #tag-filter-clear");
 		clearButton.onclick = function()

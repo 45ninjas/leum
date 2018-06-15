@@ -2,7 +2,7 @@
 /**
 * 404 Page
 */
-class Error404 extends Page
+class Error404
 {
 	public $title = "404 - File not found.";
 	protected $message;

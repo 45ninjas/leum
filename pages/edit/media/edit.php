@@ -50,14 +50,13 @@ class Page
 		if(isset($mediaId))
 		{
 			$this->mediaItem = Media::GetSingle($dbc, $mediaId);
-			$this->tagString = implode(',', $this->mediaItem->GetTags($dbc, true));
-			$this->title = "Edit Media";
-
 			if($this->mediaItem == null)
 			{
 				Leum::Instance()->Show404Page("Media item $mediaId does not exist in the database.");
 				return;
 			}
+			$this->tagString = implode(',', $this->mediaItem->GetTags($dbc, true));
+			$this->title = "Edit Media";
 		}
 		else
 			$this->mediaItem = new Media();

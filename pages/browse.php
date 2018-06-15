@@ -9,8 +9,6 @@ require_once SYS_ROOT . "/page-parts/media-viewer.php";
 
 class Page
 {
-	public $title = "Browse";
-	
 	public $pageNum = 0;
 	public $pageSize = 50;
 
@@ -29,17 +27,15 @@ class Page
 
 	public $useModal = true;
 	
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		$dbc = Leum::Instance()->GetDatabase();
+		// Require the resources. 
+		$leum->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
+		$leum->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
+		$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 
-		if(Leum::Instance() !== null)
-		{
-			$leum = Leum::Instance();
-			$leum->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
-			$leum->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
-			$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
-		}
+		$leum->SetTitle("Browse");
+
 
 		// Get the page number.
 		if(isset($_GET['page']) && is_numeric($_GET['page']))
@@ -63,7 +59,6 @@ class Page
 
 		$this->pageButtons = new PageButtons($this->totalPages,$this->pageNum + 1);
 
-		Leum::Instance()->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 	}
 	public function Content()
 	{ ?>

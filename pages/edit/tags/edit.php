@@ -8,12 +8,9 @@ class Page
 	public $title = "Create Tag";
 	private $tagItem;
 	private $modify = false;
-	private $db;
 
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		$this->db = Leum::Instance()->GetDatabase();
-
 		$tagId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{
@@ -25,22 +22,24 @@ class Page
 		{
 			$this->tagItem = new Tag();
 			$this->tagItem->slug = $_POST['slug'];
-			Tag::InsertSingle($this->db, $this->tagItem,$tagId);
+			Tag::InsertSingle($dbc, $this->tagItem,$tagId);
 		}
 
 		if(isset($tagId))
 		{
-			$this->tagItem = Tag::GetSingle($this->db, $tagId);
+			$this->tagItem = Tag::GetSingle($dbc, $tagId);
 			$this->title = "Edit Tag";
 
 			if($this->tagItem == null)
 			{
-				Leum::Instance()->Show404Page("Tag $tagId does not exist in the database.");
+				$leum->Show404Page("Tag $tagId does not exist in the database.");
 				return;
 			}
 		}
 		else
 			$this->tagItem = new Tag();
+
+		$leum->SetTitle($this->title);
 	}
 	public function Content()
 	{ ?>
@@ -71,7 +70,7 @@ class Page
 	function EchoValue($value)
 	{
 		if($this->modify)
-		echo "value=\"$value\"";
+			echo "value=\"$value\"";
 	}
 }
 ?>

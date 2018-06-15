@@ -17,11 +17,9 @@ class Page
 
 	private $tagString = "";
 
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		$dbc = Leum::Instance()->GetDatabase();
-
-		// Why is this up here separated from the rest (ln 43)?
+		// Why is this up here separated from the rest?
 		$mediaId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{
@@ -52,7 +50,7 @@ class Page
 			$this->mediaItem = Media::GetSingle($dbc, $mediaId);
 			if($this->mediaItem == null)
 			{
-				Leum::Instance()->Show404Page("Media item $mediaId does not exist in the database.");
+				$leum->Show404Page("Media item $mediaId does not exist in the database.");
 				return;
 			}
 			$this->tagString = implode(',', $this->mediaItem->GetTags($dbc, true));
@@ -63,7 +61,8 @@ class Page
 
 		$this->viewer = new MediaViewer($this->mediaItem, true);
 
-		Leum::Instance()->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
+		$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
+		$leum->SetTitle($this->title);
 	}
 	public function Content()
 	{ ?>

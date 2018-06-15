@@ -7,15 +7,12 @@ require_once SYS_ROOT . '/page-parts/media-viewer.php';
 require_once SYS_ROOT . '/page-parts/tag-field.php';
 class Page
 {
-	public $title = "View";
 	private $mediaItem;
 	private $viewer;
 	private $tagField;
 
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		$dbc = Leum::Instance()->GetDatabase();
-
 		$mediaId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{
@@ -26,6 +23,8 @@ class Page
 		}
 		$this->viewer = new MediaViewer($this->mediaItem, true, true, true, true, false);
 		$this->tagField = new TagField($this->mediaItem->GetTags(), true);
+
+		$leum->SetTitle("View");
 	}
 	public function Content()
 	{ ?>

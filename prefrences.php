@@ -27,6 +27,20 @@ define('THUMB_SIZE', 196);
 define('LOG_DIR', SYS_ROOT . '/logs');
 define('API_URL', ROOT . "/api");
 
+// The document title prefix and suffix(the name of the tab on the browser.)
+// Don't forget to add spaces where needed.
+// === Examples ===
+// 		prefix: APP_TITLE + " - "
+// 		suffix: ""
+// 		result "Leum - Edit Media" (assuming APP_TITLE is 'Leum').
+// 	Another one!
+// 		prefix: ""
+// 		suffix: " CoolPics"
+// 		result: "Edit Media CoolPics"
+define('TITLE_PREFIX', "Leum - ");
+define('TITLE_SUFFIX', "");
+
+
 // === Routes ===
 // 
 // Try not to touch theses as messing up any of these preg/regex strings and group counts will lead 

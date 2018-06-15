@@ -5,21 +5,12 @@ require_once SYS_ROOT . "/core/tag.php";
 */
 class Page
 {
-	public $title = "Edit Tags";
 	private $tagItems = array();
 	private $total;
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		$db = Leum::Instance()->GetDatabase();
-		if(isset($arguments[0]) && is_numeric($arguments[0]))
-		{
-			$item = Tag::GetSingle($db, $arguments[0]);
-			if($item)
-				$this->tagItems[] = $item;
-		}
-		else
-			$this->tagItems = Tag::GetAll($db);	
-
+		$leum->SetTitle("Tags");
+		$this->tagItems = Tag::GetAll($dbc);	
 		$this->total = count($this->tagItems);
 	}
 	public function Content()

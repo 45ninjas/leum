@@ -16,57 +16,65 @@ class Leum
 	public $request = "";
 	public $arguments;
 
-	private $my_db;
+	private $dbc;
 
 	public $headIncludes;
 
 	public function __construct()
 	{
-		// Set the instance variable for singleton.
+		// Routes variable from preferences.php
+		global $routes;
+
+		// Set the instance variable for singleton, get a database object and initialize the dispatcher.
 		self::$_instance = $this;
+		$this->GetDatabase();
+		$this->dispatcher = new Dispatcher($routes);
+
+		// Get the user session and permissions
+		// TODO: Implement users, permissions and authentication.
+		$userInfo = null;
 
 		// Get the request and remove the trailing slash.
 		if(isset($_GET['request']))
 		{
 			$this->request = $_GET['request'];
 
+			// Remove that pesky trailing slash.
 			if(substr($this->request,-1) == '/')
-			{
 				$this->request = substr($this->request, 0, -1);
-			}
 		}
 
 		// Setup the head includes.
 		$this->headIncludes = array();
 
-		// Setup the dispatcher.
-		global $routes;
-		$this->dispatcher = new Dispatcher($routes);
-
-		// Get the page from the dispatcher.
+		// Get the page and arguments form the dispatcher.
 		$arguments = $this->dispatcher->GetPage($this->request);
 
-		if($arguments == false)
+		// Show the 404 page if we have no route/page.
+		if($arguments[0] == false)
 		{
 			self::Show404Page();
 			return;
 		}
 
 		$pageFile = array_shift($arguments);
-		
+
+		// Include the code for the page.		
 		include $pageFile;
-		$this->page = new Page($arguments);
+
+		// Initialize the page and set the arguments.
+		$this->page = new Page($this, $this->dbc, $userInfo, $arguments);
 		$this->arguments = $arguments;
 	}
 
+	// Similar idea to how enqueue works in wordpress. 
 	public function RequireResource($file, $html, $head = true)
 	{
 		if(!array_key_exists($file, $this->headIncludes))
-		{
 			$this->headIncludes[$file] = $html;
-		}
 	}
 
+	// Singleton Instance.
 	public static function Instance()
 	{
 		if(self::$_instance == null)
@@ -75,11 +83,12 @@ class Leum
 		return self::$_instance;
 	}
 
+	// Get a PDO database object (aka: dbc). This is now Deprecated.
 	public function GetDatabase()
 	{
-		if(!isset($this->my_db))
-			$this->my_db = DBConnect();
-		return $this->my_db;
+		if(!isset($this->dbc))
+			$this->dbc = DBConnect();
+		return $this->dbc;
 	}
 
 	public function Head()
@@ -94,17 +103,22 @@ class Leum
 			echo "\n";
 		}
 	}
+
+	// Tells the page to show it's output.
 	public function Output()
 	{
+		// If there is an error set, then show the error.
 		if(isset($this->error))
 		{
-			include SYS_ROOT . "/pages/404.php";
-			$this->page = new Error404([$this->error]);
+			include SYS_ROOT . "/pages/error-pages/404.php";
+			$this->page = new Page($this, $this->dbc, null, [$this->error]);
 			$this->arguments = [$this->error];
 		}
 		
 		$this->page->Content();
 	}
+
+	// Shows triggers the 404 page to show. can provide a custom message.
 	public function Show404Page($message = null)
 	{
 		if(isset($message))
@@ -112,22 +126,16 @@ class Leum
 		else
 			$this->error = true;
 	}
-	private function Debug()
+	// Sets the title of the page. Force bypasses prefix and suffix from config.
+	public function SetTitle($newTitle, $force = false)
 	{
-		?>
-		<div class="debug-head">
-			<div class="content">
-				<pre>
-Leum Debug Information.
-Page Title		:<?php echo $this->page->title?>
+		$this->title = $newTitle;
 
-Request			:<?php echo $this->request; ?>
+		if(!$force && defined('TITLE_PREFIX'))
+			$this->title = TITLE_PREFIX . $newTitle;
 
-Arguments		:'<?php echo implode("', '", $this->arguments); ?>'
-				</pre>
-			</div>
-		</div>
-		<?php
+		if(!$force && defined('TITLE_SUFFIX'))
+			$this->title .= TITLE_SUFFIX;
 	}
 }
 ?>

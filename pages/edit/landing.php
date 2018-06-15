@@ -4,10 +4,9 @@
 */
 class Page
 {
-	public $title = "Edit";
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-
+		$leum->SetTitle("Edit");
 	}
 	public function Content()
 	{ ?>

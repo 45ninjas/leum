@@ -4,10 +4,9 @@
 */
 class Page
 {
-	public $title = "Home";
-	public function __construct($arguments)
+	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-
+		$leum->SetTitle("Home");
 	}
 	public function Content()
 	{

@@ -28,17 +28,20 @@ class Page
 <div class="main">
 	<div class="header">
 		<h1>Tag</h1>
+		<div class="pure-menu pure-menu-horizontal">
+			<ul class="pure-menu">
+				<li class="pure-menu-item"><a href="<?=ROOT."/edit/";?>" class="pure-menu-link">&#10094; Edit</a></li>
+				<li class="pure-menu-item"><a href="<?=ROOT."/edit/tag/new";?>" class="pure-menu-link">Create New <i class="fa fa-plus"></i></a></li>
+				<li class="pure-menu-item"><a href="<?=ROOT."/utils/tags-all.php";?>" class="pure-menu-link">Import All Tags <i class="fa fa-download"></i></a></li>
+			</ul>
+		</div>
 	</div>
 	<div class="content">
-		<a class="pure-button pure-button-primary" href="<?php echo ROOT."/edit/tag/new/" ?>">
-			Create New Tag
-			<i class="fa fa-plus"></i>
-		</a>
 		<?php
 		if(isset($this->tagItems) && $this->total > 0)
 		{
 		?>
-		<p>Found <?php echo $this->total; ?> results.</p>
+		<p>Found <?php echo $this->total; ?> tags.</p>
 		<table class="pure-table pure-table-striped full-width">
 			<thead>
 				<tr>

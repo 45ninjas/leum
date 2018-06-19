@@ -1,6 +1,6 @@
 <?php 
 define('SYS_ROOT', __DIR__);
-require_once 'prefrences.php';
+require_once 'preferences.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
 $leum = new Leum();

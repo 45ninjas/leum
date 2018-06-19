@@ -10,7 +10,7 @@ include_once API_ROOT . "/resource/tags.php";
 include_once API_ROOT . "/resource/content.php";
 
 require_once SYS_ROOT . "/functions.php";
-require_once SYS_ROOT . "/prefrences.php";
+require_once SYS_ROOT . "/preferences.php";
 
 use API as API;
 

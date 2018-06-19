@@ -1,5 +1,5 @@
 <?php
-require_once 'prefrences.php';
+require_once 'preferences.php';
 // require_once 'api/v1/leum.api.php';
 
 function DBConnect()

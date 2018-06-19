@@ -9,7 +9,7 @@ require_once SYS_ROOT . "/api/v1/browse.php";
 require_once SYS_ROOT . "/api/v1/ingest.php";
 
 require_once SYS_ROOT . "/functions.php";
-require_once SYS_ROOT . "/prefrences.php";
+require_once SYS_ROOT . "/preferences.php";
 
 // Newer Leum Core Includes.
 require_once SYS_ROOT . "/core/media.php";

@@ -11,38 +11,29 @@ $dbc = DBConnect();
 
 header("Content-Type: text/plain");
 
-if(!TableExists($dbc, "media"))
-{
-	echo "Creating the media table\n";
-	Media::CreateTable($dbc);
-}
-else
-	echo "media table already exists, skipping\n";
+// Core functionality tables.
+CreateTable($dbc, "media",		'Media',		'CreateTable');
+CreateTable($dbc, "tags",		'Tag',			'CreateTable');
+CreateTable($dbc, "map",		'Map',			'CreateTable');
 
-if(!TableExists($dbc, "tags"))
-{
-	echo "Creating the tags table\n";
-	Tag::CreateTable($dbc);
-}
+// Users and Roles
+CreateTable($dbc, "users", 'User', 'CreateTable');
+CreateTable($dbc, "roles", 'Role', 'CreateTable');
+CreateTable($dbc, "permissions",'Permission',	'CreateTable');
+CreateTable($dbc, "role_permission_map", 'RolePermissionMap', 'CreateTable');
+CreateTable($dbc, "user_role_map", 'UserRoleMap', 'CreateTable');
 
-else
-	echo "tags table already exists, skipping\n";
-
-if(!TableExists($dbc, "map"))
+function CreateTable($dbc, $tableName, $class, $method)
 {
-	echo "Creating the map table\n";
-	Mapping::CreateTable($dbc);
-}
-else
-	echo "map table already exists, skipping\n";
+	if(TableExists($dbc, $tableName))
+	{
+		echo "$tableName already exists, skipping\n";
+		return;
+	}
 
-if(!TableExists($dbc, "task"))
-{
-	echo "Creating the task table\n";
-	Task::CreateTable($dbc);
+	$class::$method($dbc);
+	echo "$tableName was created\n";
 }
-else
-	echo "task table already exists, skipping\n";
 
 function TableExists($dbc, $tableName)
 {

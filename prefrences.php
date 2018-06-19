@@ -66,5 +66,10 @@ $routes = array(
 	["edit/tags/edit.php",		'edit\/tag\/(\d+)',				1],
 	["edit/tags/edit.php",		'edit\/tag\/new',				0],
 	["edit/tags/list.php",		'edit\/tag',					0],
+
+	// User Editing.
+	["edit/users/edit-user.php",		'edit\/user\/(\d+)',	1],
+	["edit/users/edit-user.php",		'edit\/user\/new',		0],
+	["edit/users/list-users.php",		'edit\/user',			0],
 );
 ?>

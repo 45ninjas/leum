@@ -21,6 +21,7 @@ class Page
 		<ul class="leum-blank-list">
 			<li><a href="<?=ROOT?>/edit/media/">Media</a></li>
 			<li><a href="<?=ROOT?>/edit/tag/">Tags</a></li>
+			<li><a href="<?=ROOT?>/edit/user/">Users</a></li>
 		</ul>
 
 		<code class="leum-code leum-green">

@@ -1,15 +1,51 @@
 <?php
 
+require_once SYS_ROOT . "/core/leum-core.php";
+
 class Role
 {
 	public $role_id;
-	public $name;
+	public $slug;
+	public $description;
+	public $permissions;
 
+	public function AddPermission($dbc, $permission)
+	{
+		RolePermissionMap::Map($dbc, $permission, $this->role_id);	
+	}
+	public function RemovePermission($dbc, $permission)
+	{
+		RolePermissionMap::Unmap($dbc, $permission, $this->role_id);
+	}
 	public function GetPermissions($dbc)
 	{
-		RolePermissionMap::GetPermissions($dbc, $role_id);
+		$this->permissions = RolePermissionMap::GetAllMapped($dbc, $this->role_id, true);
+	}
+	public function HasPermission($permission)
+	{
+		if($permission instanceof Permission)
+			$permission = $permission->slug;
+
+		return in_array($permission, $this->permissions);
 	}
 
+	public static function GetId($role, $dbc = null)
+	{
+		if($role instanceof self)
+			return $role->role_id;
+		else if(is_numeric($role))
+			return $role;
+		else if($dbc != null && is_string($role))
+		{
+			$statement = $dbc->prepare("SELECT role_id from roles where slug = ?");
+			$statement->execute([$role]);
+
+			$result = $statement->fetchColumn();
+			if($result != false && is_numeric($result))
+				return $result;
+		}
+		throw new Exception("Bad role index input");
+	}
 	public static function CreateTable($dbc)
 	{
 		$sql = "CREATE table roles
@@ -104,16 +140,6 @@ class Role
 			return $dbc->lastInsertId();
 		}
 	}
-
-	private static function GetID($role)
-	{
-		if($role instanceof role)
-			return $role->role_id;
-		else if(is_numeric($role))
-			return $role;
-
-		throw new Exception("Bad role index input");
-	}
 }
 
 class RolePermissionMap
@@ -135,28 +161,128 @@ class RolePermissionMap
 		";
 		$dbc->exec($sql);
 	}
-	public static function GetPermissions($dbc, $role_id, $slugsOnly = false)
-	{
-		if($slugsOnly)
-			$sql = "SELECT tags.slug from role_permission_map";
-		else
-			$sql = "SELECT * from role_permission_map";
 
-		$sql .= " inner join roles on role_permission_map.role_id = roles.role_id
-		inner join permissions on role_permission_map.permission_id = permissions.permission_id
-		where roles.role_id = ?";
+	//RolePermissionMap::Map($dbc, $permission, $role_id);
+	public static function Map($dbc, $role, $permission)
+	{
+		$role = Role::GetId($role);
+		$permission = Permission::GetId($permission);
+
+		$sql = "INSERT into role_permission_map (role_id, permission_id) values (?, ?)";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$role_id]);
+		$statement->execute([$role, $permission]);
+	}
+	//RolePermissionMap::Unmap($dbc, $permission, $role_id);
+	public static function Unmap($dbc, $role, $permission)
+	{
+		$role = Role::GetId($role);
+		$permission = Permission::GetId($permission);
 
+		$sql = "DELETE from role_permission_map where role_id = ? and  permission_id = ?";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$role, $permission]);
+	}
+	//RolePermissionMap::GetAllMapped($dbc, $role_id);
+	public static function GetAllMapped($dbc, $role, $slugsOnly = false)
+	{
+		$role = Role::GetId($role);
+
+		// Set the select variable to the correct value based on the slug flag.
+		if($slugsOnly)
+			$select = "permissions.slug";
+		else
+			$select = "permissions.*";
+
+		// Run the sql.
+		$sql = "SELECT $select from role_permission_map
+		inner join roles on role_permission_map.role_id = roles.role_id
+		inner join permissions on role_permission_map.permission_id = permissions.permission_id
+		where roles.role_id = ?";
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$role]);
+
+		// Return the results, if slugs only the return an array of slugs.
 		if($slugsOnly)
 			return $statement->fetchAll(PDO::FETCH_COLUMN);
 		else
-			return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+			return $statement->fetchAll(PDO::FETCH_CLASS, 'Permission');
 	}
-	public static function SetPermission($dbc, $role_id, $permissions)
+	public function UnmapAll($dbc, $role)
 	{
-		
+		$role = Role::GetId($role);
+
+		$sql = "DELETE from role_permission_map where role_id = ?";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$role]);
+
+		return $statement->rowCount();
+	}
+	// Sets the permissions.
+	public function SetPermissions($dbc, $role, $newPermissions)
+	{
+		$role = Role::GetId($role);
+
+		// If no permissions have been set than remove all permissions from this role.
+		if(is_null($newPermissions) || count($newPermissions) == 0)
+		{
+			self::UnmapAll($dbc, $role);
+			return;
+		}
+
+		// Get the id's of the new permissions.
+		$indexPlaceholder = LeumCore::PDOPlaceholder($newPermissions);
+		$sql = "SELECT permission_id from permissions where slug in ($indexPlaceholder)";
+		$statement = $dbc->prepare($sql);
+		$statement->execute($newPermissions);
+		$newPermissionIds = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+		// Get the ids of each permission already mapped to the role.
+		$sql = "SELECT permissions.permission_id from role_permission_map
+		inner join permissions on role_permission_map.permission_id = permissions.permission_id
+		where role_id = ?";
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$role]);
+		$permissionIds = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+		// Figure out what id's need to be removed, added and not touched.
+		$permissionsToRemove = array();
+		$permissionsToAdd = $newPermissionIds;
+
+		foreach($permissionIds as $dbPerm)
+		{
+			if(!in_array($dbPerm, $newPermissionIds))
+				$permissionsToRemove[] = $dbPerm;
+
+			unset($permissionsToAdd[array_search($dbPerm, $newPermissionIds)]);
+		}
+		// Apply the changes needed to be made.
+		if($dbc->beginTransaction())
+		{
+			try
+			{
+				// Remove all the permissions to remove.
+				while($permission = array_pop($permissionsToRemove))
+					self::Unmap($dbc, $role, $permission);
+
+				// Add all the permissions to add.
+				while($permission = array_pop($permissionsToAdd))
+					self::Map($dbc, $role, $permission);
+
+				$dbc->commit();
+			}
+			catch (Exception $e)
+			{
+				if($dbc->inTransaction())
+					$dbc->rollBack();
+
+				throw $e;
+			}
+		}
+		else
+			throw new Exception("Unable to being a transaction");
 	}
 }
 class UserRoleMap
@@ -177,6 +303,43 @@ class UserRoleMap
 		)
 		";
 		$dbc->exec($sql);
+	}
+	//UserRoleMap::Map($dbc, $user, $role);
+	public static function Map($dbc, $user, $role)
+	{
+		$role = Role::GetId($role);
+		$permission = Permission::GetId($permission);
+
+		$sql = "INSERT into user_role_map (role_id, permission_id) values (?, ?)";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$role, $permission]);
+	}
+	//UserRoleMap::Unmap($dbc, $user, $role);
+	public static function Unmap($dbc, $user, $role)
+	{
+		$role = Role::GetId($role);
+		$permission = Permission::GetId($permission);
+
+		$sql = "DELETE from user_role_map where role_id = ? and  permission_id = ?";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$role, $permission]);
+	}
+	//UserRoleMap::GetAllMapped($dbc, $user);
+	public static function GetAllMapped($dbc, $user)
+	{
+		$user = Role::GetId($user);
+
+		// Run the sql.
+		$sql = "SELECT roles.* from user_role_map
+		inner join users on user_role_map.user_id = users.user_id
+		inner join roles on user_role_map.role_id = roles.role_id
+		where users.user_id = ?";
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$user]);
+
+		return $statement->fetchAll(PDO::FETCH_CLASS, 'Role');
 	}
 }
 

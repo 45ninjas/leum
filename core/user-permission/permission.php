@@ -18,6 +18,16 @@ class Permission
 		$dbc->exec($sql);
 	}
 
+	public static function GetId($permission)
+	{
+		if($permission instanceof self)
+			return $permission->permission_id;
+		else if(is_numeric($permission))
+			return $permission;
+		
+		throw new Exception("Bad permission index input");
+	}
+
 	// Getting one permission.
 	public static function GetSingle($dbc, $permission)
 	{
@@ -100,16 +110,6 @@ class Permission
 			$statement->execute([$permission->slug, $permission->description]);
 			return $dbc->lastInsertId();
 		}
-	}
-
-	private static function GetID($permission)
-	{
-		if($permission instanceof permission)
-			return $permission->permission_id;
-		else if(is_numeric($permission))
-			return $permission;
-
-		throw new Exception("Bad permission index input");
 	}
 }
 

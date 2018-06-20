@@ -1,0 +1,6 @@
+table.permission-matrix input[type="checkbox"]
+{
+	width: 100%;
+	height: 1.5em;
+	display: block;
+}

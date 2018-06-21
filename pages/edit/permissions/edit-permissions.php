@@ -80,7 +80,7 @@ function Matrix()
 		foreach ($this->allPermissions as $permission)
 		{
 			echo "<tr>";
-			echo "<th>$permission->slug</th>";
+			echo "<th>$permission->slug<span class=\"tool-tip\">$permission->description</span></th>";
 			foreach ($this->allRoles as $role)
 			{
 				$checked = "";

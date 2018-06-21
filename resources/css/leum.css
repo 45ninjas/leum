@@ -21,6 +21,10 @@ pre#debug-head
 {
 	width: 100%;
 }
+.middle
+{
+	margin: auto;
+}
 
 .button-compact
 {
@@ -205,4 +209,35 @@ pre#debug-head
 	overflow: hidden;
 	max-width: 1px;
 	cursor: alias;
+}
+/* == Login Box ==*/
+.login-box
+{
+	width: 22em;
+	display: block;
+	margin: auto;
+}
+.login-box .msg
+{
+	display: block;
+	background-color: #f6f6f6;
+	box-shadow: rgb(221, 221, 221) 0px 1px 3px inset;
+	border-radius: 4px;
+	border-left: 4px solid gray;
+	padding: 0.5em;
+}
+.msg.msg-red
+{
+	border-left-color: red;
+	background-color: #faf6f6;
+}
+.msg.msg-green
+{
+	border-left-color: green;
+	background-color: #f6faf6;
+}
+.msg.msg-blue
+{
+	border-left-color: blue;
+	background-color: #f6f6fa;
 }

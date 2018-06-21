@@ -10,6 +10,7 @@
         <ul class="pure-menu-list">
 <!--         	<li class="pure-menu-item menu-item-divided pure-menu-selected">
             </li> -->
+            <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/login" class="pure-menu-link">Login</a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/browse" class="pure-menu-link">Browse</a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/edit" class="pure-menu-link">Edit</a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/preferences" class="pure-menu-link">Preferences</a></li>

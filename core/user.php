@@ -6,6 +6,7 @@ class User
 	public $usermame;
 	public $last_login;
 	public $email;
+	public $hash;
 
 	public $permissions;
 	public $roles;
@@ -18,13 +19,29 @@ class User
 	{
 		// Get permissions that are assigned to this user from all roles.
 	}
+	public function SetPassword($password, $dbc = null)
+	{
+		$this->hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => AUTH_PASS_COST]);
 
+		if(isset($dbc))
+		{
+			$sql = "UPDATE users set hash = ? where user_id = ?";
+			$statement = $dbc->prepare($sql);
+			$statement->execute([$this->hash, $this->user_id]);
+		}
+	}
+	public function Login($dbc)
+	{
+		$statement = $dbc->prepare("UPDATE users set last_login = NOW() where user_id = ?");
+		$statement->execute([$this->user_id]);
+	}
 	public static function CreateTable($dbc)
 	{
 		$sql = "CREATE table users
 		(
 			user_id int unsigned auto_increment primary key,
-			username varchar(256) not null,
+			username varchar(255) not null,
+			hash varchar(255) not null,
 			last_login datetime not null,
 			email text
 		)";
@@ -35,11 +52,11 @@ class User
 	public static function GetSingle($dbc, $user)
 	{
 		if(is_string($user))
-			$sql = "SELECT user_id, username, last_login, email from users where username = ?";
+			$sql = "SELECT * from users where username = ?";
 		else
 		{
 			$user = self::GetID($user);
-			$sql = "SELECT user_id, username, last_login, email from users where user_id = ?";
+			$sql = "SELECT * from users where user_id = ?";
 		}
 
 		$statement = $dbc->prepare($sql);
@@ -96,23 +113,54 @@ class User
 			$user = new User();
 			$user->username = $userData['username'];
 			$user->email = $userData['email'];
+			$user->SetPassword($userData['password']);
 		}
 		if(is_numeric($index))
 		{
-			$sql = "UPDATE users SET username = ?, email = ? WHERE user_id = ?";
+			$sql = "UPDATE users SET username = ?, email = ?, hash = ? WHERE user_id = ?";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$user->username, $user->email, $index]);
+			$statement->execute([$user->username, $user->email, $user->hash, $index]);
 			return $index;
 		}
 		else
 		{
-			$sql = "INSERT INTO users (username, email) VALUES (?, ?)";
+			$sql = "INSERT INTO users (username, email, hash) VALUES (?, ?, ?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$user->username, $user->email]);
-			return $dbc->lastInsertId();
+			$statement->execute([$user->username, $user->email, $user->hash]);
+			return (int)$dbc->lastInsertId();
 		}
+	}
+
+	public static function CheckPassword($dbc, $user, $password)
+	{
+		if(is_string($user))
+			$sql = "SELECT hash from users where username = ?";
+		else
+		{
+			$user = self::GetID($user);
+			$sql = "SELECT hash from users where user_id = ?";
+		}
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$user]);
+
+		$user = $statement->fetchObject(__CLASS__);
+
+		if($user == false)
+			return false;
+
+		$return = false;
+		if(password_verify($password, $user->hash))
+		{
+			// User password matches!
+			$return = true;
+			// Does the password hash need updating?
+			if(password_needs_rehash($user->hash, PASSWORD_DEFAULT, ['cost' => AUTH_PASS_COST]))
+				$user->SetPassword($dbc, $password);
+		}
+
+		return $return;
 	}
 
 	private static function GetID($user)
@@ -124,6 +172,4 @@ class User
 
 		throw new Exception("Bad user index input");
 	}
-}
-
-?>
+}?>

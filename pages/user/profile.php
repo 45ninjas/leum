@@ -13,7 +13,7 @@ class Page
 
 <div class="main">
 	<div class="header">
-		<h1>$userInfo->user->username</h1>
+		<h1><?=$_SESSION["username"];?></h1>
 	</div>
 	<div class="content">
 		<p>This page has no content yet.</p>

@@ -1,4 +1,5 @@
 <?php
+require_once SYS_ROOT . "/core/leum-core.php";
 /**
 * Default page
 */
@@ -8,6 +9,7 @@ class Page
 	private $messageText;
 	private $messageClass = "msg-red";
 	private $forgot = false;
+	private $success = false;
 	
 	private $forgotMsg = "The provided email address does not match any records.";
 	private $forgotSucessMsg = "We've sent you an email.";
@@ -28,6 +30,20 @@ class Page
 		{
 			$this->messageClass = "msg-blue";
 			$this->messageText = $this->forgotSucessMsg;
+		}
+		if(isset($_POST["login"]))
+		{
+			$password = $_POST["password"];
+			$username = $_POST["username"];
+
+			if($leum->AttemptLogin($username, $password))
+			{
+				$this->success = true;
+			}
+			else
+			{
+				$this->messageText = $this->failLoginMsg;
+			}
 		}
 
 		$leum->SetTitle($this->title);
@@ -68,7 +84,7 @@ class Page
 				<input id="remember-me" type="checkbox" name="remember">
 				Remember me.
 			</label>
-			<button type="submit" class="pure-button pure-input-1 pure-button-primary">Sign In</button>
+			<button type="submit" name="login" class="pure-button pure-input-1 pure-button-primary">Sign In</button>
 		</form>
 		<?php
 	}

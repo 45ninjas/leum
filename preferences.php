@@ -17,7 +17,6 @@ define('DB_PASS', 'change me');
 define('DB_USER', 'leum');
 define('DB_NAME', 'leum');
 
-
 // === Advanced stuff (no touch) ===
 // 
 // The directory where the media is stored relative to this directory. (no trailing slash)
@@ -39,6 +38,10 @@ define('API_URL', ROOT . "/api");
 // 		result: "Edit Media CoolPics"
 define('TITLE_PREFIX', "Leum - ");
 define('TITLE_SUFFIX', "");
+
+// === Passwords ===
+// http://php.net/manual/en/function.password-hash.php#example-985
+define('AUTH_PASS_COST', 10);
 
 // === Routes ===
 // 

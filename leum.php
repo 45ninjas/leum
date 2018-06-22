@@ -33,6 +33,9 @@ class Leum
 		// Get the user session and permissions
 		// TODO: Implement users, permissions and authentication.
 		$userInfo = null;
+		session_start();
+		if(isset($_GET['logout']))
+			$this->Logout();
 
 		// Get the request and remove the trailing slash.
 		if(isset($_GET['request']))
@@ -136,6 +139,25 @@ class Leum
 
 		if(!$force && defined('TITLE_SUFFIX'))
 			$this->title .= TITLE_SUFFIX;
+	}
+	public function AttemptLogin($username, $password)
+	{
+		if(User::CheckPassword($this->dbc, $username, $password))
+		{
+			$user = User::GetSingle($this->dbc, $username);
+			$user->Login($this->dbc);
+			$_SESSION['user_id'] = $user->user_id;
+			$_SESSION['username'] = $user->username;
+			$_SESSION['permissions'] = $user->permissions;
+
+			return true;
+		}
+		return false;
+	}
+	public function Logout()
+	{
+		session_destroy();
+		$_SESSION = array();
 	}
 }
 ?>

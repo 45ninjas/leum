@@ -8,6 +8,7 @@ require_once SYS_ROOT . "/core/leum-core.php";
 include_once API_ROOT . "/resource/media.php";
 include_once API_ROOT . "/resource/tags.php";
 include_once API_ROOT . "/resource/content.php";
+include_once API_ROOT . "/resource/user.php";
 
 require_once SYS_ROOT . "/functions.php";
 require_once SYS_ROOT . "/preferences.php";

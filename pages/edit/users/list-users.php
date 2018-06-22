@@ -56,7 +56,7 @@ class Page
 						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/user/$user->user_id"; ?>">
 							<i class="fa fa-edit"></i>
 						</a>
-						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v2/user/$user->user_id"; ?>">
+						<a class="pure-button button-delete button-compact" data-title="<?php echo $user->username; ?>" href="<?php echo ROOT."/api/v2/user/$user->user_id"; ?>">
 							<i class="fa fa-trash"></i>
 						</a>
 					</td>

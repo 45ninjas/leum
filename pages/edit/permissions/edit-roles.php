@@ -17,16 +17,23 @@ class Page
 		// Apply changes if they exist.
 		if(isset($_POST['slug']))
 		{
-			$role = new Role();
-			$role->slug = $_POST['slug'];
+			if(isset($_POST['delete']) && isset($_POST['role_id']))
+			{
+				Role::DeleteSingle($dbc, $_POST['role_id']);
+			}
+			else
+			{
+				$role = new Role();
+				$role->slug = $_POST['slug'];
 
-			if(isset($_POST['description']))
-				$role->description = $_POST['description'];
+				if(isset($_POST['description']))
+					$role->description = $_POST['description'];
 
-			if(isset($_POST['role_id']))
-				$role->role_id = $_POST['role_id'];
+				if(isset($_POST['role_id']))
+					$role->role_id = $_POST['role_id'];
 
-			Role::InsertSingle($dbc, $role, $role->role_id);
+				Role::InsertSingle($dbc, $role, $role->role_id);
+			}
 		}
 
 		if(isset($arguments[0]))

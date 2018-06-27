@@ -11,13 +11,22 @@ class User
 	public $permissions;
 	public $roles;
 
-	public function GetRoles($dbc)
-	{
-		// Get roles that are assigned to this user.
-	}
+	// Gets all permission slugs mapped to the user.
 	public function GetPermissions($dbc)
 	{
-		// Get permissions that are assigned to this user from all roles.
+		$sql = "SELECT DISTINCT p.slug
+		FROM permissions p
+        JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+        JOIN roles ON rpm.role_id = roles.role_id
+        JOIN user_role_map upm on rpm.role_id = upm.role_id
+        JOIN users ON upm.user_id = users.user_id
+        WHERE users.user_id = ?;";
+
+        $statement = $dbc->prepare($sql);
+        $statement->execute([$this->user_id]);
+
+        $this->premissions = $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $this->permissions;
 	}
 	public function SetPassword($password, $dbc = null)
 	{

@@ -33,7 +33,12 @@ class Leum
 		// Get the user session and permissions
 		// TODO: Implement users, permissions and authentication.
 		$userInfo = null;
+
+		// Setup the session paramaters
+		session_set_cookie_params(0,ROOT); 
+		session_name("leum");
 		session_start();
+
 		if(isset($_GET['logout']))
 			$this->Logout();
 
@@ -146,6 +151,7 @@ class Leum
 		{
 			$user = User::GetSingle($this->dbc, $username);
 			$user->Login($this->dbc);
+			$user->GetPermissions($this->dbc);
 			$_SESSION['user_id'] = $user->user_id;
 			$_SESSION['username'] = $user->username;
 			$_SESSION['permissions'] = $user->permissions;

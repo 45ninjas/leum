@@ -52,12 +52,47 @@ class Page
 
 	<div class="content">
 		<form method="POST" class="pure-form">
+			<h2 class="title"><i class="fa fa-users left"></i>Roles</h2>
+			<?php $this->Roles(); ?>
+			<a class="pure-button pure-button-primary button-compact" href="<?=ROOT?>/edit/permissions/roles/new">
+				New <i class="fa fa-plus"></i>
+			</a>
+			<h2 class="title"><i class="fa fa-key left"></i>Permission Matrix</h2>
 			<?php $this->Matrix(); ?>
 			<input type="submit" class="pure-button pure-button-primary" name="update-matrix" value="Apply">
 		</form>
 	</div>
 </div>
 
+<?php }
+
+function Roles()
+{ ?>
+	<table class="pure-table pure-table-horizontal">
+		<thead>
+			<tr>
+				<!-- <th>ID</th> -->
+				<th>Role</th>
+				<th>Description</th>
+				<th>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->allRoles as $role)
+			{
+				$editLink = ROOT . "/edit/permissions/roles/$role->slug";
+				echo "<tr>";
+				echo "<!-- <td>$role->role_id</td> -->";
+				echo "<th>$role->slug</th>";
+				echo "<td>$role->description</td>";
+				echo "<td><a class=\"pure-button button-compact\" href=\"$editLink\"><i class=\"fa fa-edit\"></i></a></td>";
+				echo "</tr>";
+			}
+			?>
+		</tbody>
+	</table>
 <?php }
 
 function Matrix()

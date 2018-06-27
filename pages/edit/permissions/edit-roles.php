@@ -14,6 +14,7 @@ class Page
 
 		$leum->RequireResource('/resources/css/leum-edit.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-edit.css') . '">');
 
+		// Apply changes if they exist.
 		if(isset($_POST['slug']))
 		{
 			$role = new Role();
@@ -32,7 +33,8 @@ class Page
 		{
 			// Looks like we are editing an existing role.
 			$roleSlug = $arguments[0];
-			$this->role = Role::GetSingle($dbc, $roleSlug);
+			if(!$this->role = Role::GetSingle($dbc, $roleSlug))
+				$leum->Show404Page("Role $roleSlug does not exist.");
 		}
 		else
 		{

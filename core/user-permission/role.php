@@ -111,18 +111,25 @@ class Role
 	// Updating and inserting roles.
 	public static function InsertSingle($dbc, $roleData, $index = null)
 	{
+		// Get the index from the role if it's a 'role'
 		if($roleData instanceof role)
 		{
 			$role = $roleData;
 			if(isset($roleData->role_id))
-				$index = $mediaData->role_id;
+				$index = $roleData->role_id;
 		}
+		// Make a role from a std array.
 		else
 		{
 			$role = new role();
 			$role->slug = $roleData['slug'];
 			$role->description = $roleData['description'];
 		}
+
+		// Clean the slug.
+		$role->slug = LeumCore::CreateSlug($role->slug);
+
+		// Update an existing role.
 		if(is_numeric($index))
 		{
 			$sql = "UPDATE roles SET slug = ?, description = ? WHERE role_id = ?";
@@ -131,6 +138,8 @@ class Role
 			$statement->execute([$role->slug, $role->description, $index]);
 			return $index;
 		}
+
+		// Or create a new role.
 		else
 		{
 			$sql = "INSERT INTO roles (slug, description) VALUES (?, ?)";

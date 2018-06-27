@@ -241,3 +241,19 @@ pre#debug-head
 	border-left-color: blue;
 	background-color: #f6f6fa;
 }
+
+.title
+{
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	padding-top: 1em;
+	padding-bottom: 15px;
+}
+.title .fa.left
+{
+	margin-right: 1em;
+}
+.title:first-of-type
+{
+	padding-top: initial;
+}

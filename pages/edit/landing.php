@@ -22,6 +22,7 @@ class Page
 			<li><a href="<?=ROOT?>/edit/media/">Media</a></li>
 			<li><a href="<?=ROOT?>/edit/tag/">Tags</a></li>
 			<li><a href="<?=ROOT?>/edit/user/">Users</a></li>
+			<li><a href="<?=ROOT?>/edit/permissions/">Permissions</a></li>
 		</ul>
 
 		<code class="leum-code leum-green">

@@ -74,8 +74,10 @@ $routes = array(
 	["edit/users/edit-user.php",			'edit\/user\/new',			0],
 	["edit/users/list-users.php",			'edit\/user',				0],
 
-	// Permissions.
-	["edit/permissions/edit-permissions.php", 'edit\/permissions',		0],
+	// Permissions and roles.
+	["edit/permissions/edit-permissions.php",	'edit/permissions',						0],
+	["edit/permissions/edit-roles.php",			'edit/permissions/roles/new',			0],
+	["edit/permissions/edit-roles.php",			'edit/permissions/roles/([-a-z1-9]+)',	1],
 
 	// User pages.
 	["user/create-user.php",				'create-account',			0],

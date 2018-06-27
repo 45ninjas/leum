@@ -94,6 +94,9 @@ class Permission
 			$permission->slug = $permissionData['slug'];
 			$permission->description = $permissionData['description'];
 		}
+
+		$permission->slug = LeumCore::CreateSlug($permission->slug);
+
 		if(is_numeric($index))
 		{
 			$sql = "UPDATE permissions SET slug = ?, description = ? WHERE permission_id = ?";

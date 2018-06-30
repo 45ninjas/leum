@@ -56,23 +56,23 @@ $routes = array(
 	["home.php",							'',							0],
 	["preferences.php",						'preferences',				0],
 	["browse.php",							'browse',					0],
-	["view.php",							'view\/(\d+)',				1],
+	["view.php",							'view/(\d+)',				1],
 	["edit/landing.php",					'edit',						0],
 	
 	// Media Editing
-	["edit/media/edit.php",					'edit\/media\/(\d+)',		1],
-	["edit/media/edit.php",					'edit\/media\/new',			0],
-	["edit/media/list.php",					'edit\/media',				0],
+	["edit/media/edit.php",					'edit/media\/(\d+)',		1],
+	["edit/media/edit.php",					'edit/media\/new',			0],
+	["edit/media/list.php",					'edit/media',				0],
 	
 	// Tag Editing
-	["edit/tags/edit.php",					'edit\/tag\/(\d+)',			1],
-	["edit/tags/edit.php",					'edit\/tag\/new',			0],
-	["edit/tags/list.php",					'edit\/tag',				0],
+	["edit/tags/edit.php",					'edit/tag/(\d+)',			1],
+	["edit/tags/edit.php",					'edit/tag/new',			0],
+	["edit/tags/list.php",					'edit/tag',				0],
 
 	// User Editing.
-	["edit/users/edit-user.php",			'edit\/user\/(\d+)',		1],
-	["edit/users/edit-user.php",			'edit\/user\/new',			0],
-	["edit/users/list-users.php",			'edit\/user',				0],
+	["edit/users/edit-user.php",			'edit/user/(\d+)',		1],
+	["edit/users/edit-user.php",			'edit/user/new',			0],
+	["edit/users/list-users.php",			'edit/user',				0],
 
 	// Permissions and roles.
 	["edit/permissions/edit-permissions.php",	'edit/permissions',						0],

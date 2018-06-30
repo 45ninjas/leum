@@ -3,28 +3,63 @@
 class User
 {
 	public $user_id;
-	public $usermame;
+	public $username;
 	public $last_login;
 	public $email;
+	public $hash;
 
 	public $permissions;
 	public $roles;
 
-	public function GetRoles($dbc)
+	// Figures out if the user has a permission
+	public function HasPermission($slug)
 	{
-		// Get roles that are assigned to this user.
-	}
-	public function GetPermissions($dbc)
-	{
-		// Get permissions that are assigned to this user from all roles.
+		if(!isset($this->permissions) || !is_array($this->permissions))
+			throw new Exception("User's permissions are not set. Use 'GetPermissions()'");
+
+		return in_array($slug, $this->permissions);
 	}
 
+	// Gets all permission slugs mapped to the user.
+	public function GetPermissions($dbc)
+	{
+		$sql = "SELECT DISTINCT p.slug
+		FROM permissions p
+        JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+        JOIN roles ON rpm.role_id = roles.role_id
+        JOIN user_role_map upm on rpm.role_id = upm.role_id
+        JOIN users ON upm.user_id = users.user_id
+        WHERE users.user_id = ?;";
+
+        $statement = $dbc->prepare($sql);
+        $statement->execute([$this->user_id]);
+
+        $this->premissions = $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $this->permissions;
+	}
+	public function SetPassword($password, $dbc = null)
+	{
+		$this->hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => AUTH_PASS_COST]);
+
+		if(isset($dbc))
+		{
+			$sql = "UPDATE users set hash = ? where user_id = ?";
+			$statement = $dbc->prepare($sql);
+			$statement->execute([$this->hash, $this->user_id]);
+		}
+	}
+	public function Login($dbc)
+	{
+		$statement = $dbc->prepare("UPDATE users set last_login = NOW() where user_id = ?");
+		$statement->execute([$this->user_id]);
+	}
 	public static function CreateTable($dbc)
 	{
 		$sql = "CREATE table users
 		(
 			user_id int unsigned auto_increment primary key,
-			username varchar(256) not null,
+			username varchar(255) not null,
+			hash varchar(255) not null,
 			last_login datetime not null,
 			email text
 		)";
@@ -32,20 +67,47 @@ class User
 		$dbc->exec($sql);
 	}
 	// Getting one user.
-	public static function GetSingle($dbc, $user)
+	public static function GetSingle($dbc, $user, $withPermissions = false, $everything = false)
 	{
-		if(is_string($user))
-			$sql = "SELECT user_id, username, last_login, email from users where username = ?";
+		if($everything)
+			$columns = "*";
+		else
+			$columns = "users.user_id, users.username, users.last_login";
+
+		if(!$withPermissions)
+		{
+			if(is_string($user))
+				$sql = "SELECT $columns from users where username = ?";
+			else
+			{
+				$user = self::GetID($user);
+				$sql = "SELECT * from users where user_id = ?";
+			}
+
+			$statement = $dbc->prepare($sql);
+			$statement->execute([$user]);
+
+			return $statement->fetchObject(__CLASS__);
+		}
 		else
 		{
-			$user = self::GetID($user);
-			$sql = "SELECT user_id, username, last_login, email from users where user_id = ?";
+			$sql = "SELECT $columns, (SELECT DISTINCT GROUP_CONCAT(p.slug)
+			FROM permissions p
+            JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+            JOIN roles ON rpm.role_id = roles.role_id
+            JOIN user_role_map upm on rpm.role_id = upm.role_id
+            JOIN users ON upm.user_id = users.user_id
+            WHERE users.user_id = ?) AS permissions
+            FROM users
+            where users.user_id = ?;";
+
+            $statement = $dbc->prepare($sql);
+            $statement->execute([$user,$user]);
+
+            $result = $statement->fetchObject(__CLASS__);
+            $result->permissions = explode(',', $result->permissions);
+			return $result;
 		}
-
-		$statement = $dbc->prepare($sql);
-		$statement->execute([$user]);
-
-		return $statement->fetchObject(__CLASS__);
 	}
 	// Getting multiple users.
 	public static function GetMultiple($dbc, $user_ids)
@@ -96,23 +158,54 @@ class User
 			$user = new User();
 			$user->username = $userData['username'];
 			$user->email = $userData['email'];
+			$user->SetPassword($userData['password']);
 		}
 		if(is_numeric($index))
 		{
-			$sql = "UPDATE users SET username = ?, email = ? WHERE user_id = ?";
+			$sql = "UPDATE users SET username = ?, email = ?, hash = ? WHERE user_id = ?";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$user->username, $user->email, $index]);
+			$statement->execute([$user->username, $user->email, $user->hash, $index]);
 			return $index;
 		}
 		else
 		{
-			$sql = "INSERT INTO users (username, email) VALUES (?, ?)";
+			$sql = "INSERT INTO users (username, email, hash) VALUES (?, ?, ?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$user->username, $user->email]);
-			return $dbc->lastInsertId();
+			$statement->execute([$user->username, $user->email, $user->hash]);
+			return (int)$dbc->lastInsertId();
 		}
+	}
+
+	public static function CheckPassword($dbc, $user, $password)
+	{
+		if(is_string($user))
+			$sql = "SELECT hash from users where username = ?";
+		else
+		{
+			$user = self::GetID($user);
+			$sql = "SELECT hash from users where user_id = ?";
+		}
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$user]);
+
+		$user = $statement->fetchObject(__CLASS__);
+
+		if($user == false)
+			return false;
+
+		$return = false;
+		if(password_verify($password, $user->hash))
+		{
+			// User password matches!
+			$return = true;
+			// Does the password hash need updating?
+			if(password_needs_rehash($user->hash, PASSWORD_DEFAULT, ['cost' => AUTH_PASS_COST]))
+				$user->SetPassword($dbc, $password);
+		}
+
+		return $return;
 	}
 
 	private static function GetID($user)
@@ -124,6 +217,4 @@ class User
 
 		throw new Exception("Bad user index input");
 	}
-}
-
-?>
+}?>

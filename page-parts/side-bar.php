@@ -10,6 +10,12 @@
         <ul class="pure-menu-list">
 <!--         	<li class="pure-menu-item menu-item-divided pure-menu-selected">
             </li> -->
+            <?php
+            if(isset($leum->user)):
+            ?><li class="pure-menu-item"><a href="<?php echo ROOT; ?>/profile" class="pure-menu-link"><?=$leum->user->username;?></a></li>
+            <li class="pure-menu-item"><a href="<?php echo ROOT; ?>?logout" class="pure-menu-link">Logout</a></li><?php
+            else:
+            ?><li class="pure-menu-item"><a href="<?php echo ROOT; ?>/login" class="pure-menu-link">Login</a></li><?php endif; ?>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/browse" class="pure-menu-link">Browse</a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/edit" class="pure-menu-link">Edit</a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/preferences" class="pure-menu-link">Preferences</a></li>

@@ -7,6 +7,11 @@ class Page
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
 		$leum->SetTitle("Edit");
+
+		if(!$leum->AllowedTo('admin-pages'))
+		{
+			throw new exception("You are not allowed to do this");
+		}
 	}
 	public function Content()
 	{ ?>
@@ -21,6 +26,8 @@ class Page
 		<ul class="leum-blank-list">
 			<li><a href="<?=ROOT?>/edit/media/">Media</a></li>
 			<li><a href="<?=ROOT?>/edit/tag/">Tags</a></li>
+			<li><a href="<?=ROOT?>/edit/user/">Users</a></li>
+			<li><a href="<?=ROOT?>/edit/permissions/">Permissions</a></li>
 		</ul>
 
 		<code class="leum-code leum-green">

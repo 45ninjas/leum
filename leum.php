@@ -3,6 +3,7 @@ define('SYS_ROOT', __DIR__);
 require_once 'preferences.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
+require_once SYS_ROOT . '/core/leum-core.php';
 $leum = new Leum();
 
 class Leum
@@ -20,6 +21,8 @@ class Leum
 
 	public $headIncludes;
 
+	public $user = null;
+
 	public function __construct()
 	{
 		// Routes variable from preferences.php
@@ -30,9 +33,26 @@ class Leum
 		$this->GetDatabase();
 		$this->dispatcher = new Dispatcher($routes);
 
-		// Get the user session and permissions
-		// TODO: Implement users, permissions and authentication.
-		$userInfo = null;
+		// Setup the session parameters
+		session_set_cookie_params(0,ROOT); 
+		session_name("leum");
+		session_start();
+
+		// Does the user want to logout?
+		if(isset($_GET['logout']))
+			$this->Logout();
+
+		// Is there a user session?
+		if(isset($_SESSION['user_id']))
+		{
+			// Get the user data.
+			$this->user = User::GetSingle($this->dbc, $_SESSION['user_id'], true);
+			if($this->user == false)
+			{
+				$this->user = null;
+				throw new Exception("Unable to get user from session");
+			}
+		}
 
 		// Get the request and remove the trailing slash.
 		if(isset($_GET['request']))
@@ -57,13 +77,12 @@ class Leum
 			return;
 		}
 
+		// Include the code for the page.
 		$pageFile = array_shift($arguments);
-
-		// Include the code for the page.		
 		include $pageFile;
 
 		// Initialize the page and set the arguments.
-		$this->page = new Page($this, $this->dbc, $userInfo, $arguments);
+		$this->page = new Page($this, $this->dbc, $this->user, $arguments);
 		$this->arguments = $arguments;
 	}
 
@@ -136,6 +155,32 @@ class Leum
 
 		if(!$force && defined('TITLE_SUFFIX'))
 			$this->title .= TITLE_SUFFIX;
+	}
+	public function AttemptLogin($username, $password)
+	{
+		if(User::CheckPassword($this->dbc, $username, $password))
+		{
+			$user = User::GetSingle($this->dbc, $username);
+			$user->Login($this->dbc);
+			$user->GetPermissions($this->dbc);
+			$_SESSION['user_id'] = $user->user_id;
+			$_SESSION['name'] = $user->username;
+			$_SESSION['permissions'] = $user->permissions;
+
+			return true;
+		}
+		return false;
+	}
+	public function Logout()
+	{
+		session_destroy();
+		$_SESSION = array();
+	}
+	public function AllowedTo($permissionSlug)
+	{
+		if(!isset($this->user))
+			return false;
+		return $this->user->HasPermission($permissionSlug);
 	}
 }
 ?>

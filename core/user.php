@@ -3,13 +3,22 @@
 class User
 {
 	public $user_id;
-	public $usermame;
+	public $username;
 	public $last_login;
 	public $email;
 	public $hash;
 
 	public $permissions;
 	public $roles;
+
+	// Figures out if the user has a permission
+	public function HasPermission($slug)
+	{
+		if(!isset($this->permissions) || !is_array($this->permissions))
+			throw new Exception("User's permissions are not set. Use 'GetPermissions()'");
+
+		return in_array($slug, $this->permissions);
+	}
 
 	// Gets all permission slugs mapped to the user.
 	public function GetPermissions($dbc)
@@ -58,20 +67,47 @@ class User
 		$dbc->exec($sql);
 	}
 	// Getting one user.
-	public static function GetSingle($dbc, $user)
+	public static function GetSingle($dbc, $user, $withPermissions = false, $everything = false)
 	{
-		if(is_string($user))
-			$sql = "SELECT * from users where username = ?";
+		if($everything)
+			$columns = "*";
+		else
+			$columns = "users.user_id, users.username, users.last_login";
+
+		if(!$withPermissions)
+		{
+			if(is_string($user))
+				$sql = "SELECT $columns from users where username = ?";
+			else
+			{
+				$user = self::GetID($user);
+				$sql = "SELECT * from users where user_id = ?";
+			}
+
+			$statement = $dbc->prepare($sql);
+			$statement->execute([$user]);
+
+			return $statement->fetchObject(__CLASS__);
+		}
 		else
 		{
-			$user = self::GetID($user);
-			$sql = "SELECT * from users where user_id = ?";
+			$sql = "SELECT $columns, (SELECT DISTINCT GROUP_CONCAT(p.slug)
+			FROM permissions p
+            JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+            JOIN roles ON rpm.role_id = roles.role_id
+            JOIN user_role_map upm on rpm.role_id = upm.role_id
+            JOIN users ON upm.user_id = users.user_id
+            WHERE users.user_id = ?) AS permissions
+            FROM users
+            where users.user_id = ?;";
+
+            $statement = $dbc->prepare($sql);
+            $statement->execute([$user,$user]);
+
+            $result = $statement->fetchObject(__CLASS__);
+            $result->permissions = explode(',', $result->permissions);
+			return $result;
 		}
-
-		$statement = $dbc->prepare($sql);
-		$statement->execute([$user]);
-
-		return $statement->fetchObject(__CLASS__);
 	}
 	// Getting multiple users.
 	public static function GetMultiple($dbc, $user_ids)

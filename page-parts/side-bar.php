@@ -11,8 +11,8 @@
 <!--         	<li class="pure-menu-item menu-item-divided pure-menu-selected">
             </li> -->
             <?php
-            if(isset($_SESSION["user_id"])):
-            ?><li class="pure-menu-item"><a href="<?php echo ROOT; ?>/profile" class="pure-menu-link"><?=$_SESSION["username"];?></a></li>
+            if(isset($leum->user)):
+            ?><li class="pure-menu-item"><a href="<?php echo ROOT; ?>/profile" class="pure-menu-link"><?=$leum->user->username;?></a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>?logout" class="pure-menu-link">Logout</a></li><?php
             else:
             ?><li class="pure-menu-item"><a href="<?php echo ROOT; ?>/login" class="pure-menu-link">Login</a></li><?php endif; ?>

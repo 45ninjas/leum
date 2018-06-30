@@ -10,8 +10,9 @@ function SetupDefaults($dbc)
 		'access-app' 				=> "Can access the app.",
 		'login'						=> "Allowed to login.",
 		'edit-account'				=> "Edit personal profile.",
-		'reset-password'		=> "Reset password.",
+		'reset-password'			=> "Reset password.",
 		'register-account'			=> "Register account.",
+		'admin-pages'				=> "Allowed to see the admin pages.",
 		// Media
 		'media-create'				=> "Create new media items.",
 		'media-edit'				=> "Edit existing media items.",
@@ -71,7 +72,8 @@ function SetupDefaults($dbc)
 				'users-create',
 				'users-edit',
 				'users-delete',
-				'users-reset'
+				'users-reset',
+				'admin-pages'
 			]
 		],
 		"suspended" => [

@@ -3,7 +3,7 @@ require_once SYS_ROOT . "/core/tag.php";
 /**
 * View Tags
 */
-class Page
+class list_tags implements IPage
 {
 	private $tagItems = array();
 	private $total;

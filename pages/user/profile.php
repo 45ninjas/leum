@@ -2,7 +2,7 @@
 /**
 * Default page
 */
-class Page
+class profile implements IPage
 {
 	private $userInfo;
 	public function __construct($leum, $dbc, $userInfo, $arguments)

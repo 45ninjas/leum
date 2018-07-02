@@ -4,7 +4,7 @@ require_once SYS_ROOT . "/core/media.php";
 * View Media
 * TODO: Add pagination.
 */
-class Page
+class list_media implements IPage
 {
 	private $mediaItems = array();
 	private $total;

@@ -5,7 +5,7 @@
 require_once SYS_ROOT . '/core/leum-core.php';
 require_once SYS_ROOT . '/page-parts/media-viewer.php';
 require_once SYS_ROOT . '/page-parts/tag-field.php';
-class Page
+class view implements IPage
 {
 	private $mediaItem;
 	private $viewer;

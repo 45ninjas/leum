@@ -2,7 +2,7 @@
 /**
 * Default page
 */
-class Page
+class default_page implements IPage
 {
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{

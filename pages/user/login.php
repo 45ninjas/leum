@@ -3,7 +3,7 @@ require_once SYS_ROOT . "/core/leum-core.php";
 /**
 * Default page
 */
-class Page
+class login implements IPage
 {
 	private $title;
 	private $messageText;

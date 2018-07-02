@@ -11,7 +11,6 @@ class Leum
 	private static $_instance = null;
 	public $dispatcher;
 	public $page;
-	public $error = null;
 
 	public $title = APP_TITLE;
 	public $request = "";
@@ -79,10 +78,24 @@ class Leum
 
 		// Include the code for the page.
 		$pageFile = array_shift($arguments);
-		include $pageFile;
+		$pageClass = basename($pageFile, ".php");
 
+		// Show a 500 page if the file does not exist.
+		if(!is_file($pageFile))
+		{
+			self::ShowErrorPage(500, "The file containing the '$pageClass' class for this page does not exist. [Routes Issue]");
+			return;
+		}
+
+		include $pageFile;
+		// Show a 500 page if the class does not exist.
+		if(!class_exists($pageClass))
+		{
+			self::ShowErrorPage(500, "The '$pageClass' class for this page does not exist. [Routes Issue]");
+			return;
+		}
 		// Initialize the page and set the arguments.
-		$this->page = new Page($this, $this->dbc, $this->user, $arguments);
+		$this->page = new $pageClass($this, $this->dbc, $this->user, $arguments);
 		$this->arguments = $arguments;
 	}
 
@@ -126,24 +139,32 @@ class Leum
 	// Tells the page to show it's output.
 	public function Output()
 	{
-		// If there is an error set, then show the error.
-		if(isset($this->error))
-		{
-			include SYS_ROOT . "/pages/error-pages/404.php";
-			$this->page = new Page($this, $this->dbc, null, [$this->error]);
-			$this->arguments = [$this->error];
-		}
-		
 		$this->page->Content();
 	}
 
 	// Shows triggers the 404 page to show. can provide a custom message.
 	public function Show404Page($message = null)
 	{
-		if(isset($message))
-			$this->error = $message;
-		else
-			$this->error = true;
+		$this->ShowErrorPage(404, $message, 'error_404');
+	}
+	public function ShowPermissionErrorPage($message = null)
+	{
+		$this->ShowErrorPage(403, $message, 'no_permission');
+	}
+	public function ShowErrorPage($code, $message, $class = 'error_generic')
+	{
+		http_response_code($code);
+
+		$file = SYS_ROOT . "/pages/error-pages/$class.php";
+
+		if(!is_file($file))
+			throw new Exception("Error Page '$class' does not exist");
+
+		require_once $file;
+
+		$this->arguments['error-message'] = $message;
+		$this->arguments['error-code'] = $code;
+		$this->page = new $class($this, $this->dbc, null, $this->arguments);
 	}
 	// Sets the title of the page. Force bypasses prefix and suffix from config.
 	public function SetTitle($newTitle, $force = false)
@@ -182,5 +203,11 @@ class Leum
 			return false;
 		return $this->user->HasPermission($permissionSlug);
 	}
+}
+
+interface IPage
+{
+	public function __construct($leum, $dbc, $userInfo, $arguments);
+	public function Content();
 }
 ?>

@@ -2,7 +2,7 @@
 /**
 * Edit Landing page
 */
-class Page
+class landing implements IPage
 {
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
@@ -10,7 +10,8 @@ class Page
 
 		if(!$leum->AllowedTo('admin-pages'))
 		{
-			throw new exception("You are not allowed to do this");
+			$leum->ShowPermissionErrorPage("You are not allowed to do this.");
+			//throw new exception("You are not allowed to do this");
 		}
 	}
 	public function Content()

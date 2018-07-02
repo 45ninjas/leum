@@ -4,7 +4,7 @@ require_once SYS_ROOT . "/core/user-permission/role.php";
 /**
 * View Tags
 */
-class Page
+class edit_roles implements IPage
 {
 	private $role;
 	private $title;

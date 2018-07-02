@@ -2,34 +2,20 @@
 /**
 * 404 Page
 */
-class Page
+class error_404 implements IPage
 {
-	protected $message;
-	protected $code = 404;
+	private $message;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		// Get the error message from the arguments.
-		if(isset($arguments["message"]))
-			$this->message = $arguments["message"];
-		else if(isset($arguments[0]) && is_string($arguments[0]))
-			$this->message = $arguments[0];
-
-		// Get the http code from the arguments.
-		if(isset($arguments["code"]) && is_integer($arguments["code"]))
-			$this->code = $arguments["code"];
-
-		http_response_code($this->code);
-
-		$leum->SetTitle("Error " . $this->code);
-		
+		$message = $arguments['error-message'];
 	}
 
 	public function Content()
 	{?>
 <div class="main">
 	<div class="header">
-		<h1><?=$this->code;?> - Uh-Oh!</h1>
-		<h2>Yep, you read it correctly, it's a <?=$this->code;?> alright.</h2>
+		<h1>404 - Uh-Oh!</h1>
+		<h2>Yep, you read it correctly, it's a 404 alright.</h2>
 	</div>
 
 	<div class="content">

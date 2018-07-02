@@ -3,7 +3,7 @@ require_once SYS_ROOT . "/core/user.php";
 /**
 * View Tags
 */
-class Page
+class edit_user implements IPage
 {
 	private $user;
 	private $title;

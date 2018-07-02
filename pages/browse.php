@@ -7,7 +7,7 @@ require_once SYS_ROOT . "/page-parts/tag-field.php";
 require_once SYS_ROOT . "/core/leum-core.php";
 require_once SYS_ROOT . "/page-parts/media-viewer.php";
 
-class Page
+class browse implements IPage
 {
 	public $pageNum = 0;
 	public $pageSize = 50;

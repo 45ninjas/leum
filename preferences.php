@@ -60,27 +60,27 @@ $routes = array(
 	["edit/landing.php",					'edit',						0],
 	
 	// Media Editing
-	["edit/media/edit.php",					'edit/media\/(\d+)',		1],
-	["edit/media/edit.php",					'edit/media\/new',			0],
-	["edit/media/list.php",					'edit/media',				0],
+	["edit/media/edit_media.php",			'edit/media\/(\d+)',		1],
+	["edit/media/edit_media.php",			'edit/media\/new',			0],
+	["edit/media/list_media.php",			'edit/media',				0],
 	
 	// Tag Editing
-	["edit/tags/edit.php",					'edit/tag/(\d+)',			1],
-	["edit/tags/edit.php",					'edit/tag/new',			0],
-	["edit/tags/list.php",					'edit/tag',				0],
+	["edit/tags/edit_tags.php",				'edit/tag/(\d+)',			1],
+	["edit/tags/edit_tags.php",				'edit/tag/new',			0],
+	["edit/tags/list_tags.php",				'edit/tag',				0],
 
 	// User Editing.
-	["edit/users/edit-user.php",			'edit/user/(\d+)',		1],
-	["edit/users/edit-user.php",			'edit/user/new',			0],
-	["edit/users/list-users.php",			'edit/user',				0],
+	["edit/users/edit_user.php",			'edit/user/(\d+)',		1],
+	["edit/users/edit_user.php",			'edit/user/new',			0],
+	["edit/users/list_users.php",			'edit/user',				0],
 
 	// Permissions and roles.
-	["edit/permissions/edit-permissions.php",	'edit/permissions',						0],
-	["edit/permissions/edit-roles.php",			'edit/permissions/roles/new',			0],
-	["edit/permissions/edit-roles.php",			'edit/permissions/roles/([-a-z1-9]+)',	1],
+	["edit/permissions/edit_permissions.php",	'edit/permissions',						0],
+	["edit/permissions/edit_roles.php",			'edit/permissions/roles/new',			0],
+	["edit/permissions/edit_roles.php",			'edit/permissions/roles/([-a-z1-9]+)',	1],
 
 	// User pages.
-	["user/create-user.php",				'create-account',			0],
+	["user/create_user.php",				'create-account',			0],
 	["user/login.php",						'login',					0],
 	["user/login.php",						'login/(forgot)',			1],
 	["user/profile.php",					'profile',					0]

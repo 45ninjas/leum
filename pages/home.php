@@ -2,7 +2,7 @@
 /**
 * Home Page
 */
-class Page
+class home implements IPage
 {
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{

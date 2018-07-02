@@ -3,7 +3,7 @@
 * Edit tag page
 */
 require_once SYS_ROOT . "/core/tag.php";
-class Page
+class edit_tags implements IPage
 {
 	public $title = "Create Tag";
 	private $tagItem;

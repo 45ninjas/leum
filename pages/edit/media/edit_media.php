@@ -8,7 +8,7 @@ require_once SYS_ROOT . "/core/tag.php";
 
 require_once 'page-parts/media-viewer.php';
 require_once 'page-parts/tag-field.php';
-class Page
+class edit_media implements IPage
 {
 	public $title = "Create Media";
 	private $mediaItem;

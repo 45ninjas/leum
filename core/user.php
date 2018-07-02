@@ -15,7 +15,10 @@ class User
 	public function HasPermissions($permissions)
 	{
 		if(!isset($this->permissions) || !is_array($this->permissions))
+		{
+			var_dump($this);
 			throw new Exception("User's permissions are not set. Use 'GetPermissions()'");
+		}
 
 		return !array_diff($permissions, $this->permissions);
 	}
@@ -34,8 +37,22 @@ class User
         $statement = $dbc->prepare($sql);
         $statement->execute([$this->user_id]);
 
-        $this->premissions = $statement->fetchAll(PDO::FETCH_COLUMN);
+        $this->permissions = $statement->fetchAll(PDO::FETCH_COLUMN);
         return $this->permissions;
+	}
+	public function GetRoles($dbc)
+	{
+		$sql = "SELECT DISTINCT r.slug
+		FROM roles r
+		JOIN user_role_map urm ON r.role_id = urm.role_id
+		JOIN users ON urm.user_id = users.user_id
+		WHERE users.user_id = ?;";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$this->user_id]);
+
+		$this->roles = $statement->fetchAll(PDO::FETCH_COLUMN);
+		return $this->roles;
 	}
 	public function SetPassword($password, $dbc = null)
 	{
@@ -72,42 +89,49 @@ class User
 		if($everything)
 			$columns = "*";
 		else
-			$columns = "users.user_id, users.username, users.last_login";
+			$columns = "u.user_id, u.username, u.last_login";
 
-		if(!$withPermissions)
-		{
-			if(is_string($user))
-				$sql = "SELECT $columns from users where username = ?";
-			else
-			{
-				$user = self::GetID($user);
-				$sql = "SELECT * from users where user_id = ?";
-			}
-
-			$statement = $dbc->prepare($sql);
-			$statement->execute([$user]);
-
-			return $statement->fetchObject(__CLASS__);
-		}
+		if(is_string($user))
+			$field = 'username';
 		else
 		{
-			$sql = "SELECT $columns, (SELECT DISTINCT GROUP_CONCAT(p.slug)
-			FROM permissions p
-            JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
-            JOIN roles ON rpm.role_id = roles.role_id
-            JOIN user_role_map upm on rpm.role_id = upm.role_id
-            JOIN users ON upm.user_id = users.user_id
-            WHERE users.user_id = ?) AS permissions
-            FROM users
-            where users.user_id = ?;";
-
-            $statement = $dbc->prepare($sql);
-            $statement->execute([$user,$user]);
-
-            $result = $statement->fetchObject(__CLASS__);
-            $result->permissions = explode(',', $result->permissions);
-			return $result;
+			$field = 'user_id';
+			$user = self::GetID($user);
 		}
+
+		if(!$withPermissions)
+			$sql = "SELECT $columns from users as u where u.$field = ?";
+		else
+			$sql = "SELECT u.user_id, u.username, u.last_login,
+			(SELECT DISTINCT GROUP_CONCAT(p.slug)
+			FROM permissions p
+			JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+			JOIN roles ON rpm.role_id = roles.role_id
+			JOIN user_role_map upm on rpm.role_id = upm.role_id
+			JOIN users ON upm.user_id = users.user_id
+			WHERE users.user_id = u.user_id)
+			AS permissions,
+			(SELECT DISTINCT GROUP_CONCAT(r.slug)
+			FROM roles r
+			JOIN user_role_map urm ON r.role_id = urm.role_id
+			JOIN users ON urm.user_id = users.user_id
+			WHERE users.user_id = u.user_id)
+			AS roles
+			FROM users AS u
+			where u.$field = ?";
+
+		$statement = $dbc->prepare($sql);
+		$statement->execute([$user]);
+
+		$result = $statement->fetchObject(__CLASS__);
+
+		if($withPermissions)
+		{
+			$result->permissions = explode(',', $result->permissions);
+			$result->roles = explode(',', $result->roles);
+		}
+
+		return $result;
 	}
 	// Getting multiple users.
 	public static function GetMultiple($dbc, $user_ids)
@@ -124,14 +148,46 @@ class User
 		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
 	}
 	// Getting all users.
-	public static function GetAll($dbc)
+	public static function GetAll($dbc, $permissions = false)
 	{
-		$sql = "SELECT user_id, username, last_login, email from users";
+		if(!$permissions)
+			$sql = "SELECT user_id, username, last_login, email from users";
+		else
+		{
+			$sql = "SELECT u.username, u.user_id, u.last_login, u.email,
+			(SELECT DISTINCT GROUP_CONCAT(p.slug)
+			    FROM permissions p
+			    JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+			    JOIN roles ON rpm.role_id = roles.role_id
+			    JOIN user_role_map upm on rpm.role_id = upm.role_id
+			    JOIN users ON upm.user_id = users.user_id
+			    WHERE users.user_id = u.user_id)
+			    AS permissions,
+			(SELECT DISTINCT GROUP_CONCAT(r.slug)
+			    FROM roles r
+			    JOIN user_role_map urm ON r.role_id = urm.role_id
+			    JOIN users ON urm.user_id = users.user_id
+			    WHERE users.user_id = u.user_id) AS roles
+		    FROM users AS u;";
+		}
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute();
 
-		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+		if($permissions)
+		{
+			$users = array();
+			$statement->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
+			while ($user = $statement->fetch())
+			{
+				$user->roles = explode(', ', $user->roles);
+				$user->permissions = explode(', ', $user->permissions);
+				array_unshift($users, $user);
+			}
+			return $users;
+		}
+		else
+			return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
 	}
 	// Deleting single users.
 	public static function DeleteSingle($dbc, $user)
@@ -180,6 +236,7 @@ class User
 
 	public static function CheckPassword($dbc, $user, $password)
 	{
+
 		if(is_string($user))
 			$sql = "SELECT hash from users where username = ?";
 		else
@@ -192,6 +249,8 @@ class User
 
 		$user = $statement->fetchObject(__CLASS__);
 
+		$user = User::GetSingle($dbc, $user);
+
 		if($user == false)
 			return false;
 
@@ -202,7 +261,7 @@ class User
 			$return = true;
 			// Does the password hash need updating?
 			if(password_needs_rehash($user->hash, PASSWORD_DEFAULT, ['cost' => AUTH_PASS_COST]))
-				$user->SetPassword($dbc, $password);
+				$user->SetPassword($password, $dbc);
 		}
 
 		return $return;

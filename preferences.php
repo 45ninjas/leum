@@ -44,6 +44,10 @@ define('TITLE_SUFFIX', "");
 define('AUTH_PASS_COST', 10);
 
 // === Routes ===
+define('LOGIN_PAGE', "/user/login.php");
+define('LOGIN_URL', "login");
+define('HOME_PAGE', "/home.php");
+// 
 // 
 // Try not to touch theses as messing up any of these preg/regex strings and group counts will lead 
 // to some or all pages not working.
@@ -53,7 +57,7 @@ define('AUTH_PASS_COST', 10);
 // 
 //	Destination page.			Preg/Regex.						Group count (total arguments).
 $routes = array(
-	["home.php",							'',							0],
+	[HOME_PAGE,								'',							0],
 	["preferences.php",						'preferences',				0],
 	["browse.php",							'browse',					0],
 	["view.php",							'view/(\d+)',				1],
@@ -66,11 +70,11 @@ $routes = array(
 	
 	// Tag Editing
 	["edit/tags/edit_tags.php",				'edit/tag/(\d+)',			1],
-	["edit/tags/edit_tags.php",				'edit/tag/new',			0],
-	["edit/tags/list_tags.php",				'edit/tag',				0],
+	["edit/tags/edit_tags.php",				'edit/tag/new',				0],
+	["edit/tags/list_tags.php",				'edit/tag',					0],
 
 	// User Editing.
-	["edit/users/edit_user.php",			'edit/user/(\d+)',		1],
+	["edit/users/edit_user.php",			'edit/user/(\d+)',			1],
 	["edit/users/edit_user.php",			'edit/user/new',			0],
 	["edit/users/list_users.php",			'edit/user',				0],
 
@@ -81,8 +85,8 @@ $routes = array(
 
 	// User pages.
 	["user/create_user.php",				'create-account',			0],
-	["user/login.php",						'login',					0],
-	["user/login.php",						'login/(forgot)',			1],
+	[LOGIN_PAGE,							LOGIN_URL,					0],
+	[LOGIN_PAGE,							LOGIN_URL . '/(forgot)',	1],
 	["user/profile.php",					'profile',					0]
 );
 ?>

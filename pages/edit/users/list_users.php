@@ -11,7 +11,7 @@ class list_users implements IPage
 	{
 		$leum->PermissionCheck("admin-pages", "users-edit");
 		$leum->SetTitle("Users");
-		$this->users = User::GetAll($dbc);	
+		$this->users = User::GetAll($dbc, true);	
 		$this->total = count($this->users);
 	}
 	public function Content()
@@ -40,6 +40,7 @@ class list_users implements IPage
 					<th>Username</th>
 					<th>Email</th>
 					<th>Last Login</th>
+					<th>Roles</th>
 					<th>Action</th>
 				</tr>
 			</thead>
@@ -47,12 +48,14 @@ class list_users implements IPage
 			<?php 
 				foreach ($this->users as $user)
 				{
+					$roles = implode(', ', $user->roles);
 				?>
 				<tr>
 					<td><?=$user->user_id;?></td>
 					<td><?=$user->username;?></td>
 					<td><?=$user->email;?></td>
 					<td><?=$user->last_login;?></td>
+					<td><?=$roles;?></td>
 					<td>
 						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/user/$user->user_id"; ?>">
 							<i class="fa fa-edit"></i>

@@ -77,16 +77,9 @@ class Dispatcher
 	public function GetPage($request)
 	{
 		if($request == "")
-			return ["pages/home.php"];
+			return ["home.php"];
 
 		$args = $this->Dispatch($request);
-
-		if(is_file("pages/$args[0]"))
-		{
-			$args[0] = "pages/$args[0]";
-			return $args;
-		}
-		
-		return false;
+		return $args;
 	}
 }

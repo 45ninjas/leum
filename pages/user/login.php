@@ -36,14 +36,10 @@ class login implements IPage
 			$password = $_POST["password"];
 			$username = $_POST["username"];
 
-			if($leum->AttemptLogin($username, $password))
-			{
+			if($leum->AttemptLogin($username, $password, $message))
 				$this->success = true;
-			}
 			else
-			{
-				$this->messageText = $this->failLoginMsg;
-			}
+				$this->messageText = $message;
 		}
 
 		$leum->SetTitle($this->title);

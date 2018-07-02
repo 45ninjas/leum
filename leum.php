@@ -15,11 +15,12 @@ class Leum
 
 	public $title = APP_TITLE;
 	public $request = "";
-	public $arguments;
+	public $arguments = array();
+	public $routeResolve = null;
 
 	private $dbc;
 
-	public $headIncludes;
+	public $headIncludes = array();
 
 	public $user = null;
 
@@ -33,6 +34,45 @@ class Leum
 		$this->GetDatabase();
 		$this->dispatcher = new Dispatcher($routes);
 
+		// Get the request and remove the trailing slash.
+		if(isset($_GET['request']))
+		{
+			$this->request = $_GET['request'];
+
+			// Remove that pesky trailing slash.
+			if(substr($this->request,-1) == '/')
+				$this->request = substr($this->request, 0, -1);
+		}
+
+		$this->Dispatch();
+
+		$this->UserInit();
+
+		// Show the 404 page if we have no route/page.
+		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/pages/$this->routeResolve"))
+		{
+			self::Show404Page();
+			return;
+		}
+
+		// If no page has been set then, use the page the dispatcher found.
+		if(!isset($this->page))
+			$this->LoadPage($this->routeResolve);
+	}
+	private function Dispatch()
+	{
+		$dispResult = $this->dispatcher->GetPage($this->request);
+		if($dispResult != false)
+		{
+			$this->routeResolve = array_shift($dispResult);
+			$this->arguments = array_merge($dispResult, $this->arguments);
+		}
+		else
+			$this->routeResolve = null;
+
+	}
+	private function UserInit()
+	{
 		// Setup the session parameters
 		session_set_cookie_params(0,ROOT); 
 		session_name("leum");
@@ -54,37 +94,31 @@ class Leum
 			}
 		}
 
-		// Get the request and remove the trailing slash.
-		if(isset($_GET['request']))
+		// Disallow access to the app, force login. Unless allowed to.
+		if($this->routeResolve != LOGIN_PAGE && !$this->AllowedTo("access-app"))
 		{
-			$this->request = $_GET['request'];
+			$location = "/" . LOGIN_URL;
 
-			// Remove that pesky trailing slash.
-			if(substr($this->request,-1) == '/')
-				$this->request = substr($this->request, 0, -1);
+			if(!empty($this->request))
+				$location .= "?req=$this->request";
+
+			$this->Redirect($location);
 		}
 
-		// Setup the head includes.
-		$this->headIncludes = array();
+	}
 
-		// Get the page and arguments form the dispatcher.
-		$arguments = $this->dispatcher->GetPage($this->request);
-
-		// Show the 404 page if we have no route/page.
-		if($arguments[0] == false)
-		{
-			self::Show404Page();
-			return;
-		}
-
-		// Include the code for the page.
-		$pageFile = array_shift($arguments);
+	public function LoadPage($pageFile, $throw = false)
+	{
+		$pageFile = SYS_ROOT . "/pages/$pageFile";
 		$pageClass = basename($pageFile, ".php");
-
 		// Show a 500 page if the file does not exist.
 		if(!is_file($pageFile))
 		{
-			$this->ShowErrorPage(500, "The file containing the '$pageClass' class for this page does not exist. [Routes Issue]");
+			$error = "The file containing the '$pageClass' class for this page does not exist. [Routes Issue]";
+			if($throw)
+				throw new Exception($error);
+			else
+				$this->ShowErrorPage(500, $error);
 			return;
 		}
 
@@ -92,16 +126,19 @@ class Leum
 		// Show a 500 page if the class does not exist.
 		if(!class_exists($pageClass))
 		{
-			$this->ShowErrorPage(500, "The '$pageClass' class for this page does not exist. [Routes Issue]");
+			$error = "The '$pageClass' class for this page does not exist. [Routes Issue]";
+			if($throw)
+				throw new Exception($error);
+			else
+				$this->ShowErrorPage(500, $error);
 			return;
 		}
-		$this->arguments = $arguments;
 		// Initialize the page and set the arguments.
-		$this->page = new $pageClass($this, $this->dbc, $this->user, $this->arguments);
+		$newPage = new $pageClass($this, $this->dbc, $this->user, $this->arguments);
 
-		// Looks like we have an error!
-		if(isset($this->errorClass))
-			$this->DoErrorPage();
+		// Just in-case a new page was created during the creating of this page. Don't overwrite the new page. As it's very likely an error.
+		if($this->page == null)
+			$this->page = $newPage;
 	}
 
 	// Similar idea to how enqueue works in wordpress. 
@@ -146,21 +183,6 @@ class Leum
 	{
 		$this->page->Content();
 	}
-
-	private function DoErrorPage()
-	{
-		$this->page = null;
-		http_response_code($this->arguments['error-code']);
-		$file = SYS_ROOT . "/pages/error-pages/$this->errorClass.php";
-
-		if(!is_file($file))
-			throw new Exception("Error Page '$this->errorClass' does not exist");
-
-		require_once $file;
-
-		$this->page = new $this->errorClass($this, $this->dbc, null, $this->arguments);
-	}
-
 	// Shows triggers the 404 page to show. can provide a custom message.
 	public function Show404Page($message = null)
 	{
@@ -174,7 +196,10 @@ class Leum
 	{
 		$this->arguments['error-code'] = $code;
 		$this->arguments['error-message'] = $message;
-		$this->errorClass = $class;
+		$this->page = null;
+		http_response_code($code);		
+
+		$this->LoadPage("error-pages/$class.php", true);
 	}
 	// Sets the title of the page. Force bypasses prefix and suffix from config.
 	public function SetTitle($newTitle, $force = false)
@@ -187,19 +212,36 @@ class Leum
 		if(!$force && defined('TITLE_SUFFIX'))
 			$this->title .= TITLE_SUFFIX;
 	}
-	public function AttemptLogin($username, $password)
+	public function AttemptLogin($username, $password, &$message)
 	{
+		// Did the user enter a correct password?
 		if(User::CheckPassword($this->dbc, $username, $password))
 		{
-			$user = User::GetSingle($this->dbc, $username);
+			// Get the user.
+			$user = User::GetSingle($this->dbc, $username, true);
+
+			// Is the user allowed to login?
+			if(!$user->HasPermissions(["login"]))
+			{
+				$message="You don't have permission to login. Your account could have been suspended/locked. Contact your administrator for assistance.";
+				return false;
+			}
+
+			// Actually log the user in.
 			$user->Login($this->dbc);
-			$user->GetPermissions($this->dbc);
+			$this->user = $user;
 			$_SESSION['user_id'] = $user->user_id;
-			$_SESSION['name'] = $user->username;
-			$_SESSION['permissions'] = $user->permissions;
+
+			// Redirect the user back to the page they where trying to access.
+			$redirect = "";
+			if(isset($_GET['req']))
+				$redirect = $_GET['req'];
+			$this->Redirect($_GET['req']);
 
 			return true;
 		}
+		// User name or password was wrong.
+		$message= "The provided user-name or password didn't match any of our records.";
 		return false;
 	}
 	public function Logout()
@@ -209,20 +251,41 @@ class Leum
 	}
 	public function AllowedTo($permissionSlugs)
 	{
+		if(is_string($permissionSlugs))
+			$permissionSlugs = [$permissionSlugs];
+
+		// echo "Checking Permissions: " . implode(', ', $permissionSlugs) . PHP_EOL;
+
 		if(!isset($this->user))
 			return false;
 
-		if(is_array($permissionSlugs))
-			return $this->user->HasPermissions($permissionSlugs);
-		elseif (is_string($permissionSlugs))
-			return $this->user->HasPermissions([$permissionSlugs]);
-
-		return false;
+		return $this->user->HasPermissions($permissionSlugs);
 	}
 	public function PermissionCheck(...$permissions)
 	{
 		if(!$this->AllowedTo($permissions))
+		{
 			$this->ShowPermissionerrorPage("You don't have sufficient permissions");
+		}
+	}
+	public function Redirect($targetRequest)
+	{
+		// TODO: Follow the HTML spec. and use a full url.
+		$targetRequest = ROOT . $targetRequest;
+		header("Location: $targetRequest");
+
+		?>
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<title><?=APP_TITLE?> Redirect</title>
+		</head>
+		<body>
+			<p>Redirecting. This will only take a moment. Click <a href="<?=$targetRequest?>">here</a> if it's not working.</p>
+		</body>
+		</html>
+		<?php
+		die();
 	}
 }
 

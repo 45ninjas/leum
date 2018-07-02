@@ -10,6 +10,7 @@ class edit_user implements IPage
 	private $total;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "users-edit");
 		$this->title = "Create User";
 		$user_id = null;
 

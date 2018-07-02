@@ -9,6 +9,7 @@ class list_users implements IPage
 	private $total;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "users-edit");
 		$leum->SetTitle("Users");
 		$this->users = User::GetAll($dbc);	
 		$this->total = count($this->users);

@@ -12,12 +12,12 @@ class User
 	public $roles;
 
 	// Figures out if the user has a permission
-	public function HasPermission($slug)
+	public function HasPermissions($permissions)
 	{
 		if(!isset($this->permissions) || !is_array($this->permissions))
 			throw new Exception("User's permissions are not set. Use 'GetPermissions()'");
 
-		return in_array($slug, $this->permissions);
+		return !array_diff($permissions, $this->permissions);
 	}
 
 	// Gets all permission slugs mapped to the user.

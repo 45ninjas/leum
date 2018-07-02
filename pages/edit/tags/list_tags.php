@@ -9,6 +9,7 @@ class list_tags implements IPage
 	private $total;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "tags-edit");
 		$leum->SetTitle("Tags");
 		$this->tagItems = Tag::GetAll($dbc);	
 		$this->total = count($this->tagItems);

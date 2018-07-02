@@ -19,6 +19,8 @@ class edit_media implements IPage
 
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "media-edit");
+
 		// Why is this up here separated from the rest?
 		$mediaId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))

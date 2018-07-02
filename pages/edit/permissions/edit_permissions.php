@@ -11,6 +11,7 @@ class edit_permissions implements IPage
 	private $title;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "permissions-edit");
 		$this->title = "Permissions";
 		$leum->SetTitle($this->title);
 

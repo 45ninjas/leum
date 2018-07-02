@@ -10,6 +10,7 @@ class list_media implements IPage
 	private $total;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "media-edit");
 		$leum->SetTitle("Media");
 		$this->mediaItems = Media::GetAll($dbc);
 		$this->total = count($this->mediaItems);

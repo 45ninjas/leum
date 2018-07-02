@@ -11,6 +11,7 @@ class edit_tags implements IPage
 
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
+		$leum->PermissionCheck("admin-pages", "tags-edit");
 		$tagId = null;
 		if(isset($arguments[0]) && is_numeric($arguments[0]))
 		{

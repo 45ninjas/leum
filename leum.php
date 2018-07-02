@@ -11,6 +11,7 @@ class Leum
 	private static $_instance = null;
 	public $dispatcher;
 	public $page;
+	public $errorClass;
 
 	public $title = APP_TITLE;
 	public $request = "";
@@ -83,7 +84,7 @@ class Leum
 		// Show a 500 page if the file does not exist.
 		if(!is_file($pageFile))
 		{
-			self::ShowErrorPage(500, "The file containing the '$pageClass' class for this page does not exist. [Routes Issue]");
+			$this->ShowErrorPage(500, "The file containing the '$pageClass' class for this page does not exist. [Routes Issue]");
 			return;
 		}
 
@@ -91,12 +92,16 @@ class Leum
 		// Show a 500 page if the class does not exist.
 		if(!class_exists($pageClass))
 		{
-			self::ShowErrorPage(500, "The '$pageClass' class for this page does not exist. [Routes Issue]");
+			$this->ShowErrorPage(500, "The '$pageClass' class for this page does not exist. [Routes Issue]");
 			return;
 		}
-		// Initialize the page and set the arguments.
-		$this->page = new $pageClass($this, $this->dbc, $this->user, $arguments);
 		$this->arguments = $arguments;
+		// Initialize the page and set the arguments.
+		$this->page = new $pageClass($this, $this->dbc, $this->user, $this->arguments);
+
+		// Looks like we have an error!
+		if(isset($this->errorClass))
+			$this->DoErrorPage();
 	}
 
 	// Similar idea to how enqueue works in wordpress. 
@@ -142,6 +147,20 @@ class Leum
 		$this->page->Content();
 	}
 
+	private function DoErrorPage()
+	{
+		$this->page = null;
+		http_response_code($this->arguments['error-code']);
+		$file = SYS_ROOT . "/pages/error-pages/$this->errorClass.php";
+
+		if(!is_file($file))
+			throw new Exception("Error Page '$this->errorClass' does not exist");
+
+		require_once $file;
+
+		$this->page = new $this->errorClass($this, $this->dbc, null, $this->arguments);
+	}
+
 	// Shows triggers the 404 page to show. can provide a custom message.
 	public function Show404Page($message = null)
 	{
@@ -153,18 +172,9 @@ class Leum
 	}
 	public function ShowErrorPage($code, $message, $class = 'error_generic')
 	{
-		http_response_code($code);
-
-		$file = SYS_ROOT . "/pages/error-pages/$class.php";
-
-		if(!is_file($file))
-			throw new Exception("Error Page '$class' does not exist");
-
-		require_once $file;
-
-		$this->arguments['error-message'] = $message;
 		$this->arguments['error-code'] = $code;
-		$this->page = new $class($this, $this->dbc, null, $this->arguments);
+		$this->arguments['error-message'] = $message;
+		$this->errorClass = $class;
 	}
 	// Sets the title of the page. Force bypasses prefix and suffix from config.
 	public function SetTitle($newTitle, $force = false)
@@ -197,11 +207,22 @@ class Leum
 		session_destroy();
 		$_SESSION = array();
 	}
-	public function AllowedTo($permissionSlug)
+	public function AllowedTo($permissionSlugs)
 	{
 		if(!isset($this->user))
 			return false;
-		return $this->user->HasPermission($permissionSlug);
+
+		if(is_array($permissionSlugs))
+			return $this->user->HasPermissions($permissionSlugs);
+		elseif (is_string($permissionSlugs))
+			return $this->user->HasPermissions([$permissionSlugs]);
+
+		return false;
+	}
+	public function PermissionCheck(...$permissions)
+	{
+		if(!$this->AllowedTo($permissions))
+			$this->ShowPermissionerrorPage("You don't have sufficient permissions");
 	}
 }
 

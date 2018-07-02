@@ -7,7 +7,7 @@ class error_404 implements IPage
 	private $message;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		$message = $arguments['error-message'];
+		$this->message = $arguments['error-message'];
 	}
 
 	public function Content()

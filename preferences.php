@@ -43,9 +43,22 @@ define('TITLE_SUFFIX', "");
 // http://php.net/manual/en/function.password-hash.php#example-985
 define('AUTH_PASS_COST', 10);
 
+// === Roles ===
+// Do not change unless you have modified the core/user-permission/defaults.php file BEFORE
+// setting up leum or you know what these actually do behind the scenes.
+// The default user role, used for unauthenticated users.
+define('DEFAULT_ROLE','default');
+// The role a new user is assigned when they register an account or an admin creates an account.
+define('NEW_USER_ROLE','user');
+
 // === Routes ===
+// These settings are used throughout leum and must be valid. If not users will not be able to access the login pages.
+// The login page file.
 define('LOGIN_PAGE', "/user/login.php");
+// The login route.
 define('LOGIN_URL', "login");
+// The register account page. If permissions allow 
+define('REGISTER_PAGE', "/user/register.php");
 define('HOME_PAGE', "/home.php");
 // 
 // 
@@ -84,7 +97,7 @@ $routes = array(
 	["edit/permissions/edit_roles.php",			'edit/permissions/roles/([-a-z1-9]+)',	1],
 
 	// User pages.
-	["user/create_user.php",				'create-account',			0],
+	[REGISTER_PAGE,							'register',					0],
 	[LOGIN_PAGE,							LOGIN_URL,					0],
 	[LOGIN_PAGE,							LOGIN_URL . '/(forgot)',	1],
 	["user/profile.php",					'profile',					0]

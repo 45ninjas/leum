@@ -23,6 +23,9 @@ class Leum
 	public $headIncludes = array();
 
 	public $user = null;
+	public $defaultRole;
+
+	public $messages;
 
 	public function __construct()
 	{
@@ -33,6 +36,8 @@ class Leum
 		self::$_instance = $this;
 		$this->GetDatabase();
 		$this->dispatcher = new Dispatcher($routes);
+
+		$this->defaultRole = Role::GetSingle($this->dbc, DEFAULT_ROLE, true);
 
 		// Get the request and remove the trailing slash.
 		if(isset($_GET['request']))
@@ -94,17 +99,28 @@ class Leum
 			}
 		}
 
-		// Disallow access to the app, force login. Unless allowed to.
-		if($this->routeResolve != LOGIN_PAGE && !$this->AllowedTo("access-app"))
+		// Can we access the app?
+		if(!$this->AllowedTo("access-app"))
 		{
-			$location = "/" . LOGIN_URL;
+			// If a user is logged in, let them know what's up.
+			if(isset($this->user))
+			{
+				$this->ShowPermissionerrorPage("You don't have permission to access ". APP_TITLE .".");
+				// Message::Create("msg-red", "If you believe you should have permission to access this page please contact your administrator.");
+			}
+			// Looks like this user has not authenticated, the the thing.
+			elseif($this->routeResolve != LOGIN_PAGE && $this->routeResolve != REGISTER_PAGE)
+			{
+				$location = "/" . LOGIN_URL;
 
-			if(!empty($this->request))
-				$location .= "?req=$this->request";
+				// If they where trying to access a page include it in the req parameter.
+				if(!empty($this->request))
+					$location .= "?req=$this->request";
 
-			$this->Redirect($location);
+				// Redirect the user to the login page.
+				$this->Redirect($location);
+			}
 		}
-
 	}
 
 	public function LoadPage($pageFile, $throw = false)
@@ -214,8 +230,8 @@ class Leum
 	}
 	public function AttemptLogin($username, $password, &$message)
 	{
-		// Did the user enter a correct password?
-		if(User::CheckPassword($this->dbc, $username, $password))
+		// Did the user enter a correct password for the provided user?
+		if(UserAccount::Login($this->dbc, $username, $password))
 		{
 			// Get the user.
 			$user = User::GetSingle($this->dbc, $username, true);
@@ -227,8 +243,7 @@ class Leum
 				return false;
 			}
 
-			// Actually log the user in.
-			$user->Login($this->dbc);
+			// Set the user variable.
 			$this->user = $user;
 			$_SESSION['user_id'] = $user->user_id;
 
@@ -257,9 +272,14 @@ class Leum
 		// echo "Checking Permissions: " . implode(', ', $permissionSlugs) . PHP_EOL;
 
 		if(!isset($this->user))
-			return false;
+			$return = $this->defaultRole->HasPermissions($permissionSlugs);
+		else
+			$return = $this->user->HasPermissions($permissionSlugs);
 
-		return $this->user->HasPermissions($permissionSlugs);
+		if(!$return)
+			$this->arguments['error-permission'] = implode(', ', $permissionSlugs);
+
+		return $return;
 	}
 	public function PermissionCheck(...$permissions)
 	{
@@ -293,5 +313,38 @@ interface IPage
 {
 	public function __construct($leum, $dbc, $userInfo, $arguments);
 	public function Content();
+}
+
+class Message
+{
+	public static $messages = array();
+	public static function Create($class, $text, $location = "default")
+	{
+		$msg = new Message($class, $text);
+		$msg->AddMessage($location);
+	}
+	public static function ShowMessages($location = "default", $class = "")
+	{
+		if(isset(self::$messages[$location]))
+		{
+			echo "<div class=\"messages $location $class\">";
+			foreach (self::$messages[$location] as $message)
+			{
+				echo "<div class=\"msg $message->class\">$message->text</div>";
+			}
+			echo "</div>";
+		}
+	}
+	private function AddMessage($location = "default")
+	{
+		self::$messages[$location][] = $this;
+	}
+	public $class;
+	public $text;
+	public function __construct($class, $text)
+	{
+		$this->class = $class;
+		$this->text = $text;
+	}
 }
 ?>

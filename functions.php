@@ -30,6 +30,7 @@ function TheTitle()
 }
 function TheContent()
 {
+	Message::ShowMessages("default");
 	Leum::Instance()->Output();
 }
 function TheHead()

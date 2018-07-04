@@ -17,7 +17,6 @@ class Permission
 
 		$dbc->exec($sql);
 	}
-
 	public static function GetId($permission)
 	{
 		if($permission instanceof self)

@@ -22,7 +22,7 @@ class error_generic implements IPage
 
 	<div class="content">
 		<?php if(isset($this->message)): ?><h2 class="content-subhead"><?=$this->message;?></h2><?php endif; ?>
-		<img class="pure-img" src="<?php asset("/resources/graphics/yotsuba-kowai-paint.png") ?>">
+		<img class="pure-img middle" src="<?php asset("/resources/graphics/yotsuba-kowai-paint.png") ?>">
 	</div>
 </div>
 <?php }

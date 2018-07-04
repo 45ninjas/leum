@@ -5,9 +5,11 @@
 class no_permission implements IPage
 {
 	private $message;
+	private $permission;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
 		$this->message = $arguments['error-message'];
+		$this->permission = $arguments['error-permission'];
 	}
 
 	public function Content()
@@ -20,7 +22,8 @@ class no_permission implements IPage
 
 	<div class="content">
 		<?php if(isset($this->message)): ?><h2 class="content-subhead"><?=$this->message;?></h2><?php endif; ?>
-		<img class="pure-img" src="<?php asset("/resources/graphics/yotsuba-block.jpg") ?>">
+		<p>To access this page your account requires: <?=$this->permission?>.</p>
+		<img class="pure-img middle" src="<?php asset("/resources/graphics/yotsuba-block.jpg") ?>">
 	</div>
 </div>
 <?php }

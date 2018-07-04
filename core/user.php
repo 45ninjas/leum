@@ -74,11 +74,11 @@ class User
 	{
 		$sql = "CREATE table users
 		(
-			user_id int unsigned auto_increment primary key,
-			username varchar(255) not null,
-			hash varchar(255) not null,
-			last_login datetime not null,
-			email text
+			user_id int unsigned auto_increment PRIMARY KEY,
+			username varchar(255) NOT NULL UNIQUE,
+			hash varchar(255) NOT NULL,
+			last_login datetime NOT NULL,
+			email text UNIQUE
 		)";
 
 		$dbc->exec($sql);
@@ -104,18 +104,18 @@ class User
 		else
 			$sql = "SELECT u.user_id, u.username, u.last_login,
 			(SELECT DISTINCT GROUP_CONCAT(p.slug)
-			FROM permissions p
-			JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
-			JOIN roles ON rpm.role_id = roles.role_id
-			JOIN user_role_map upm on rpm.role_id = upm.role_id
-			JOIN users ON upm.user_id = users.user_id
-			WHERE users.user_id = u.user_id)
+				FROM permissions p
+				JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+				JOIN roles ON rpm.role_id = roles.role_id
+				JOIN user_role_map upm on rpm.role_id = upm.role_id
+				JOIN users ON upm.user_id = users.user_id
+				WHERE users.user_id = u.user_id)
 			AS permissions,
 			(SELECT DISTINCT GROUP_CONCAT(r.slug)
-			FROM roles r
-			JOIN user_role_map urm ON r.role_id = urm.role_id
-			JOIN users ON urm.user_id = users.user_id
-			WHERE users.user_id = u.user_id)
+				FROM roles r
+				JOIN user_role_map urm ON r.role_id = urm.role_id
+				JOIN users ON urm.user_id = users.user_id
+				WHERE users.user_id = u.user_id)
 			AS roles
 			FROM users AS u
 			where u.$field = ?";
@@ -162,12 +162,13 @@ class User
 			    JOIN user_role_map upm on rpm.role_id = upm.role_id
 			    JOIN users ON upm.user_id = users.user_id
 			    WHERE users.user_id = u.user_id)
-			    AS permissions,
+			AS permissions,
 			(SELECT DISTINCT GROUP_CONCAT(r.slug)
 			    FROM roles r
 			    JOIN user_role_map urm ON r.role_id = urm.role_id
 			    JOIN users ON urm.user_id = users.user_id
-			    WHERE users.user_id = u.user_id) AS roles
+			    WHERE users.user_id = u.user_id)
+			AS roles
 		    FROM users AS u;";
 		}
 
@@ -248,6 +249,10 @@ class User
 		$statement->execute([$user]);
 
 		$user = $statement->fetchObject(__CLASS__);
+		var_dump($user);
+		//$user->SetPassword($password);
+		var_dump($user);
+
 
 		$user = User::GetSingle($dbc, $user);
 
@@ -267,7 +272,7 @@ class User
 		return $return;
 	}
 
-	private static function GetID($user)
+	public static function GetID($user)
 	{
 		if($user instanceof User)
 			return $user->user_id;

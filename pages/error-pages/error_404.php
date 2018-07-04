@@ -30,7 +30,7 @@ class error_404 implements IPage
 				<li>The world ended.</li>
 			</ul>
 			<p>But seriously it's probably your fault.</p>
-		<img class="pure-img" src="<?php asset("/resources/graphics/yotsuba-kowai-paint.png") ?>">
+		<img class="pure-img middle" src="<?php asset("/resources/graphics/yotsuba-kowai-paint.png") ?>">
 	</div>
 </div>
 <?php }

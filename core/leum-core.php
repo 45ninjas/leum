@@ -5,6 +5,7 @@ require_once SYS_ROOT . "/core/tag.php";
 require_once SYS_ROOT . "/core/query.php";
 
 require_once SYS_ROOT . "/core/user.php";
+require_once SYS_ROOT . "/core/user-account.php";
 require_once SYS_ROOT . "/core/user-permission/role.php";
 require_once SYS_ROOT . "/core/user-permission/permission.php";
 
@@ -42,6 +43,13 @@ class LeumCore
 
 		//return the friendly url
 		return substr($string, 0, 32);
+	}
+	public static function IsValidUsername($username)
+	{
+		if(preg_match('/[^A-Za-z0-9!&_-]/', $username) == 0)
+			return true;
+
+		return false;
 	}
 }
  ?>

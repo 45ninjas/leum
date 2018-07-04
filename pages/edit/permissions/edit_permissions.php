@@ -32,11 +32,6 @@ class edit_permissions implements IPage
 		// Get all the roles and permissions for displaying.
 		$this->allRoles = Role::GetAll($dbc, true);
 		$this->allPermissions = Permission::GetAll($dbc);
-
-		foreach ($this->allRoles as $role)
-		{
-			$role->GetPermissions($dbc);
-		}
 	}
 	public function Content()
 	{ ?>
@@ -122,8 +117,11 @@ function Matrix()
 				$checked = "";
 				$disabled = "";
 
-				if($role->HasPermission($permission))
+				if($role->HasPermission($permission->slug))
+				{
+
 					$checked = "checked";
+				}
 
 				// if($role->slug == "root")
 				// $disabled = "disabled";

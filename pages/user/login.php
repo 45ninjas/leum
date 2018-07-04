@@ -6,15 +6,10 @@ require_once SYS_ROOT . "/core/leum-core.php";
 class login implements IPage
 {
 	private $title;
-	private $messageText;
-	private $messageClass = "msg-red";
 	private $forgot = false;
 	private $success = false;
-	
-	private $forgotMsg = "The provided email address does not match any records.";
+		
 	private $forgotSucessMsg = "We've sent you an email.";
-	private $suspendedMsg = "Your account has been suspended.";
-	private $failLoginMsg = "The provided user-name or password is incorrect. Please try again.";
 
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
@@ -26,11 +21,12 @@ class login implements IPage
 			$this->title = "Reset Account";
 		}
 
+		if(isset($_GET['info']))
+			Message::Create("msg-blue", $_GET['info'], "login");
+
 		if(isset($_POST["reset-email"]))
-		{
-			$this->messageClass = "msg-blue";
-			$this->messageText = $this->forgotSucessMsg;
-		}
+			Message::Create("msg-blue", $this->forgotSucessMsg, "login");
+
 		if(isset($_POST["login"]))
 		{
 			$password = $_POST["password"];
@@ -39,7 +35,7 @@ class login implements IPage
 			if($leum->AttemptLogin($username, $password, $message))
 				$this->success = true;
 			else
-				$this->messageText = $message;
+				Message::Create("msg-red", $message, "login");
 		}
 
 		$leum->SetTitle($this->title);
@@ -53,29 +49,24 @@ class login implements IPage
 		<h1><?=$this->title;?></h1>
 	</div>
 	<div class="content login-box">
-		<?php $this->ShowMessage($this->messageText); ?>
 		<?php if($this->forgot) $this->ShowReset(); else $this->ShowLogin(); ?>
 	</div>
 </div>
 
 <?php
 	}
-
-	function ShowMessage($messageText)
-	{
-		if(!empty($messageText))
-			echo "<div class=\"msg $this->messageClass\">$messageText</div>";
-	}
-
 	function ShowLogin()
 	{
+		Message::ShowMessages("login");
 		?>
 		<form class="pure-form" action="<?=ROOT;?>/login" method="POST">
 			<fieldset class="pure-group">
 				<input type="text" class="pure-input-1" placeholder="Username" name="username">
 				<input type="password" class="pure-input-1" placeholder="Password" name="password">
 			</fieldset>
-			<a href="<?=ROOT?>/login/forgot">Having troubles logging in?</a>
+			<a href="<?=ROOT . "/" . LOGIN_URL?>/forgot">Having troubles logging in?</a>
+			<br>
+			<a href="<?=ROOT?>/register">Don't Have an account?</a>
 			<label class="pure-checkbox" for="remember-me">
 				<input id="remember-me" type="checkbox" name="remember">
 				Remember me.
@@ -88,7 +79,7 @@ class login implements IPage
 	{
 		?>
 		<p>We'll send you an email to reset your account.</p>
-		<form class="pure-form" action="<?=ROOT;?>/login/forgot" method="POST">
+		<form class="pure-form" action="<?=ROOT . "/" . LOGIN_URL;?>/forgot" method="POST">
 			<input type="email" class="pure-input-1" name="reset-email" placeholder="Email">
 			<button type="submit" class="pure-button pure-input-1 pure-button-primary">Send Email</button>
 		</form>

@@ -21,12 +21,23 @@ class Role
 	{
 		$this->permissions = RolePermissionMap::GetAllMapped($dbc, $this->role_id, true);
 	}
+
 	public function HasPermission($permission)
 	{
-		if($permission instanceof Permission)
-			$permission = $permission->slug;
-
+		if(!isset($this->permissions) || !is_array($this->permissions))
+		{
+			throw new Exception("Role's permissions are not set. Use 'GetPermissions()'");
+		}
 		return in_array($permission, $this->permissions);
+	}
+	public function HasPermissions($permissions)
+	{
+		if(!isset($this->permissions) || !is_array($this->permissions))
+		{
+			throw new Exception("Role's permissions are not set. Use 'GetPermissions()'");
+		}
+
+		return !array_diff($permissions, $this->permissions);
 	}
 
 	public static function GetId($role, $dbc = null)
@@ -58,20 +69,35 @@ class Role
 		$dbc->exec($sql);
 	}
 	// Getting one role.
-	public static function GetSingle($dbc, $role)
+	public static function GetSingle($dbc, $role, $withPermissions = false)
 	{
 		if(is_string($role))
-			$sql = "SELECT role_id, slug, description from roles where slug = ?";
+			$field = "slug";
 		else
 		{
+			$field = "role_id";
 			$role = self::GetID($role);
-			$sql = "SELECT role_id, slug, description from roles where role_id = ?";
 		}
+
+		if($withPermissions)
+			$sql = "SELECT role_id, slug, description,
+			(SELECT DISTINCT GROUP_CONCAT(p.slug)
+				FROM permissions p
+				JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+				where rpm.role_id = r.role_id) as permissions
+			from roles as r where $field = ?;";
+		else
+			$sql = "SELECT role_id, slug, description from roles where $field = ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$role]);
 
-		return $statement->fetchObject(__CLASS__);
+		$return = $statement->fetchObject(__CLASS__);
+
+		if($withPermissions)
+			$return->permissions = explode(',', $return->permissions);
+
+		return $return;
 	}
 	// Getting multiple roles.
 	public static function GetMultiple($dbc, $role_ids)
@@ -88,14 +114,31 @@ class Role
 		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
 	}
 	// Getting all roles.
-	public static function GetAll($dbc)
+	public static function GetAll($dbc, $withPermissions)
 	{
-		$sql = "SELECT role_id, slug, description from roles";
+		if($withPermissions)
+			$sql = "SELECT role_id, slug, description,
+			(SELECT DISTINCT GROUP_CONCAT(p.slug)
+				FROM permissions p
+				JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id
+				where rpm.role_id = r.role_id) as permissions
+			from roles as r;";
+		else
+			$sql = "SELECT role_id, slug, description from roles;";
 
-		$statement = $dbc->prepare($sql);
-		$statement->execute();
+		$statement = $dbc->query($sql);
+		//$statement->query();
 
-		return $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+		$roles = $statement->fetchAll(PDO::FETCH_CLASS, __CLASS__);
+
+		if($withPermissions)
+		{
+			foreach ($roles as $role)
+			{
+				$role->permissions = explode(',', $role->permissions);	
+			}
+		}
+		return $roles;
 	}
 	// Deleting single roles.
 	public static function DeleteSingle($dbc, $role)
@@ -171,6 +214,11 @@ class RolePermissionMap
 		$dbc->exec($sql);
 	}
 
+	public static function GetDefaultPermissions($dbc)
+	{
+		return self::GetAllMapped($dbc, DEFAULT_ROLE, true);	
+	}
+
 	//RolePermissionMap::Map($dbc, $permission, $role_id);
 	public static function Map($dbc, $role, $permission)
 	{
@@ -196,7 +244,13 @@ class RolePermissionMap
 	//RolePermissionMap::GetAllMapped($dbc, $role_id);
 	public static function GetAllMapped($dbc, $role, $slugsOnly = false)
 	{
-		$role = Role::GetId($role);
+		if(is_string($role))
+			$field = "slug";
+		else
+		{
+			$role = Role::GetId($role);
+			$field = "role_id";
+		}
 
 		// Set the select variable to the correct value based on the slug flag.
 		if($slugsOnly)
@@ -204,11 +258,13 @@ class RolePermissionMap
 		else
 			$select = "permissions.*";
 
+		if($role)
+
 		// Run the sql.
 		$sql = "SELECT $select from role_permission_map
 		inner join roles on role_permission_map.role_id = roles.role_id
 		inner join permissions on role_permission_map.permission_id = permissions.permission_id
-		where roles.role_id = ?";
+		where roles.$field = ?";
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$role]);
 
@@ -317,23 +373,23 @@ class UserRoleMap
 	public static function Map($dbc, $user, $role)
 	{
 		$role = Role::GetId($role);
-		$permission = Permission::GetId($permission);
+		$user = User::GetId($user);
 
-		$sql = "INSERT into user_role_map (role_id, permission_id) values (?, ?)";
+		$sql = "INSERT into user_role_map (role_id, user_id) values (?, ?)";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$role, $permission]);
+		$statement->execute([$role, $user]);
 	}
 	//UserRoleMap::Unmap($dbc, $user, $role);
 	public static function Unmap($dbc, $user, $role)
 	{
 		$role = Role::GetId($role);
-		$permission = Permission::GetId($permission);
+		$user = User::GetId($user);
 
-		$sql = "DELETE from user_role_map where role_id = ? and  permission_id = ?";
+		$sql = "DELETE from user_role_map where role_id = ? and  user_id = ?";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$role, $permission]);
+		$statement->execute([$role, $user]);
 	}
 	//UserRoleMap::GetAllMapped($dbc, $user);
 	public static function GetAllMapped($dbc, $user)

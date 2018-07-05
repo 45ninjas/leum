@@ -102,7 +102,7 @@ class User
 		if(!$withPermissions)
 			$sql = "SELECT $columns from users as u where u.$field = ?";
 		else
-			$sql = "SELECT u.user_id, u.username, u.last_login,
+			$sql = "SELECT $columns,
 			(SELECT DISTINCT GROUP_CONCAT(p.slug)
 				FROM permissions p
 				JOIN role_permission_map rpm ON p.permission_id = rpm.permission_id

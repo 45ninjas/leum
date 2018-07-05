@@ -32,11 +32,12 @@ $leumContent = trim(ob_get_clean());
 	<?php TheHead(); ?>
 </head>
 <body>
+	<?php include "page-parts/leum-menu.php" ?>
 	<div id="layout">
-		<?php include "page-parts/side-bar.php"; ?>
+		<?php //include "page-parts/side-bar.php"; ?>
 		<pre id="debug-head"><?php echo $leumContent; ?></pre>
 		<div id="main">
-			<?php TheContent(); ?>			
+			<?php TheContent(); ?>		
 		</div>
 	</div>
 

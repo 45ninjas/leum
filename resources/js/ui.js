@@ -1,9 +1,40 @@
+window.onload = function()
+{
+    // get the dropown and button to open the dropdown.
+    var dropdown = document.querySelector("#user-dropdown");
+    var button = document.querySelector("#user-dropdown-button");
+
+    // When the user presses the dropdown button remove hidden from the dropdown.
+    button.onclick = function(){ ShowUserDropdown(true); };
+
+    // Did the dropdown contain the click.
+    function CheckClick(e)
+    {
+        if(!dropdown.contains(e.target))
+            ShowUserDropdown(false);
+    }
+    // Sets the hidden attribute and adds/removes whole document click event.
+    function ShowUserDropdown(value)
+    {
+        if(value)
+        {
+            // Open the dropdown.
+            dropdown.removeAttribute("hidden");
+            document.addEventListener('click', CheckClick, true);
+        }
+        else
+        {
+            dropdown.setAttribute("hidden", "yes");
+            document.removeEventListener('click', CheckClick, true);
+        }
+    }
+}
 function GetRootDir()
 {
     return document.head.querySelector("[property=site-root]").content;
 }
 
-// Menu Hambuger stuff.
+/*// Menu Hambuger stuff.
 (function (window, document) {
 
     var layout   = document.getElementById('layout'),
@@ -49,4 +80,4 @@ function GetRootDir()
         }
     };
 
-}(this, this.document));
+}(this, this.document));*/

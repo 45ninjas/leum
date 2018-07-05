@@ -91,7 +91,7 @@ class Leum
 		if(isset($_SESSION['user_id']))
 		{
 			// Get the user data.
-			$this->user = User::GetSingle($this->dbc, $_SESSION['user_id'], true);
+			$this->user = User::GetSingle($this->dbc, $_SESSION['user_id'], true, true);
 			if($this->user == false)
 			{
 				$this->user = null;

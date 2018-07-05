@@ -18,7 +18,6 @@
             ?><li class="pure-menu-item"><a href="<?php echo ROOT; ?>/login" class="pure-menu-link">Login</a></li><?php endif; ?>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/browse" class="pure-menu-link">Browse</a></li>
             <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/edit" class="pure-menu-link">Edit</a></li>
-            <li class="pure-menu-item"><a href="<?php echo ROOT; ?>/preferences" class="pure-menu-link">Preferences</a></li>
         </ul>
     </div>
 </div>

@@ -23,6 +23,16 @@ function GetAsset($asset)
 {
 	return ROOT.$asset;
 }
+function ProfilePicture($colour = "#4eb4f5")
+{
+	if(isset(Leum::Instance()->user))
+	{
+		$profileUrl = GetAsset("/resources/graphics/default-profile-1.png");
+		echo "<img class=\"profile\" src=\"$profileUrl\" style=\"background-color: $colour\">";
+	}
+	else
+		echo "<i class=\"fa fa-user-circle\"></i>";
+}
 
 function TheTitle()
 {

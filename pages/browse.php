@@ -30,7 +30,7 @@ class browse implements IPage
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
 		// Require the resources. 
-		$leum->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
+		$leum->RequireResource('/resources/css/media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/media-viewer.css') . '">');
 		$leum->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
 		$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 

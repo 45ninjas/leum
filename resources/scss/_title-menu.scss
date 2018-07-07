@@ -1,0 +1,148 @@
+/* == Title Bar == */
+%title-menu-shadow {
+	box-shadow: 0 2px 5px #33323280;
+}
+.title-menu
+{
+	display: flex;
+	justify-content: space-between;
+	z-index: 10;
+	@extend %title-menu-shadow;
+	background-color: #191818;
+	color: #fff;
+	
+	.item
+	{
+		padding: 0.5em 0.8em;
+		font-size: 125%;
+	}
+	.item:hover,
+	.user-dropdown a:hover
+	{
+		color: #fff;
+		transition: color 0.1s;
+	}
+	.title-menu-heading
+	{
+		text-transform: uppercase;
+		font-weight: 300;
+		letter-spacing: 0.1em;
+		color: #fff;
+	}
+	.profile,
+	.fa
+	{
+		font-size: 1.5em;
+		height: 1em;
+		width: auto;
+		vertical-align: middle;
+	}
+	.user-button
+	{
+		padding: 0.3125rem;
+	}
+	/* == User Drop down ==*/
+	.user-dropdown
+	{
+		font-size: 1.25rem;
+		width: 300px;
+		right: 0;
+		top: 2.15em;
+		padding: 1em;
+		position: absolute;
+		display: block;
+		z-index: 15;
+
+		@extend %dark;
+		@extend %title-menu-shadow;
+
+		.user-header
+		{
+			display: flex;
+			margin-bottom: 1em;
+
+			.profile
+			{
+				height: 2em;
+				width: 2em;
+				margin-right: 0.5em;
+				flex-shrink: 0;
+			}
+			.username,
+			.email
+			{
+				width: 100%;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			.email
+			{
+				font-size: 1rem;
+			}
+			.username
+			{
+				text-align: left;
+				font-weight: 600;
+				color: #fff;
+			}
+		}
+
+		hr
+		{
+			border: 1px solid #555;
+		}
+		ul
+		{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			border-top: 2px solid #555;
+		}
+		ul:first-child
+		{
+			border-top: none;
+		}
+
+		li
+		{
+			margin: 0.5em 0em;
+		}
+		li .fa
+		{
+			font-size: inherit;
+			margin-left: 1em;
+			float: left;
+			position: absolute;
+		}
+		li span
+		{
+			margin-left: 2.5em;
+		}
+		a
+		{
+			display: block;
+			color: inherit;
+			text-decoration: none;
+			width: 100%;
+			color: $dark-text;
+		}
+
+		a.regiser-link
+		{
+			margin-bottom: 0.75em;
+		}
+
+		li:last-of-type
+		{
+			margin-bottom: 0;
+		}
+	}
+}
+.profile
+{
+	display: inline-block;
+	height: 2em;
+	width: auto;
+	border-radius: 50%;
+	object-fit: cover;
+}

@@ -1,3 +1,232 @@
+/* == Title Bar == */
+.title-menu .user-dropdown, .title-menu {
+  box-shadow: 0 2px 5px #33323280;
+}
+
+.title-menu {
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  background-color: #191818;
+  color: #fff;
+  /* == User Drop down ==*/
+}
+.title-menu .item {
+  padding: 0.5em 0.8em;
+  font-size: 125%;
+}
+.title-menu .item:hover,
+.title-menu .user-dropdown a:hover {
+  color: #fff;
+  transition: color 0.1s;
+}
+.title-menu .title-menu-heading {
+  text-transform: uppercase;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+.title-menu .profile,
+.title-menu .fa {
+  font-size: 1.5em;
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+}
+.title-menu .user-button {
+  padding: 0.3125rem;
+}
+.title-menu .user-dropdown {
+  font-size: 1.25rem;
+  width: 300px;
+  right: 0;
+  top: 2.15em;
+  padding: 1em;
+  position: absolute;
+  display: block;
+  z-index: 15;
+}
+.title-menu .user-dropdown .user-header {
+  display: flex;
+  margin-bottom: 1em;
+}
+.title-menu .user-dropdown .user-header .profile {
+  height: 2em;
+  width: 2em;
+  margin-right: 0.5em;
+  flex-shrink: 0;
+}
+.title-menu .user-dropdown .user-header .username,
+.title-menu .user-dropdown .user-header .email {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.title-menu .user-dropdown .user-header .email {
+  font-size: 1rem;
+}
+.title-menu .user-dropdown .user-header .username {
+  text-align: left;
+  font-weight: 600;
+  color: #fff;
+}
+.title-menu .user-dropdown hr {
+  border: 1px solid #555;
+}
+.title-menu .user-dropdown ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid #555;
+}
+.title-menu .user-dropdown ul:first-child {
+  border-top: none;
+}
+.title-menu .user-dropdown li {
+  margin: 0.5em 0em;
+}
+.title-menu .user-dropdown li .fa {
+  font-size: inherit;
+  margin-left: 1em;
+  float: left;
+  position: absolute;
+}
+.title-menu .user-dropdown li span {
+  margin-left: 2.5em;
+}
+.title-menu .user-dropdown a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  color: #AAA;
+}
+.title-menu .user-dropdown a.regiser-link {
+  margin-bottom: 0.75em;
+}
+.title-menu .user-dropdown li:last-of-type {
+  margin-bottom: 0;
+}
+
+.profile {
+  display: inline-block;
+  height: 2em;
+  width: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+ul.tagfield {
+  list-style: none;
+  display: inline;
+  padding: 0;
+  margin: 0;
+  width: auto;
+}
+
+ul.tagfield li {
+  background-color: #EEE;
+  display: inline-block;
+  border-radius: 2px;
+  padding: 0.35em;
+  margin: 0.25em;
+  color: #333;
+}
+
+ul.tagfield li a.tag-delete {
+  color: inherit;
+  margin-left: 0.35em;
+}
+
+#modal-background {
+  background-color: #000000;
+  opacity: 0.8;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 1000;
+  border-radius: 2px;
+}
+
+.modal-title {
+  border-bottom: 1px solid #CCC;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.modal-footer {
+  border-top: 1px solid #CCC;
+  direction: rtl;
+  padding: 0.5rem;
+}
+
+.modal-footer > * {
+  margin-left: 0.5rem;
+}
+
+.media-modal {
+  background: none;
+}
+
+.media-modal .content {
+  margin: 0;
+  padding: 0;
+}
+
+.media-modal .modal-footer,
+.media-modal .modal-title {
+  border: none;
+}
+
+.media-modal {
+  max-width: 100%;
+}
+
+.media-modal .modal-footer .pure-button {
+  background: none;
+  color: white;
+  border: 1px solid #ffffff30;
+  border-radius: 2px;
+  font-size: 85%;
+  padding: 0.3em 0.6em;
+}
+
+.media-modal .modal-footer .pure-button:hover {
+  background-color: #ffffff30;
+  color: white;
+  border: 1px solid #ffffff30;
+  border-radius: 2px;
+}
+
+.media-modal .leum-content-item {
+  margin: 0;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.media-modal .modal-title {
+  font-weight: bolder;
+  color: #fff9;
+  font-size: 100%;
+}
+
+.title-menu .user-dropdown {
+  background-color: #333232;
+  color: #AAA;
+}
+
 #debug-head {
   background-color: wheat;
 }
@@ -226,144 +455,6 @@ pre#debug-head {
   width: 22em;
   display: block;
   margin: auto;
-}
-
-/* == Title Bar == */
-.title-menu {
-  background-color: #191818;
-  display: flex;
-  justify-content: space-between;
-  z-index: 10;
-  box-shadow: 0 4px 5px #33323280;
-}
-
-.title-menu .item {
-  padding: 0.5em 0.8em;
-  font-size: 125%;
-}
-
-.title-menu .item:hover,
-.user-dropdown a:hover {
-  color: #fff;
-  transition: color 0.1s;
-}
-
-.title-menu .title-menu-heading {
-  text-transform: uppercase;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  color: #fff;
-}
-
-.profile {
-  display: inline-block;
-  height: 2em;
-  width: auto;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.title-menu .profile,
-.title-menu .fa {
-  font-size: 1.5em;
-  height: 1em;
-  width: auto;
-  vertical-align: middle;
-}
-
-.title-menu .user-button {
-  padding: 0.3125rem;
-}
-
-/* == User Drop down ==*/
-.user-dropdown {
-  font-size: 1.25rem;
-  width: 300px;
-  right: 0;
-  top: 2.15em;
-  padding: 1em;
-  color: #aaa;
-  position: absolute;
-  display: block;
-  z-index: 15;
-  background-color: #333232;
-  font-weight: 300;
-  list-style: none;
-  box-shadow: 0 4px 5px #33323280;
-}
-
-.user-header {
-  display: flex;
-  margin-bottom: 1em;
-}
-
-.user-header .profile {
-  height: 2em;
-  width: 2em;
-  margin-right: 0.5em;
-  flex-shrink: 0;
-}
-
-.user-header .username,
-.user-header .email {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.user-header .email {
-  font-size: 1rem;
-}
-
-.user-header .username {
-  text-align: left;
-  font-weight: 600;
-  color: #fff;
-}
-
-.user-dropdown hr {
-  border: 1px solid #555;
-}
-
-.user-dropdown ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 2px solid #555;
-}
-
-.user-dropdown ul:first-child {
-  border-top: none;
-}
-
-.user-dropdown li {
-  margin: 0.5em 0em;
-}
-
-.user-dropdown li .fa {
-  font-size: inherit;
-  margin-left: 1em;
-  float: left;
-  position: absolute;
-}
-
-.user-dropdown li span {
-  margin-left: 2.5em;
-}
-
-.user-dropdown a {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  width: 100%;
-}
-
-.user-dropdown a.regiser-link {
-  margin-bottom: 0.75em;
-}
-
-.user-dropdown li:last-of-type {
-  margin-bottom: 0;
 }
 
 /* == Titles ==*/

@@ -1,46 +1,44 @@
-table.permission-matrix input[type="checkbox"]
-{
-	width: 100%;
-	height: 1.5em;
-	display: block;
+table.permission-matrix input[type=checkbox] {
+  width: 100%;
+  height: 1.5em;
+  display: block;
 }
 
 table.permission-matrix td,
-table.permission-matrix th
-{
-	position: relative;
+table.permission-matrix th {
+  position: relative;
 }
 
 table.permission-matrix td .tool-tip,
-table.permission-matrix th .tool-tip
-{
-    visibility: hidden;
-    background-color: #000000bb;
-    color: #fff;
-    width: 180px;
-    text-align: left;
-    border-radius: 5px;
-    padding: 0 0.5em;
-    position: absolute;
-    z-index: 1;
-    left: 100%;
-    font-weight: normal;
+table.permission-matrix th .tool-tip {
+  visibility: hidden;
+  background-color: #000000bb;
+  color: #fff;
+  width: 180px;
+  text-align: left;
+  border-radius: 5px;
+  padding: 0 0.5em;
+  position: absolute;
+  z-index: 1;
+  left: 100%;
+  font-weight: normal;
 }
+
 table.permission-matrix td:hover .tool-tip,
-table.permission-matrix th:hover .tool-tip
-{
-	visibility: visible;
+table.permission-matrix th:hover .tool-tip {
+  visibility: visible;
 }
 
 table.permission-matrix td:hover .tool-tip:after,
-table.permission-matrix th:hover .tool-tip:after
-{
-	content: " ";
-	position: absolute;
-	right: 100%;
-	top: 0.5em;
-	margin-bottom: -5px;
-	border-width: 5px;
-	border-style: solid;
-	border-color: transparent #000000bb transparent transparent;
+table.permission-matrix th:hover .tool-tip:after {
+  content: " ";
+  position: absolute;
+  right: 100%;
+  top: 0.5em;
+  margin-bottom: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #000000bb transparent transparent;
 }
+
+/*# sourceMappingURL=leum-edit.css.map */

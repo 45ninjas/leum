@@ -13,7 +13,7 @@ class MediaViewer
 	public function __construct($media, $canEdit = false, $autoPlay = false, $loop = true, $controls = true, $ajax = false)
 	{
 		if(class_exists('Leum') && Leum::Instance() !== null)
-			Leum::Instance()->RequireResource('/resources/css/leum-media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-media-viewer.css') . '">');
+			Leum::Instance()->RequireResource('/resources/css/media-viewer.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/media-viewer.css') . '">');
 		$this->media = $media;
 		$this->edit = $canEdit === true;
 		$this->media->GetType();
@@ -44,7 +44,10 @@ class MediaViewer
 	public function ShowFull()
 	{ ?>
 	<div class="media-viewer">
-		<h1 class="title"><?= $this->media->title; ?></h1>
+		<div class="title-bar">
+			<span class="title"><?=$this->media->title;?></span>
+			<button class="close-button"><i class="fa fa-times"></i></button>
+		</div>
 		<?php $this->ShowContent(); ?>
 	</div>
 	<?php }

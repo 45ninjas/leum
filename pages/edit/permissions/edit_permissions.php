@@ -15,7 +15,7 @@ class edit_permissions implements IPage
 		$this->title = "Permissions";
 		$leum->SetTitle($this->title);
 
-		$leum->RequireResource('/resources/css/leum-edit.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-edit.css') . '">');
+		$leum->RequireResource('/resources/css/leum-admin.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-admin.css') . '">');
 
 		// Check to see if the matrix needs to be updated.
 		if(isset($_POST['roles']))

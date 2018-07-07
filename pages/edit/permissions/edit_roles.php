@@ -13,7 +13,7 @@ class edit_roles implements IPage
 		$leum->PermissionCheck("admin-pages", "permissions-edit");
 		$this->title = "Edit Role";
 
-		$leum->RequireResource('/resources/css/leum-edit.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-edit.css') . '">');
+		$leum->RequireResource('/resources/css/leum-admin.css', '<link rel="stylesheet" type="text/css" href="' . GetAsset('/resources/css/leum-admin.css') . '">');
 
 		// Apply changes if they exist.
 		if(isset($_POST['slug']))

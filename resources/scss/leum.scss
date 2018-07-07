@@ -1,10 +1,9 @@
-$text-colour: #888;
-$dark-text: #AAA;
-$dark-bg: #333232;
+@import 'themes/default';
 
-@import 'title-menu';
-@import 'tag-field';
-@import 'modal';
+@import 'base/title-menu';
+@import 'base/tag-field';
+@import 'base/modal';
+@import 'base/media-viewer';
 
 %dark {
 	background-color: $dark-bg;

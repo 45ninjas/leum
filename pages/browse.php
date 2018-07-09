@@ -153,9 +153,9 @@ if(isset($this->wantedTags))
 			<div class="tag-input">
 				<input id="contain-tags" type="hidden" name="t" value="<?=$wantedText?>">
 				<div class="search-box">
-					<input class="pure-u-1" type="text" id="contain-tag-input" placeholder="Search" autocomplete="off">
-					<button type="submit" class="pure-button" id="tag-filter-clear"><i class="fa fa-times"></i></button>
-					<button type="submit" class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
+					<input tabindex="1" class="pure-u-1" type="text" id="contain-tag-input" placeholder="Search" autocomplete="off">
+					<button class="pure-button" id="tag-filter-clear"><i class="fa fa-times"></i></button>
+					<button tabindex="2" type="submit" class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
 				</div>
 				<ul class="suggestion-box" id="contain-suggestion-box" hidden>
 				</ul>
@@ -166,8 +166,11 @@ if(isset($this->wantedTags))
 	</form>
 </div>
 <script type="text/javascript">
-	window.onload = function()
-	{
+	document.addEventListener("DOMContentLoaded", load);
+
+	function load() {
+		console.log("working?");
+
 		var Tags = document.querySelector("#tag-filter #contain-tags");
 		var Input = document.querySelector("#tag-filter #contain-tag-input");
 		var Field = document.querySelector("#tag-filter #contain-tag-field");
@@ -177,19 +180,9 @@ if(isset($this->wantedTags))
 		containEditor.SetTags(Tags.value.split(','));
 		containEditor.resultLimit = 10;
 
-		Tags = document.querySelector("#tag-filter #exclude-tags");
-		Input = document.querySelector("#tag-filter #exclude-tag-input");
-		Field = document.querySelector("#tag-filter #exclude-tag-field");
-		SuggestionBox = document.querySelector("#tag-filter #exclude-suggestion-box");
-
-		excludeEditor = new TagEditor(Input, Field,Tags, SuggestionBox);
-		excludeEditor.SetTags(Tags.value.split(','));
-		containEditor.resultLimit = 10;
-
 		var clearButton = document.querySelector("#tag-filter #tag-filter-clear");
 		clearButton.onclick = function()
 		{
-			excludeEditor.Clear();
 			containEditor.Clear();
 		};
 	}

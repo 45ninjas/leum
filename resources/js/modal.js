@@ -1,4 +1,4 @@
-var modalCounter = 0;
+ modalCounter = 0;
 
 // The modal class.
 //var Modal = (function ()

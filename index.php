@@ -22,15 +22,14 @@ $leumContent = trim(ob_get_clean());
 	<title><?php TheTitle(); ?></title>
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/pure-min.css"); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/grids-responsive-min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
-
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/font-awesome.min.css"); ?>">
 	<script type="text/javascript" src="<?php Asset("/resources/js/jquery-3.2.1.min.js"); ?>"></script>
 	<meta property="site-root" content="<?php echo ROOT; ?>">
 	<meta property="api-url" content="<?php echo API_URL; ?>">
 	<?php TheHead(); ?>
+	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
 </head>
-<body>
+<body class="static-title">
 	<?php include "page-parts/leum-menu.php" ?>
 	<?php //include "page-parts/side-bar.php"; ?>
 	<pre id="debug-head"><?php echo $leumContent; ?></pre>

@@ -45,7 +45,7 @@ class MediaViewer
 	{ ?>
 	<div class="media-viewer">
 		<div class="title-bar">
-			<span class="title"><?=$this->media->title;?></span>
+			<span><?=$this->media->title;?></span>
 			<button class="close-button"><i class="fa fa-times"></i></button>
 		</div>
 		<?php $this->ShowContent(); ?>

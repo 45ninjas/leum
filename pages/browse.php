@@ -64,16 +64,18 @@ class browse implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1>Browse</h1>
-		<div class="pure-menu pure-menu-horizontal">
-			<ul class="pure-menu">
-				<!-- <li class="pure-menu-item"><a class="pure-menu-link">Filter <i class="fa fa-filter"></i></a></li> -->
-			</ul>
+		<div class="content">
+			<h1>Browse</h1>
+			<div class="pure-menu pure-menu-horizontal">
+				<ul class="pure-menu">
+					<!-- <li class="pure-menu-item"><a class="pure-menu-link">Filter <i class="fa fa-filter"></i></a></li> -->
+				</ul>
+			</div>
+			<?php $this->FilterBox(); ?>
 		</div>
 	</div>
 	<div class="content">
-		<?php $this->FilterBox(); ?>
-		<?php echo "<p>$this->totalResults results, $this->totalPages pages.</p>" ?>
+		<p><?="$this->totalResults results, $this->totalPages pages."?></p>
 	</div>
 	<div class="items">
 		<?php foreach ($this->itemsToShow as $item)
@@ -109,24 +111,30 @@ function DoItem($mediaItem)
 function MediaViewer()
 { ?>
 <div id="media-viewer" class="media-viewer full" hidden>
-	<h1 id="media-title" class="title"></h1>
-	<div class="footer">
-		<div class="tag-input">
-			<input id="tag-input" type="hidden" name="tags" value="">
-			<input type="text" id="tag-input-field" placeholder="new tag">
-			<ul class="suggestion-box" id="suggestion-box" hidden>
-			</ul>
+	<div class="media-viewer-modal">
+		<div class="header">
+			<span id="media-title"></span>
+			<button class="close-button" id="media-viewer-close"><i class="fa fa-times"></i></button>
 		</div>
-		<div id="tag-editor-field" class="tags tag-field">
+		<div class="content">
+			<a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
+			<a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
 		</div>
-		<a id="media-edit-link" class="button-stealth" href="#">
-			<i class="fa fa-edit"></i>
-		</a>
+		<div class="footer">
+			<a id="media-edit-link" class="edit-button" href="#">
+				<i class="fa fa-edit"></i>
+			</a>
+			<div class="tag-input">
+				<input id="tag-input" type="hidden" name="tags" value="">
+				<input type="text" id="tag-input-field" placeholder="new tag">
+				<ul class="suggestion-box" id="suggestion-box" hidden>
+				</ul>
+			</div>
+			<div id="tag-editor-field" class="tags tag-field">
+			</div>
+		</div>
 	</div>
 </div>
-<a id="media-viewer-close" class="viewer-button" hidden>&times;</a>
-<a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
-<a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
 <?php }
 function FilterBox()
 {
@@ -141,32 +149,20 @@ if(isset($this->wantedTags))
 ?>
 <div id="tag-filter" class="tag-filter">
 	<form class="pure-form" method="GET">
-		<label for ="contain-tag-input">Include Tags</label>
 		<div class="contain-tags">
 			<div class="tag-input">
 				<input id="contain-tags" type="hidden" name="t" value="<?=$wantedText?>">
-				<input class="pure-u-1" type="text" id="contain-tag-input" placeholder="tag" autocomplete="off">
-				<!--  -->
+				<div class="search-box">
+					<input class="pure-u-1" type="text" id="contain-tag-input" placeholder="Search" autocomplete="off">
+					<button type="submit" class="pure-button" id="tag-filter-clear"><i class="fa fa-times"></i></button>
+					<button type="submit" class="pure-button pure-button-primary"><i class="fa fa-search"></i></button>
+				</div>
 				<ul class="suggestion-box" id="contain-suggestion-box" hidden>
 				</ul>
 			</div>
 			<div id="contain-tag-field" class="tags tag-field">
 			</div>
 		</div>
-		<!-- <label for ="contain-tag-input">Exclude Tags</label>
-		<div class="exclude-tags">
-			<div class="tag-input">
-				<input id="exclude-tags" type="hidden" name="et" value="<?=$unwantedText?>">
-				<input class="pure-u-1" type="text" id="exclude-tag-input" placeholder="tag" disabled="" autocomplete="off">
-				<br>
-				<ul class="suggestion-box" id="exclude-suggestion-box" hidden>
-				</ul>
-			</div>
-			<div id="exclude-tag-field" class="tags tag-field">
-			</div>
-		</div> -->
-		<button type="submit" class="pure-button pure-button-primary">Apply</button>
-		<button type="submit" class="pure-button" id="tag-filter-clear">Clear</button>
 	</form>
 </div>
 <script type="text/javascript">

@@ -1,6 +1,12 @@
-/* == Title Bar == */
 %title-menu-shadow {
-	box-shadow: 0 2px 5px #33323280;
+	box-shadow: 0 2px 5px #00000080;
+}
+.static-title .title-menu
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 .title-menu
 {
@@ -8,12 +14,14 @@
 	justify-content: space-between;
 	z-index: 10;
 	@extend %title-menu-shadow;
-	background-color: #191818;
+	background-color: $dark-dark;
 	color: #fff;
+	height: 2.5em;
+	line-height: 2.5em;
 	
 	.item
 	{
-		padding: 0.5em 0.8em;
+		padding: 0 0.8em;
 		font-size: 125%;
 	}
 	.item:hover,
@@ -37,11 +45,7 @@
 		width: auto;
 		vertical-align: middle;
 	}
-	.user-button
-	{
-		padding: 0.3125rem;
-	}
-	/* == User Drop down ==*/
+
 	.user-dropdown
 	{
 		font-size: 1.25rem;
@@ -54,6 +58,7 @@
 		z-index: 15;
 
 		@extend %dark;
+		background-color: desaturate(darken($dark-bg, 2%), 6%);
 		@extend %title-menu-shadow;
 
 		.user-header

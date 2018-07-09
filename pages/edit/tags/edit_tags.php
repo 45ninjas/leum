@@ -47,7 +47,9 @@ class edit_tags implements IPage
 
 	<div class="main">
 		<div class="header">
-			<h1><?php echo $this->title; ?></h1>
+			<div class="content">
+				<h1><?php echo $this->title; ?></h1>
+			</div>
 		</div>
 		<div class="content">
 			<form class="pure-form pure-form-stacked" method="post">

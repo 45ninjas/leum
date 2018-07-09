@@ -14,8 +14,10 @@ class error_404 implements IPage
 	{?>
 <div class="main">
 	<div class="header">
-		<h1>404 - Uh-Oh!</h1>
-		<h2>Yep, you read it correctly, it's a 404 alright.</h2>
+		<div class="content">
+			<h1>404 - Uh-Oh!</h1>
+			<h2>Yep, you read it correctly, it's a 404 alright.</h2>
+		</div>
 	</div>
 
 	<div class="content">

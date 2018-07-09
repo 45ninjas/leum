@@ -1,0 +1,56 @@
+html
+{
+	color: $text-colour;
+}
+
+.content
+{
+	max-width:1024px;
+	margin: auto;
+}
+.static-title .main .header
+{
+	margin-top: 2.5em;
+}
+.main .header
+{
+	@extend %dark;
+	display: inline-block;
+	width: 100%;
+	border-bottom: 2px solid $devide-border-colour;
+	h1, h2
+	{
+		color: $dark-text;
+	}
+	.pure-menu-link:hover
+	{
+		background-color: $dark-dark;
+		color: $dark-text;
+	}
+}
+
+.search-box
+{
+	display: flex;
+
+	button, input
+	{
+		border: none;
+		box-shadow: none;
+		background-color: transparent;
+	}
+	.pure-button
+	{
+		color: $dark-text;
+	}
+
+	.pure-button-primary
+	{
+		color: $primary;
+	}
+}
+
+h1, h2
+{
+	color: $title-colour;
+}

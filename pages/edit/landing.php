@@ -14,7 +14,9 @@ class landing implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1>Edit</h1>
+		<div class="content">
+			<h1>Edit</h1>
+		</div>
 	</div>
 	<div class="content">
 		<h2>Edit Media, tags and what not.</h2>

@@ -1,0 +1,108 @@
+.media-viewer
+{
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	align-self: center;
+
+	position: fixed;
+
+	z-index: 300;
+
+	.media-viewer-modal
+	{
+		background-color: $dark-bg;
+		color: $dark-text;
+		max-height: 100%;
+	}
+	
+	.media-item
+	{
+		margin: 0;
+	}
+	.header, .footer
+	{
+		display: flex;
+		width: 100%;
+		background-color: $dark-dark;
+	}
+	.close-button
+	{
+		display: block;
+		height: 100%;
+
+		// padding: 0.5em;
+
+		background-color: inherit;
+		border: none;
+
+		font-size: 2em;
+		width: 1.5em;
+		margin: 0;
+		padding: 0;
+	}
+	.edit-button
+	{
+		color: $dark-text;
+		order: last;
+	}
+	.close-button:hover
+	{
+		background-color: red;
+	}
+	.header span
+	{
+		flex: 1;
+		margin: 0.5em;
+		// height: 2em;
+		// line-height: 2em;
+		// vertical-align:middle;
+		font-size: 120%;
+
+	}
+	.content
+	{
+		font-weight: thick;
+	}
+}
+
+.viewer-button
+{
+	font-family: monospace;
+	text-shadow: 2px 2px 4px black;
+	z-index: 500;
+	display: block;
+	font-size: 60px;
+	position: fixed;
+	padding: 0 0.25em;
+	color: white;
+	text-decoration: none;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.viewer-button:hover
+{
+	color: #AAA;
+}
+#media-viewer-close
+{
+	top: 0;
+	right: 0;
+}
+#media-viewer-next
+{
+	top: 50%;
+	right: 0;
+}
+#media-viewer-prev
+{
+	top: 50%;
+	left: 0;
+}

@@ -16,8 +16,10 @@ class error_generic implements IPage
 	{?>
 <div class="main">
 	<div class="header">
-		<h1><?=$this->code?></h1>
-		<h2>Looks like there is an issue.</h2>
+		<div class="content">
+			<h1><?=$this->code?></h1>
+			<h2>Looks like there is an issue.</h2>
+		</div>
 	</div>
 
 	<div class="content">

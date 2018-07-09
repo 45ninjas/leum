@@ -15,7 +15,9 @@ class profile implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1><?=$this->userInfo->username?></h1>
+		<div class="content">
+			<h1><?=$this->userInfo->username?></h1>
+		</div>
 	</div>
 	<div class="content">
 		<p>Hi <?=$this->userInfo->username?>, You last logged in at <?=$this->userInfo->last_login?>.</p>

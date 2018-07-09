@@ -1,0 +1,25 @@
+.msg
+{
+	display: block;
+	background-color: #f6f6f6;
+	box-shadow: rgb(221, 221, 221) 0px 1px 3px inset;
+	border-radius: 4px;
+	border-left: 4px solid gray;
+	padding: 0.5em;
+	
+	&.msg-red
+	{
+		border-left-color: red;
+		background-color: #faf6f6;
+	}
+	&.msg-green
+	{
+		border-left-color: green;
+		background-color: #f6faf6;
+	}
+	&.msg-blue
+	{
+		border-left-color: blue;
+		background-color: #f6f6fa;
+	}
+}

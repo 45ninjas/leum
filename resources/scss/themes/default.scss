@@ -1,4 +1,13 @@
 $text-colour: #888;
+$title-colour: #444;
 $primary: #0078e7;
-$dark-text: #AAA;
-$dark-bg: #333232;
+
+$dark-bg: #15191b;
+$dark-text: desaturate(lighten($dark-bg, 65%), 80%);
+// $dark-text: #DCDCDC;
+$dark-alt-bg: darken($dark-bg, 4%);
+//$dark-alt-bg: #0F1316;
+
+$dark-dark: #0a0c0e;
+
+$devide-border-colour: #dbdbdb;

@@ -13,8 +13,10 @@ class home implements IPage
 		?>
 <div class="main">
 	<div class="header">
-		<h1>Leum</h1>
-		<h2>Another new project that will never get finished.</h2>
+		<div class="content">
+			<h1>Leum</h1>
+			<h2>Another new project that will never get finished.</h2>
+		</div>
 	</div>
 
 	<div class="content">

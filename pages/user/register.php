@@ -46,7 +46,9 @@ class register implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1><?=$this->title;?></h1>
+		<div class="content">
+			<h1><?=$this->title;?></h1>
+		</div>
 	</div>
 	<div class="content login-box">
 		<form class="pure-form" method="POST">

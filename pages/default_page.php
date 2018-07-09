@@ -13,7 +13,9 @@ class default_page implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1>Default Page</h1>
+		<div class="content">
+			<h1>Default Page</h1>
+		</div>
 	</div>
 	<div class="content">
 		<p>This page has no content yet.</p>

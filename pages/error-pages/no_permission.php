@@ -16,8 +16,10 @@ class no_permission implements IPage
 	{?>
 <div class="main">
 	<div class="header">
-		<h1>NO!</h1>
-		<h2>You don't have permission to do that.</h2>
+		<div class="content">
+			<h1>NO!</h1>
+			<h2>You don't have permission to do that.</h2>
+		</div>
 	</div>
 
 	<div class="content">

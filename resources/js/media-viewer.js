@@ -65,6 +65,7 @@ function MediaViewer()
 {
 	var viewer;
 	var lastIndex;
+	var contentDiv;
 	this.IndexChanged = function()
 	{
 		var index = GetMediaItemIndex();
@@ -86,6 +87,8 @@ function MediaViewer()
 		location.hash = "#view" + mediaIndex;
 
 		viewer = document.querySelector("#media-viewer");
+		contentDiv = viewer.querySelector(".content");
+
 		var url = GetRootDir() + "/api/v2/media/" + mediaIndex + "?usage=viewer";
 		var jqxhr = $.getJSON(url, function(data)
 		{
@@ -134,18 +137,17 @@ function MediaViewer()
 		{
 			var contentNode = viewer.querySelector(".media-item");
 			if(contentNode != null)
-				viewer.removeChild(contentNode);
+				contentDiv.removeChild(contentNode);
 		}
 		else
 		{
 			if(content != null)
 				SetContent(null);
 
-			var footer = viewer.querySelector(".footer");
 			var template = document.createElement('template');
 			template.innerHTML = content;
 			contentNode = template.content;
-			viewer.insertBefore(template.content, footer);
+			contentDiv.appendChild(contentNode);
 		}
 	}
 	function SetTags(tagSlugs)

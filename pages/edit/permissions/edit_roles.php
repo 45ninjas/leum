@@ -57,12 +57,14 @@ class edit_roles implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1><?=$this->title;?></h1>
-		<div class="pure-menu pure-menu-horizontal">
-			<ul class="pure-menu">
-				<li class="pure-menu-item"><a href="<?=ROOT."/edit/permissions";?>" class="pure-menu-link">&#10094; Permissions</a></li>
-				<li class="pure-menu-item"><a href="<?=ROOT."/edit/permissions/roles/new";?>" class="pure-menu-link">New Role <i class="fa fa-plus"></i></a></li>
-			</ul>
+		<div class="content">
+			<h1><?=$this->title;?></h1>
+			<div class="pure-menu pure-menu-horizontal">
+				<ul class="pure-menu">
+					<li class="pure-menu-item"><a href="<?=ROOT."/edit/permissions";?>" class="pure-menu-link">&#10094; Permissions</a></li>
+					<li class="pure-menu-item"><a href="<?=ROOT."/edit/permissions/roles/new";?>" class="pure-menu-link">New Role <i class="fa fa-plus"></i></a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 

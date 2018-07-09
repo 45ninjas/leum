@@ -19,12 +19,14 @@ class list_users implements IPage
 
 <div class="main">
 	<div class="header">
-		<h1>Users</h1>
-		<div class="pure-menu pure-menu-horizontal">
-			<ul class="pure-menu">
-				<li class="pure-menu-item"><a href="<?=ROOT."/edit/";?>" class="pure-menu-link">&#10094; Edit</a></li>
-				<li class="pure-menu-item"><a href="<?=ROOT."/edit/user/new";?>" class="pure-menu-link">New User <i class="fa fa-plus"></i></a></li>
-			</ul>
+		<div class="content">
+			<h1>Users</h1>
+			<div class="pure-menu pure-menu-horizontal">
+				<ul class="pure-menu">
+					<li class="pure-menu-item"><a href="<?=ROOT."/edit/";?>" class="pure-menu-link">&#10094; Edit</a></li>
+					<li class="pure-menu-item"><a href="<?=ROOT."/edit/user/new";?>" class="pure-menu-link">New User <i class="fa fa-plus"></i></a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div class="content">

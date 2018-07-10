@@ -1,5 +1,4 @@
 <?php
-require_once SYS_ROOT . "/core/tag.php";
 /**
 * View Tags
 */

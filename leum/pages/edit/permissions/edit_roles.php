@@ -1,6 +1,4 @@
 <?php
-require_once SYS_ROOT . "/core/user-permission/permission.php";
-require_once SYS_ROOT . "/core/user-permission/role.php";
 /**
 * View Tags
 */

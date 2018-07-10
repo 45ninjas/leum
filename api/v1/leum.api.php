@@ -8,13 +8,13 @@ require_once SYS_ROOT . "/api/v1/api.class.php";
 require_once SYS_ROOT . "/api/v1/browse.php";
 require_once SYS_ROOT . "/api/v1/ingest.php";
 
-require_once SYS_ROOT . "/functions.php";
-require_once SYS_ROOT . "/preferences.php";
+require_once SYS_ROOT . "/leum/functions.php";
+require_once SYS_ROOT . "/leum/preferences.php";
 
 // Newer Leum Core Includes.
-require_once SYS_ROOT . "/core/media.php";
-require_once SYS_ROOT . "/core/tag.php";
-require_once SYS_ROOT . "/core/mapping.php";
+require_once SYS_ROOT . "/leum/core/media.php";
+require_once SYS_ROOT . "/leum/core/tag.php";
+require_once SYS_ROOT . "/leum/core/mapping.php";
 
 class LeumApi extends API
 {

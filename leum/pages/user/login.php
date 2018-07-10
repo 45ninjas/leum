@@ -1,5 +1,4 @@
 <?php
-require_once SYS_ROOT . "/core/leum-core.php";
 /**
 * Default page
 */

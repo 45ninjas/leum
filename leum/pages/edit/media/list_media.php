@@ -1,5 +1,4 @@
 <?php
-require_once SYS_ROOT . "/core/media.php";
 /**
 * View Media
 * TODO: Add pagination.

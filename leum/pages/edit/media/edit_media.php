@@ -2,12 +2,8 @@
 /**
 * Default page
 */
-require_once SYS_ROOT . "/core/media.php";
-require_once SYS_ROOT . "/core/mapping.php";
-require_once SYS_ROOT . "/core/tag.php";
-
-require_once 'page-parts/media-viewer.php';
-require_once 'page-parts/tag-field.php';
+require_once SYS_ROOT . '/leum/page-parts/media-viewer.php';
+require_once SYS_ROOT . '/leum/page-parts/tag-field.php';
 class edit_media implements IPage
 {
 	public $title = "Create Media";

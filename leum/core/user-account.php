@@ -1,5 +1,4 @@
 <?php 
-require_once SYS_ROOT . "/core/user.php";
 define('DUPLICATE_ERROR', 1062);
 class UserAccount
 {

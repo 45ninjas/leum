@@ -22,4 +22,14 @@
 		border-left-color: blue;
 		background-color: #f6f6fa;
 	}
+	&.msg-debug
+	{
+		font-family: monospace;
+		unicode-bidi: embed;
+		white-space: pre;
+		br
+		{
+			display: none;
+		}
+	}
 }

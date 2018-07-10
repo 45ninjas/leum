@@ -1,7 +1,5 @@
 <?php
 
-require_once SYS_ROOT . "/core/leum-core.php";
-
 class Role
 {
 	public $role_id;

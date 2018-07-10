@@ -1,15 +1,15 @@
 <?php 
-require_once SYS_ROOT . "/core/media.php";
-require_once SYS_ROOT . "/core/mapping.php";
-require_once SYS_ROOT . "/core/tag.php";
-require_once SYS_ROOT . "/core/query.php";
+require_once "media.php";
+require_once "mapping.php";
+require_once "tag.php";
+require_once "query.php";
 
-require_once SYS_ROOT . "/core/user.php";
-require_once SYS_ROOT . "/core/user-account.php";
-require_once SYS_ROOT . "/core/user-permission/role.php";
-require_once SYS_ROOT . "/core/user-permission/permission.php";
+require_once "user.php";
+require_once "user-account.php";
+require_once "user-permission/role.php";
+require_once "user-permission/permission.php";
 
-require_once SYS_ROOT . "/utils/thumbnails.php";
+require_once SYS_ROOT . "/leum/utils/thumbnails.php";
 
 class LeumCore
 {

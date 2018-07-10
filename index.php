@@ -1,7 +1,11 @@
 <?php
 ob_start();
-include_once 'leum.php';
+define('SYS_ROOT', __DIR__);
+include_once 'leum/leum.php';
 $leumContent = trim(ob_get_clean());
+
+if(!empty($leumContent))
+	Message::Create("msg-debug",$leumContent);
 // Leum.
 // The simple local media tagging system.
 // Designed to store your webm, gif and other content.
@@ -30,11 +34,8 @@ $leumContent = trim(ob_get_clean());
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
 </head>
 <body class="static-title">
-	<?php include "page-parts/leum-menu.php" ?>
-	<?php //include "page-parts/side-bar.php"; ?>
-	<pre id="debug-head"><?php echo $leumContent; ?></pre>
+	<?php include "leum/page-parts/leum-menu.php" ?>
 	<?php TheContent(); ?>
-
 	<!-- Modal Stuff -->
 	<div id="modal-background" hidden></div>
 

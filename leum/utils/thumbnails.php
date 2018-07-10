@@ -1,7 +1,7 @@
 <?php
 
-require_once SYS_ROOT . "/core/leum-core.php";
-require_once SYS_ROOT . "/functions.php";
+require_once SYS_ROOT . "/leum/core/leum-core.php";
+require_once SYS_ROOT . "/leum/functions.php";
 
 class Thumbnails
 {

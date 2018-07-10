@@ -70,7 +70,7 @@ class Media
 		$response["id"] = $media->media_id;
 		$response["tags"] = $media->GetTags($this->dbc, true);
 
-		require_once SYS_ROOT . "/page-parts/media-viewer.php";
+		require_once SYS_ROOT . "/leum/page-parts/media-viewer.php";
 		$viewer = new \MediaViewer($media, false, true, true, true, true);
 		ob_start();
 		$viewer->ShowContent();

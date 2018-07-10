@@ -1,9 +1,8 @@
 <?php 
-define('SYS_ROOT', __DIR__);
-require_once 'preferences.php';
+require_once 'conf/leum.conf.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
-require_once SYS_ROOT . '/core/leum-core.php';
+require_once 'core/leum-core.php';
 $leum = new Leum();
 
 class Leum
@@ -54,7 +53,7 @@ class Leum
 		$this->UserInit();
 
 		// Show the 404 page if we have no route/page.
-		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/pages/$this->routeResolve"))
+		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/leum/pages/$this->routeResolve"))
 		{
 			self::Show404Page();
 			return;
@@ -125,7 +124,7 @@ class Leum
 
 	public function LoadPage($pageFile, $throw = false)
 	{
-		$pageFile = SYS_ROOT . "/pages/$pageFile";
+		$pageFile = SYS_ROOT . "/leum/pages/$pageFile";
 		$pageClass = basename($pageFile, ".php");
 		// Show a 500 page if the file does not exist.
 		if(!is_file($pageFile))
@@ -218,15 +217,19 @@ class Leum
 		$this->LoadPage("error-pages/$class.php", true);
 	}
 	// Sets the title of the page. Force bypasses prefix and suffix from config.
-	public function SetTitle($newTitle, $force = false)
+	public function SetTitle($title, $force = false)
 	{
-		$this->title = $newTitle;
-
-		if(!$force && defined('TITLE_PREFIX'))
-			$this->title = TITLE_PREFIX . $newTitle;
-
-		if(!$force && defined('TITLE_SUFFIX'))
-			$this->title .= TITLE_SUFFIX;
+		if($force)
+			$this->title = $title;
+		else
+		{
+			$args = array
+			(
+				'%title'	=> $title,
+				'%appTitle'	=> APP_TITLE
+			);
+			$this->title = str_replace(array_keys($args), array_values($args), TITLE_FORMAT);
+		}
 	}
 	public function AttemptLogin($username, $password, &$message)
 	{

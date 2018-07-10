@@ -2,10 +2,10 @@
 /**
 * Default page
 */
-require_once SYS_ROOT . "/page-parts/page-buttons.php";
-require_once SYS_ROOT . "/page-parts/tag-field.php";
-require_once SYS_ROOT . "/core/leum-core.php";
-require_once SYS_ROOT . "/page-parts/media-viewer.php";
+require_once SYS_ROOT . "/leum/page-parts/page-buttons.php";
+require_once SYS_ROOT . "/leum/page-parts/tag-field.php";
+require_once SYS_ROOT . "/leum/core/leum-core.php";
+require_once SYS_ROOT . "/leum/page-parts/media-viewer.php";
 
 class browse implements IPage
 {
@@ -169,8 +169,6 @@ if(isset($this->wantedTags))
 	document.addEventListener("DOMContentLoaded", load);
 
 	function load() {
-		console.log("working?");
-
 		var Tags = document.querySelector("#tag-filter #contain-tags");
 		var Input = document.querySelector("#tag-filter #contain-tag-input");
 		var Field = document.querySelector("#tag-filter #contain-tag-field");

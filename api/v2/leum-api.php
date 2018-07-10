@@ -3,18 +3,19 @@ if(!defined('SYS_ROOT'))
 	define('SYS_ROOT', realpath(__DIR__ . "/../.."));
 define('API_ROOT', __DIR__);
 
-require_once SYS_ROOT . "/core/leum-core.php";
+require_once SYS_ROOT . "/leum/core/leum-core.php";
 
 include_once API_ROOT . "/resource/media.php";
 include_once API_ROOT . "/resource/tags.php";
 include_once API_ROOT . "/resource/content.php";
 include_once API_ROOT . "/resource/user.php";
 
-require_once SYS_ROOT . "/functions.php";
-require_once SYS_ROOT . "/preferences.php";
+require_once SYS_ROOT . "/leum/functions.php";
+require_once SYS_ROOT . "/leum/conf/leum.conf.php";
 
 use API as API;
 
+// Catch all exceptions.
 try
 {
     $api = new LeumApi($_REQUEST['request']);

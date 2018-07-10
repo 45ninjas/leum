@@ -1,7 +1,12 @@
 <?php
 
-require_once SYS_ROOT . "/core/leum-core.php";
+// The default user role, used for unauthenticated users.
+define('DEFAULT_ROLE','default');
+// The role a new user is assigned when they register an account or an admin creates an account.
+define('NEW_USER_ROLE','user');
 
+// === Settings below are only applied when leum is being set-up ===
+// At the moment, changing these after setup have no affect.
 function SetupDefaults($dbc)
 {
 	$permissions = array
@@ -43,14 +48,14 @@ function SetupDefaults($dbc)
 			[
 				'access-app',
 				'register-account',
-				'reset-password'
 			]
 		],
 		"user" => [
 			"General user privileges like editing account, being able to login, allowed to access the app ect.",
 			[
 				'login',
-				'edit-account'
+				'edit-account',
+				'reset-password'
 			]
 		],
 		"moderator" => [

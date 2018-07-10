@@ -17,7 +17,7 @@ class Leum
 	public $arguments = array();
 	public $routeResolve = null;
 
-	private $dbc;
+	public $dbc;
 
 	public $headIncludes = array();
 

@@ -34,6 +34,11 @@ function GetRootDir()
     return document.head.querySelector("[property=site-root]").content;
 }
 
+function ParseAPIResponse($response)
+{
+
+}
+
 /*// Menu Hambuger stuff.
 (function (window, document) {
 

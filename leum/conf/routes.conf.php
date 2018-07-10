@@ -48,6 +48,9 @@ $routes = array(
 	[REGISTER_PAGE,							'register',					0],
 	[LOGIN_PAGE,							LOGIN_URL,					0],
 	[LOGIN_PAGE,							LOGIN_URL . '/(forgot)',	1],
-	["user/profile.php",					'profile',					0]
+	["user/profile.php",					'profile',					0],
+
+	// Import media.
+	["edit/utilities/media_importer.php",		'edit/import',				0]
 );
 ?>

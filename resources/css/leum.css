@@ -608,4 +608,23 @@ ul.tagfield li a.tag-delete {
   left: 0;
 }
 
+.suggestion-input {
+  display: block;
+  position: relative;
+}
+.suggestion-input .user-input {
+  background: none;
+  width: 100%;
+}
+.suggestion-input input[type=text][disabled].suggestion {
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: -2;
+  background: none;
+  cursor: default;
+  box-shadow: none;
+}
+
 /*# sourceMappingURL=leum.css.map */

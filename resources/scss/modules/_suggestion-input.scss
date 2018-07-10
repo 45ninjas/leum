@@ -1,0 +1,21 @@
+.suggestion-input
+{
+	display: block;
+	position:relative;
+	.user-input
+	{
+		background: none;
+		width:100%;
+	}
+	input[type="text"][disabled].suggestion
+	{
+		width: 100%;
+		top: 0;
+		left: 0;
+		position: absolute;
+		z-index: -2;
+		background: none;
+		cursor: default;
+		box-shadow: none;
+	}
+}

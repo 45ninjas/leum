@@ -26,7 +26,7 @@ class list_media implements IPage
 					<li class="pure-menu-item"><a href="<?=ROOT."/edit/";?>" class="pure-menu-link">&#10094; Edit</a></li>
 					<li class="pure-menu-item"><a href="<?=ROOT."/edit/media/new";?>" class="pure-menu-link">Create New <i class="fa fa-plus"></i></a></li>
 					<li class="pure-menu-item"><a href="<?=ROOT."/utils/thumbnails-all.php";?>" class="pure-menu-link">Generate Thumbnails <i class="fa fa-image"></i></a></li>
-					<li class="pure-menu-item"><a href="<?=ROOT."/utils/importer.php";?>" class="pure-menu-link">Import <i class="fa fa-download"></i></a></li>
+					<li class="pure-menu-item"><a href="<?=ROOT."/edit/import";?>" class="pure-menu-link">Import <i class="fa fa-download"></i></a></li>
 				</ul>
 			</div>
 		</div>

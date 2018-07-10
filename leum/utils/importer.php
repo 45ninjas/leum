@@ -18,7 +18,6 @@ function ImportDirectory($mediaDirectory, $dbc)
 
 		$items = Media::GetFromPath($dbc, $localPath);
 
-		var_dump($localPath);
 		if(count($items) == 0)
 		{
 			$data = array();
@@ -33,8 +32,15 @@ function ImportDirectory($mediaDirectory, $dbc)
 			}
 			else
 			{
-				// Create the thumbnail.
-				Thumbnails::MakeFor($dbc, $media);
+				try
+				{
+					// Create the thumbnail.
+					Thumbnails::MakeFor($dbc, $media);	
+				}
+				catch (Exception $e)
+				{
+					Message::Create("msg-red", "Unable to create thumbnail.<br>Exception: $e");
+				}
 				Message::Create("msg-green", "Imported $localPath successfully.", "importer");
 			}
 		}

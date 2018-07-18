@@ -39,7 +39,7 @@ function ImportDirectory($mediaDirectory, $dbc)
 				}
 				catch (Exception $e)
 				{
-					Message::Create("msg-red", "Unable to create thumbnail.<br>Exception: $e");
+					Message::Create("msg-red", "Unable to create thumbnail.<br>Exception: $e", "importer");
 				}
 				Message::Create("msg-green", "Imported $localPath successfully.", "importer");
 			}

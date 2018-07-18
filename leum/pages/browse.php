@@ -112,13 +112,13 @@ function MediaViewer()
 { ?>
 <div id="media-viewer" class="media-viewer full" hidden>
 	<div class="media-viewer-modal">
+		<a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
+		<a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
 		<div class="header">
 			<span id="media-title"></span>
 			<button class="close-button" id="media-viewer-close"><i class="fa fa-times"></i></button>
 		</div>
 		<div class="content">
-			<a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
-			<a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
 		</div>
 		<div class="footer">
 			<a id="media-edit-link" class="edit-button" href="#">

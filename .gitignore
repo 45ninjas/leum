@@ -1,5 +1,6 @@
 /content/media/*
 /content/thumbs/*
+/content/
 *.sublime-project
 *.sublime-workspace
 

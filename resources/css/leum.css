@@ -207,6 +207,10 @@
   padding-top: initial;
 }
 
+.foot-note {
+  font-size: 75%;
+}
+
 html {
   color: #888;
 }

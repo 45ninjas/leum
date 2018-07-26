@@ -26,6 +26,8 @@ class Leum
 
 	public $messages;
 
+	public $gitStatus;
+
 	public function __construct()
 	{
 		// Routes variable from preferences.php
@@ -47,7 +49,7 @@ class Leum
 			if(substr($this->request,-1) == '/')
 				$this->request = substr($this->request, 0, -1);
 		}
-
+		$this->Init();
 		$this->Dispatch();
 
 		$this->UserInit();
@@ -74,6 +76,11 @@ class Leum
 		else
 			$this->routeResolve = null;
 
+	}
+	private function Init()
+	{
+		include_once 'page-parts/git-status.php';
+		$this->gitStatus = new GitStatus(false);
 	}
 	private function UserInit()
 	{
@@ -197,6 +204,12 @@ class Leum
 	public function Output()
 	{
 		$this->page->Content();
+
+		echo "<div class=\"content foot-note\">";
+		if($this->gitStatus->valid)
+			echo "<p>". $this->gitStatus->GetMessage() . "</p>";
+		echo "<p>Leum pre-alpha<br>" . $_SERVER['SERVER_SOFTWARE'] . "</p>";
+		echo "</div>";
 	}
 	// Shows triggers the 404 page to show. can provide a custom message.
 	public function Show404Page($message = null)

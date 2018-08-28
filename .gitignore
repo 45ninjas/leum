@@ -4,4 +4,6 @@
 *.sublime-project
 *.sublime-workspace
 
+/logs/*.text
+
 sass-build.bat

@@ -1,4 +1,36 @@
 <?php 
+
+// Before anything!, setup the logs so errors can be caught;
+require_once "log.php";
+
+// Get config
+require_once SYS_ROOT . '/leum/conf/leum.conf.php';
+
+function LeumErrorHandler($errorno, $errstr, $errfile, $errline)
+{
+	// Write the error.
+	$message = "[$errorno] $errstr in $errfile [$errline]";
+	echo "Error: $message\n";
+
+	// Log it if we can.
+	if(class_exists("Log"))
+		Log::Write($message, Log::ERROR);
+}
+
+function LeumExceptionHandler($exception)
+{
+	// Write the exception.
+	$message = $exception->GetMessage() . " " . $exception->getFile() . "(" . $exception->getLine() .")" . PHP_EOL . $exception->getTraceAsString();
+	echo "Uncaught Exception: $message\n";
+
+	// Log it if we can.
+	if(class_exists("Log"))
+		Log::Write($message, Log::EXCEPTION);
+}
+
+set_error_handler("LeumErrorHandler");
+set_exception_handler("LeumExceptionHandler");
+
 require_once "media.php";
 require_once "mapping.php";
 require_once "tag.php";
@@ -9,10 +41,21 @@ require_once "user-account.php";
 require_once "user-permission/role.php";
 require_once "user-permission/permission.php";
 
+require_once "plugins.php";
+
 require_once SYS_ROOT . "/leum/utils/thumbnails.php";
+
+$core = new LeumCore();
 
 class LeumCore
 {
+	public $pluginManager;
+	public function __construct()
+	{
+		// Load the plugins first.
+		$this->pluginManager = new PluginManager(ACTIVE_PLUGINS);
+	}
+
 	public static function PDOPlaceholder($array)
 	{
 		return str_repeat('?, ', count($array) - 1) . '?';

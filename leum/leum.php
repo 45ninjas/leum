@@ -1,8 +1,7 @@
 <?php 
-require_once 'conf/leum.conf.php';
+require_once 'core/leum-core.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
-require_once 'core/leum-core.php';
 $leum = new Leum();
 
 class Leum

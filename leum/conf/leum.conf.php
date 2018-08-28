@@ -12,6 +12,7 @@ define('THUMB_DIR', '/content/thumbs');
 
 // Where the leum logs are stored.
 define('LOG_DIR', SYS_ROOT . '/logs');
+define('LOG_LEVEL', Log::INFO);
 
 define('API_URL', ROOT . "/api");
 
@@ -24,6 +25,9 @@ define('THUMB_SIZE', 196);
 // http://php.net/manual/en/function.password-hash.php#example-985
 define('AUTH_PASS_COST', 10);
 
+
+
+define('ACTIVE_PLUGINS', ["shows", "test_plugin"]);
 
 
 

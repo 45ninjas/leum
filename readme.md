@@ -1,7 +1,7 @@
 # Leum
+[![Documentation Status](https://readthedocs.org/projects/leum/badge/?version=latest)](https://leum.readthedocs.io/en/latest/?badge=latest)
+
 Leum is replacing my old and outdated *snuffy* and *redcat-media* sites.
-
-
 
 Leum is designed to organize media like **TV Shows**, **Movies**, **Music** and **Pictures** on a web-server. It's not trying to be Plex or OwnCloud. Just a media viewer for my home server that I could access over the internet if I need.
 

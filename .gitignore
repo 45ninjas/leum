@@ -1,9 +1,16 @@
+# Defiantly don't sync the hundreds of gigs of movies and TV shows.
 /content/media/*
 /content/thumbs/*
 /content/
-*.sublime-project
-*.sublime-workspace
 
+# Don't sync the logs directory.
 /logs/*.txt
 
+# Personal development stuff
+*.sublime-project
+*.sublime-workspace
 sass-build.bat
+/docs/autobuilder.sh
+
+# docs
+/docs/_*

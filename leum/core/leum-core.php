@@ -45,15 +45,18 @@ require_once "plugins.php";
 
 require_once SYS_ROOT . "/leum/utils/thumbnails.php";
 
-$core = new LeumCore();
-
 class LeumCore
 {
+	public static $instance;
 	public $pluginManager;
+	public static $hooks = array();
 	public function __construct()
 	{
 		// Load the plugins first.
 		$this->pluginManager = new PluginManager(ACTIVE_PLUGINS);
+		self::$instance = $this;
+		// Call the initialize hook.
+		self::InvokeHook('initialize');
 	}
 
 	public static function PDOPlaceholder($array)
@@ -93,6 +96,34 @@ class LeumCore
 			return true;
 
 		return false;
+	}
+	/**
+	 * registers a hook event
+	 * @param string $hookName name of hook. 
+	 * @param callable $function the function to call when the hook is called.
+	 */
+	public static function AddHook($hookName, $function)
+	{
+		// Make sure the function can be called.
+		if(!is_callable($function))
+			throw new Exception("Hook function is not callable");
+
+		// If the hook does not already exist, add it with this new hook.
+		if(!isset(self::$hooks[$hookName]))
+			self::$hooks[$hookName] = array();
+		// Push the thing in.
+		self::$hooks[$hookName][] = $function;
+	}
+	public static function InvokeHook($hookName)
+	{
+		// Make sure the hook exists.
+		if(!isset(self::$hooks[$hookName]))
+			return;
+
+		foreach (self::$hooks[$hookName] as $anon)
+		{
+			$anon();
+		}
 	}
 }
  ?>

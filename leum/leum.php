@@ -1,9 +1,10 @@
 <?php 
+// TODO: Clean this mess! rename it to leumFront?
 require_once 'core/leum-core.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
 $leum = new Leum();
-
+$core = new LeumCore();
 class Leum
 {
 	private static $_instance = null;
@@ -24,8 +25,6 @@ class Leum
 	public $defaultRole;
 
 	public $messages;
-
-	public $gitStatus;
 
 	public function __construct()
 	{
@@ -78,8 +77,7 @@ class Leum
 	}
 	private function Init()
 	{
-		include_once 'page-parts/git-status.php';
-		$this->gitStatus = new GitStatus(false);
+
 	}
 	private function UserInit()
 	{
@@ -197,6 +195,9 @@ class Leum
 			}
 			echo "\n";
 		}
+		
+		echo "<!-- leum.front.head hook -->\n";
+		LeumCore::InvokeHook('leum.front.head');
 	}
 
 	// Tells the page to show it's output.
@@ -204,11 +205,13 @@ class Leum
 	{
 		$this->page->Content();
 
-		echo "<div class=\"content foot-note\">";
-		if($this->gitStatus->valid)
-			echo "<p>". $this->gitStatus->GetMessage() . "</p>";
-		echo "<p>Leum pre-alpha<br>" . $_SERVER['SERVER_SOFTWARE'] . "</p>";
-		echo "</div>";
+		// echo "<div class=\"content foot-note\">";
+		// echo "<p>Leum pre-alpha<br>" . $_SERVER['SERVER_SOFTWARE'] . "</p>";
+		// echo "</div>";
+
+		echo "<!-- leum.front.footer hook -->\n";
+		LeumCore::InvokeHook('leum.front.footer');
+
 	}
 	// Shows triggers the 404 page to show. can provide a custom message.
 	public function Show404Page($message = null)

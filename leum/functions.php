@@ -1,7 +1,8 @@
 <?php
-
+// TODO: Depreciate this file. It's not needed and some functions are 'core'
 function DBConnect()
 {
+	// TODO: Put this in LeumCore __construct as leumCore is loaded by both API and front.
 	global $prefrences;
 	$opt = [
 		PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
@@ -13,14 +14,17 @@ function DBConnect()
 	return $pdo;
 }
 
+// deprecate
 function Asset($asset)
 {
 	echo GetAsset($asset);
 }
+// move to front.
 function GetAsset($asset)
 {
 	return ROOT.$asset;
 }
+// move to front.
 function ProfilePicture($colour = "#4eb4f5")
 {
 	if(isset(Leum::Instance()->user))
@@ -32,20 +36,28 @@ function ProfilePicture($colour = "#4eb4f5")
 		echo "<i class=\"fa fa-user-circle\"></i>";
 }
 
+// deprecate
 function TheTitle()
 {
 	echo Leum::Instance()->title;
 }
+
+// deprecate
 function TheContent()
 {
+	if(Log::$highest != false)
+		Message::Create("info", "Wrote one ore more messages to the logs. Highest message was <i>" . Log::$logLevels[Log::$highest] . "</i>");
 	Message::ShowMessages("default");
 	Leum::Instance()->Output();
 }
+
+// deprecate
 function TheHead()
 {
 	Leum::Instance()->Head();
 }
 
+// deprecate
 function CreateSlugString($tags)
 {
 	if(count($tags) == 0)
@@ -56,6 +68,7 @@ function CreateSlugString($tags)
 
 	return implode('+', $tags);
 }
+// deprecate
 function ParseSlugString($string)
 {
 	$string = preg_replace("[^A-Za-z0-9-]", "", $string);
@@ -64,6 +77,7 @@ function ParseSlugString($string)
 	return $slugs;
 }
 
+// why is this not in thumbnails? It's clearly for thumbnails.
 function ImageCreateFromImage($file)
 {
 	if(!file_exists($file))

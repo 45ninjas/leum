@@ -19,7 +19,8 @@ use API as API;
 // Catch all exceptions.
 try
 {
-    $api = new LeumApi($_REQUEST['request']);
+    $core = new LeumCore();
+    $api = new LeumApi($core, $_REQUEST['request']);
     echo $api->ProcessAPI();
 }
 catch (Exception $e)
@@ -35,7 +36,7 @@ class LeumAPI
 	public $resource;
 	public $dbc;
 
-	public function __construct($request)
+	public function __construct($core, $request)
 	{
 		header("Access-Control-Allow-Origin: *");
 		header("Access-Control-Allow-Methods: *");

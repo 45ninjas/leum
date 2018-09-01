@@ -6,17 +6,23 @@
 class PluginManager
 {
 	public $plugins = array();
+
+	// Load a plugin from the plugins directory.
 	public function LoadPlugin($pluginName)
 	{
+		// Check to see if the plug-in exists.
 		$pluginFile = SYS_ROOT . "/leum/plugins/$pluginName/$pluginName.php";
 		if(is_file($pluginFile))
 		{
 			include_once $pluginFile;
-			$pluginClass = new $pluginName;
+			$pluginClass = new $pluginName();
 
+			// Add this new plugin to the array of plugins
 			array_push($this->plugins, $pluginClass);
-
-			Message::Create("info", "Loaded the '$pluginName' plug-in");
+		}
+		else
+		{
+			Log::Write("Plug-in '$pluginName' does not exist in '$pluginFile'");
 		}
 	}
 	public function __construct($pluginsToLoad)
@@ -29,9 +35,9 @@ class PluginManager
 	}
 }
 
-Interface IPlugin
+class Plugin
 {
-	function OnInit($core, $manager);
+	// The Plugin class does not currently do anything.
 }
 
 ?>

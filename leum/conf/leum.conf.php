@@ -27,7 +27,7 @@ define('AUTH_PASS_COST', 10);
 
 
 
-define('ACTIVE_PLUGINS', ["shows", "test_plugin", "git_status"]);
+define('ACTIVE_PLUGINS', ['git_status', 'shows']);
 
 
 

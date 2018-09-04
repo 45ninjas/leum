@@ -272,7 +272,7 @@ class RolePermissionMap
 		else
 			return $statement->fetchAll(PDO::FETCH_CLASS, 'Permission');
 	}
-	public function UnmapAll($dbc, $role)
+	public static function UnmapAll($dbc, $role)
 	{
 		$role = Role::GetId($role);
 
@@ -284,7 +284,7 @@ class RolePermissionMap
 		return $statement->rowCount();
 	}
 	// Sets the permissions.
-	public function SetPermissions($dbc, $role, $newPermissions)
+	public static function SetPermissions($dbc, $role, $newPermissions)
 	{
 		$role = Role::GetId($role);
 

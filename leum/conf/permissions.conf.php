@@ -7,9 +7,9 @@ define('NEW_USER_ROLE','user');
 
 // === Settings below are only applied when leum is being set-up ===
 // At the moment, changing these after setup have no affect.
-function SetupDefaults($dbc)
+function GetPermissions()
 {
-	$permissions = array
+	return array
 	(
 		// Essentials
 		'access-app' 				=> "Can access the app.",
@@ -36,12 +36,14 @@ function SetupDefaults($dbc)
 		// Permissions
 		'permissions-edit'			=> "Edit, assign and view roles and permissions"
 	);
-
-	$roles = array
+}
+function GetRoles()
+{
+	return array
 	(
 		"root" => [
 			"Root access, Has all permissions, system level. Only used to edit permissions.",
-			array_keys($permissions)
+			GetPermissions()
 		],
 		"default" => [
 			"Default user privileges for all users including un-authenticated users.",
@@ -86,29 +88,6 @@ function SetupDefaults($dbc)
 				[
 				]
 	]);
-
-	try
-	{
-		// Add all the permissions.
-		foreach ($permissions as $slug => $description)
-		{
-			Permission::InsertSingle($dbc, ["slug" => $slug, "description" => $description]);
-		}
-		echo "Added default permissions\n";
-
-		// Add all the roles.
-		foreach ($roles as $role => $slugs)
-		{
-			$title = array_shift($slugs);
-			$role_id = Role::InsertSingle($dbc, ["slug" => $role, "description" => $title]);
-			RolePermissionMap::SetPermissions($dbc, $role_id, $slugs[0]);
-
-			echo "Added $role role\n";
-		}	
-	}
-	catch (Exception $e)
-	{
-		throw $e;
-	}
 }
+
 ?>

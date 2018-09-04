@@ -22,6 +22,10 @@ Leum Hooks
 
 initialize
 	Invoked after leum is up and running. **Note:** this is after routes are created and resolved.
+leum.setup
+	Invoked when leum is being set-up via the setup.php script.
+leum.front.routes
+	Invoked when leunm's font has assigned the default routes.
 leum.front.footer
 	Invoked after the footer is outputted.
 leum.front.header

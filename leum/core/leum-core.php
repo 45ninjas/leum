@@ -40,6 +40,7 @@ require_once "user.php";
 require_once "user-account.php";
 require_once "user-permission/role.php";
 require_once "user-permission/permission.php";
+require_once "message.php";
 
 require_once "plugins.php";
 

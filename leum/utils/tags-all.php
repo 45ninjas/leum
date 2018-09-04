@@ -1,7 +1,7 @@
 <?php
 if(!defined('SYS_ROOT'))
-	define('SYS_ROOT', realpath(__DIR__ . "/.."));
-require_once SYS_ROOT . "/core/leum-core.php";
+	define('SYS_ROOT', realpath(__DIR__ . "/../.."));
+require_once SYS_ROOT . "/leum/core/leum-core.php";
 
 header("Content-Type: text/plain");
 
@@ -14,6 +14,12 @@ if(isset($_GET['defaults']))
     $defaultTags[] = Tag::CreateSlug($item);  
   }
 }
+if(isset($_GET['dir']))
+	$dir = $_GET['dir'];
+
+if(!isset($dir))
+	throw new Exception("dir must be provided");
+	
 
 $dbc = DBConnect();
 
@@ -24,20 +30,21 @@ $totalBatches = null;
 
 $allKnownTags = Tag::GetAllSlugs($dbc);
 
-DoBatch($dbc, $batch, $batchSize);
+DoBatch($dbc, $dir, $batch, $batchSize);
 flush();
 
 for ($batch = 1; $batch < $totalBatches; $batch++, $batchCount++)
 {
-	DoBatch($dbc, $batch, $batchSize);
+	DoBatch($dbc, $dir, $batch, $batchSize);
 	flush();
 }
 
-function DoBatch($dbc, $batch, $size)
+function DoBatch($dbc, $dir, $batch, $size)
 {
 	global $totalBatches, $overwrite;
 
-	$items = Media::GetAll($dbc, $batch, $size);
+	//$items = Media::GetAll($dbc, $batch, $size);
+	$items = GetAllInDir($dbc, $dir, $batch, $size);
 	
 	if($totalBatches == null)
 		$totalBatches = ceil(LeumCore::GetTotalItems($dbc) / $size);
@@ -48,6 +55,18 @@ function DoBatch($dbc, $batch, $size)
 	}
 
 	echo "Tag Batch " . ($batch + 1) . " of $totalBatches\n";
+}
+
+function GetAllInDir($dbc, $dir, $page, $pageSize)
+{
+	$offset = $pageSize * $page;
+	// Get ALL items
+	$sql = "SELECT sql_calc_found_rows * from media where path LIKE CONCAT(?, '%') order by date desc limit ? offset ?";
+
+	$statement = $dbc->prepare($sql);
+	$statement->execute([$dir,$pageSize, $offset]);
+
+	return $statement->fetchAll(PDO::FETCH_CLASS, 'Media');
 }
 
 function DoSingle($dbc, $media)

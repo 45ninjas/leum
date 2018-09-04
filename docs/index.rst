@@ -12,7 +12,7 @@ Welcome to Leum's documentation!
 
    plugins
    hooks
-
+   log
 
 Indices and tables
 ==================

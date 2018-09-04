@@ -27,29 +27,29 @@ class Log
 	/**
 	 * Write writes data to the logs. Formatting and timestamps done for you.
 	 * @param string $message the message to write in the logs
-	 * @param int $type 	the type of message using the constants provided in this class
+	 * @param int $level 	the level of message using the constants provided in this class
 	 * @param string $logs 	the log to save it in. Null is 'default.txt'.
 	 */
-	public static function Write($message, $type = self::INFO, $log = null)
+	public static function Write($message, $level = self::INFO, $log = null)
 	{
 		// Make sure the log is actually important enough to save.
-		if($type > LOG_LEVEL)
+		if($level > LOG_LEVEL)
 			return;
 
-		if($type > self::$highest)
-		self::$highest = $type;
+		if($level > self::$highest)
+		self::$highest = $level;
 
 		if($log == null)
 			$logfile = LOG_DIR . "/default.txt";
 		else
-			$logfile = LOG_DIR . "/$log.txt";
+			$logfile = LOG_DIR . "/$log";
 
-		$typeStr = self::$logLevels[$type];
+		$levelStr = self::$logLevels[$level];
 		
 		$date = new DateTime();
 		$date = $date->format("y:m:d h:i:s");
 
-		file_put_contents($logfile, "$date [$typeStr] $message" . PHP_EOL, FILE_APPEND);
+		file_put_contents($logfile, "$date [$levelStr] $message" . PHP_EOL, FILE_APPEND);
 	}
 }
 

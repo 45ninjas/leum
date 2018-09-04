@@ -22,7 +22,7 @@ class PluginManager
 		}
 		else
 		{
-			Log::Write("Plug-in '$pluginName' does not exist in '$pluginFile'");
+			Log::Write("Plug-in '$pluginName' does not exist in '$pluginFile'", LOG::WARNING);
 		}
 	}
 	public function __construct($pluginsToLoad)

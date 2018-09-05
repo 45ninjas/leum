@@ -3,12 +3,11 @@
 require_once 'core/leum-core.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
-$leum = new Leum();
 $core = new LeumCore();
+$leum = new Leum();
 class Leum
 {
 	private static $_instance = null;
-	public $dispatcher;
 	public $page;
 	public $errorClass;
 
@@ -28,13 +27,9 @@ class Leum
 
 	public function __construct()
 	{
-		// Routes variable from preferences.php
-		global $routes;
-
 		// Set the instance variable for singleton, get a database object and initialize the dispatcher.
 		self::$_instance = $this;
-		$this->GetDatabase();
-		$this->dispatcher = new Dispatcher($routes);
+		$this->dbc = LeumCore::$dbc;
 
 		$this->defaultRole = Role::GetSingle($this->dbc, DEFAULT_ROLE, true);
 
@@ -53,7 +48,7 @@ class Leum
 		$this->UserInit();
 
 		// Show the 404 page if we have no route/page.
-		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/leum/pages/$this->routeResolve"))
+		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/leum/$this->routeResolve"))
 		{
 			self::Show404Page();
 			return;
@@ -65,19 +60,24 @@ class Leum
 	}
 	private function Dispatch()
 	{
-		$dispResult = $this->dispatcher->GetPage($this->request);
-		if($dispResult != false)
+		// Add the routes defined in routes.conf.php.
+		FrontRoutes();
+
+		// Trigger a hook for others to use.
+		LeumCore::InvokeHook("leum.front.routes");
+
+		$route = Dispatcher::ResolveRoute($this->request);
+
+		if($route['state'] == Dispatcher::FOUND)
 		{
-			$this->routeResolve = array_shift($dispResult);
-			$this->arguments = array_merge($dispResult, $this->arguments);
+			$this->routeResolve = $route['target'];
+			$this->arguments = array_merge($route['params'], $this->arguments);
 		}
 		else
 			$this->routeResolve = null;
-
 	}
 	private function Init()
 	{
-
 	}
 	private function UserInit()
 	{
@@ -128,7 +128,8 @@ class Leum
 
 	public function LoadPage($pageFile, $throw = false)
 	{
-		$pageFile = SYS_ROOT . "/leum/pages/$pageFile";
+		$pageFile = SYS_ROOT . "/leum/$pageFile";
+		var_dump($pageFile);
 		$pageClass = basename($pageFile, ".php");
 		// Show a 500 page if the file does not exist.
 		if(!is_file($pageFile))
@@ -176,14 +177,6 @@ class Leum
 		return self::$_instance;
 	}
 
-	// Get a PDO database object (aka: dbc). This is now Deprecated.
-	public function GetDatabase()
-	{
-		if(!isset($this->dbc))
-			$this->dbc = DBConnect();
-		return $this->dbc;
-	}
-
 	public function Head()
 	{
 		if(count($this->headIncludes) > 0)
@@ -229,7 +222,7 @@ class Leum
 		$this->page = null;
 		http_response_code($code);		
 
-		$this->LoadPage("error-pages/$class.php", true);
+		$this->LoadPage("pages/error-pages/$class.php", true);
 	}
 	// Sets the title of the page. Force bypasses prefix and suffix from config.
 	public function SetTitle($title, $force = false)

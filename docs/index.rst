@@ -13,6 +13,7 @@ Welcome to Leum's documentation!
    plugins
    hooks
    log
+   dispatcher
 
 Indices and tables
 ==================

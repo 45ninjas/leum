@@ -60,7 +60,7 @@ class Role
 		$sql = "CREATE table roles
 		(
 			role_id int unsigned auto_increment primary key,
-			slug varchar(256) not null,
+			slug varchar(32) not null unique key,
 			description text
 		)";
 
@@ -205,6 +205,7 @@ class RolePermissionMap
 			map_id int unsigned auto_increment primary key,
 			role_id int unsigned not null,
 			permission_id int unsigned not null,
+			unique key (role_id, permission_id),
 			foreign key (role_id) references roles(role_id) on delete cascade,
 			foreign key (permission_id) references permissions(permission_id) on delete cascade
 		)

@@ -43,7 +43,7 @@ function GetRoles()
 	(
 		"root" => [
 			"Root access, Has all permissions, system level. Only used to edit permissions.",
-			GetPermissions()
+			array_keys(GetPermissions())
 		],
 		"default" => [
 			"Default user privileges for all users including un-authenticated users.",

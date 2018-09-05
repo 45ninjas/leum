@@ -160,7 +160,8 @@ class LeumSetup
 
 				Message::Create("info", "Added $role role");
 				Log::Write("Added $role role", LOG::INFO, "setup.txt");
-			}	
+			}
+			
 		}
 		catch (Exception $e)
 		{

@@ -51,8 +51,10 @@ class LeumCore
 	public static $instance;
 	public $pluginManager;
 	public static $hooks = array();
+	public static $dbc;
 	public function __construct()
 	{
+		self::$dbc = DBConnect();
 		// Load the plugins first.
 		$this->pluginManager = new PluginManager(ACTIVE_PLUGINS);
 		self::$instance = $this;

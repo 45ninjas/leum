@@ -52,7 +52,8 @@ class Shows extends Plugin
 	}
 	public function AssignRoutes()
 	{
-		// Add some routes.
+		Dispatcher::AddRoute('shows', 'plugins/shows/pages/browse_shows.php');
+		Dispatcher::AddRoute('shows/%slug%', 'plugins/shows/pages/browse_shows.php');
 	}
 }
 

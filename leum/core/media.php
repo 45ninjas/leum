@@ -27,13 +27,10 @@ class Media
 	{
 		return SYS_ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
 	}
-	public function GetTags($dbc = null, $slugsOnly = false)
+	public function GetTags($dbc, $slugsOnly = false)
 	{
 		if(isset($this->media_id))
 		{
-			if(!isset($dbc))
-				$dbc = Leum::Instance()->GetDatabase();
-
 			return Mapping::GetMappedTags($dbc, $this->media_id, $slugsOnly);
 		}
 		else
@@ -84,10 +81,12 @@ class Media
 	{
 		$sql = "CREATE table media
 		(
-			media_id int unsigned auto_increment primary key,
-			title varchar(256) not null,
-			source text not null,
-			path text not null,
+			media_id bigint unsigned auto_increment primary key,
+			type varchar(32),
+			parent bigint unsigned,
+			title varchar(256),
+			description text,
+			path text,
 			date timestamp default current_timestamp
 		)";
 

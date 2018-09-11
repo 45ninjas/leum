@@ -10,7 +10,8 @@ function LeumErrorHandler($errorno, $errstr, $errfile, $errline)
 {
 	// Write the error.
 	$message = "[$errorno] $errstr in $errfile [$errline]";
-	echo "Error: $message\n";
+	Message::Create("error","Error: $message\n");
+	Message::ShowMessages("default", "content");
 
 	// Log it if we can.
 	if(class_exists("Log"))
@@ -21,8 +22,8 @@ function LeumExceptionHandler($exception)
 {
 	// Write the exception.
 	$message = $exception->GetMessage() . " " . $exception->getFile() . "(" . $exception->getLine() .")" . PHP_EOL . $exception->getTraceAsString();
-	echo "Uncaught Exception: $message\n";
-
+	Message::Create("error","Uncaught Exception: $message\n");
+	Message::ShowMessages("default", "content");
 	// Log it if we can.
 	if(class_exists("Log"))
 		Log::Write($message, Log::EXCEPTION);

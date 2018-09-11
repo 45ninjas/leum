@@ -7,22 +7,32 @@
 	border-left: 4px solid gray;
 	padding: 0.5em;
 	
-	&.msg-red
+	&.red,
+	&.error,
+	{
+		border-left-color: red;
+		background-color: #6c1010;
+		color: white;
+		font-weight: bold;
+	}
+	&.exception,
 	{
 		border-left-color: red;
 		background-color: #faf6f6;
 	}
-	&.msg-green
+	&.green,
+	&.success
 	{
 		border-left-color: green;
 		background-color: #f6faf6;
 	}
-	&.msg-blue
+	&.blue,
+	&.info
 	{
 		border-left-color: blue;
 		background-color: #f6f6fa;
 	}
-	&.msg-debug
+	&.debug
 	{
 		font-family: monospace;
 		unicode-bidi: embed;

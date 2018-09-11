@@ -505,24 +505,30 @@ ul.tagfield li a.tag-delete {
   border-left: 4px solid gray;
   padding: 0.5em;
 }
-.msg.msg-red {
+.msg.red, .msg.error {
+  border-left-color: red;
+  background-color: #6c1010;
+  color: white;
+  font-weight: bold;
+}
+.msg.exception {
   border-left-color: red;
   background-color: #faf6f6;
 }
-.msg.msg-green {
+.msg.green, .msg.success {
   border-left-color: green;
   background-color: #f6faf6;
 }
-.msg.msg-blue {
+.msg.blue, .msg.info {
   border-left-color: blue;
   background-color: #f6f6fa;
 }
-.msg.msg-debug {
+.msg.debug {
   font-family: monospace;
   unicode-bidi: embed;
   white-space: pre;
 }
-.msg.msg-debug br {
+.msg.debug br {
   display: none;
 }
 

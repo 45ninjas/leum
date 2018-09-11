@@ -129,7 +129,6 @@ class Leum
 	public function LoadPage($pageFile, $throw = false)
 	{
 		$pageFile = SYS_ROOT . "/leum/$pageFile";
-		var_dump($pageFile);
 		$pageClass = basename($pageFile, ".php");
 		// Show a 500 page if the file does not exist.
 		if(!is_file($pageFile))

@@ -22,6 +22,7 @@ function FrontRoutes()
 	Dispatcher::AddRoute('preferences',			'pages/preferences.php');
 	Dispatcher::AddRoute('browse',				'pages/browse.php');
 	Dispatcher::AddRoute('view',				'pages/view.php');
+	Dispatcher::AddRoute('view/%index%',		'pages/view.php');
 	Dispatcher::AddRoute('edit',				'pages/edit/landing.php');
 
 	// Media Editing

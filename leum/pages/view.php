@@ -2,9 +2,8 @@
 /**
 * View individual pages.
 */
-require_once SYS_ROOT . '/core/leum-core.php';
-require_once SYS_ROOT . '/page-parts/media-viewer.php';
-require_once SYS_ROOT . '/page-parts/tag-field.php';
+require_once SYS_ROOT . '/leum/page-parts/media-viewer.php';
+require_once SYS_ROOT . '/leum/page-parts/tag-field.php';
 class view implements IPage
 {
 	private $mediaItem;
@@ -22,7 +21,7 @@ class view implements IPage
 			$this->title = $this->mediaItem->title;
 		}
 		$this->viewer = new MediaViewer($this->mediaItem, true, true, true, true, false);
-		$this->tagField = new TagField($this->mediaItem->GetTags(), true);
+		$this->tagField = new TagField($this->mediaItem->GetTags($dbc), true);
 
 		$leum->SetTitle("View");
 	}

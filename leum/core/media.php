@@ -2,36 +2,54 @@
 class Media
 {
 	public $media_id;
-	public $title;
-	public $source;
-	public $path;
-	public $date;
 	public $type;
+	public $parent;
+	public $title;
+	public $description;
+	public $file;
+	public $date;
+
+	public static function CreateTable($dbc)
+	{
+		// Create the media table.
+		$sql = "CREATE table media
+		(
+			media_id bigint unsigned auto_increment primary key,
+			parent bigint unsigned references media_id,
+			type varchar(32),
+			title varchar(256),
+			description text,
+			file text,
+			date timestamp default current_timestamp
+		);";
+
+		$dbc->exec($sql);
+	}
 
 	public function GetLink()
 	{
-		return ROOT . MEDIA_DIR . "/" . $this->path;
+		return ROOT . MEDIA_DIR . "/" . $this->file;
 	}
 	public function GetThumbnail()
 	{
 		if(is_file($this->GetThumbPath()))
-			return ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
+			return ROOT . THUMB_DIR . "/" . $this->file . ".jpg";
 		else
 			return null;
 	}
 	public function GetPath()
 	{
-		return SYS_ROOT . MEDIA_DIR . "/" . $this->path;
+		return SYS_ROOT . MEDIA_DIR . "/" . $this->file;
 	}
 	public function GetThumbPath()
 	{
-		return SYS_ROOT . THUMB_DIR . "/" . $this->path . ".jpg";
+		return SYS_ROOT . THUMB_DIR . "/" . $this->file . ".jpg";
 	}
 	public function GetTags($dbc, $slugsOnly = false)
 	{
 		if(isset($this->media_id))
 		{
-			return Mapping::GetMappedTags($dbc, $this->media_id, $slugsOnly);
+			return TagMap::GetMappedTags($dbc, $this->media_id, $slugsOnly);
 		}
 		else
 			return null;
@@ -75,22 +93,6 @@ class Media
 	{
 		$dbc = Leum::Instance()->GetDatabase();
 		Media::UpdateSingle($dbc, $this);
-	}
-
-	public static function CreateTable($dbc)
-	{
-		$sql = "CREATE table media
-		(
-			media_id bigint unsigned auto_increment primary key,
-			type varchar(32),
-			parent bigint unsigned,
-			title varchar(256),
-			description text,
-			path text,
-			date timestamp default current_timestamp
-		)";
-
-		$dbc->exec($sql);
 	}
 
 	static function GetSingle($dbc, $media)
@@ -177,25 +179,25 @@ class Media
 		{
 			$media = new Media();
 			$media->title = $mediaData['title'];
-			$media->source = $mediaData['source'];
-			$media->path = $mediaData['path'];
+			$media->description = $mediaData['description'];
+			$media->file = $mediaData['path'];
 		}
 		if(is_numeric($index))
 		{
 			// Updating existing media
-			$sql = "UPDATE media SET title = ?, source = ?, path = ? WHERE media_id = ?";
+			$sql = "UPDATE media SET title = ?, description = ?, file = ? WHERE media_id = ?";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$media->title, $media->source, $media->path, $index]);
+			$statement->execute([$media->title, $media->description, $media->file, $index]);
 			return $index;
 		}
 		else
 		{
 			// Inserting a new media item into the database
-			$sql = "INSERT INTO media (title, source, path) VALUES (?, ?, ?)";
+			$sql = "INSERT INTO media (title, description, file) VALUES (?, ?, ?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$media->title, $media->source, $media->path]);
+			$statement->execute([$media->title, $media->description, $media->file]);
 			return $dbc->lastInsertId();
 		}
 	} 
@@ -208,8 +210,8 @@ class Media
 
 		// Create the sql string.
 		$sql = "SELECT sql_calc_found_rows media.* from media
-		left join map on media.media_id = map.media_id
-		left join tags on map.tag_id = tags.tag_id";
+		left join tag_map on media.media_id = tag_map.media
+		left join tags on tag_map.tag = tags.tag_id";
 
 		// Add the required tags to the query.
 		if(isset($tags) && count($tags) > 0)
@@ -257,9 +259,9 @@ class Media
 
 	public static function GetFromPath($dbc, $path)
 	{
-		$sql = "SELECT media_id from media where path = ?";
+		$sql = "SELECT media_id from media where file = ?";
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$path]);
+		$statement->execute([$file]);
 
 		return $statement->fetchAll(PDO::FETCH_COLUMN);
 	}

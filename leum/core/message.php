@@ -8,7 +8,7 @@ class Message
 		$msg = new Message($class, $text);
 		$msg->AddMessage($location);
 	}
-	public static function ShowMessages($location = "default", $class = "")
+	public static function ShowMessages($location = "default", $class = "", $clear = true)
 	{
 		if(isset(self::$messages[$location]))
 		{
@@ -18,6 +18,10 @@ class Message
 				echo "<div class=\"msg $message->class\">$message->text</div>";
 			}
 			echo "</div>";
+			if($clear)
+			{
+				unset(self::$messages[$location]);
+			}
 		}
 	}
 	private function AddMessage($location = "default")

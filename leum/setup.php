@@ -86,8 +86,6 @@ class LeumSetup
 
 		require_once SYS_ROOT . "/leum/functions.php";
 		require_once SYS_ROOT . "/leum/core/leum-core.php";
-		require_once SYS_ROOT . "/leum/core/leum-core.php";
-		// require_once SYS_ROOT . "/leum/co/user-permission/defaults.php";
 
 		Message::Create("info", "starting setup process");
 		Log::Write(" ==== starting setup process ==== ", LOG::INFO, "setup.txt");
@@ -128,7 +126,7 @@ class LeumSetup
 		// Core functionality tables.
 		self::CreateTable("media",		'Media',		'CreateTable');
 		self::CreateTable("tags",		'Tag',			'CreateTable');
-		self::CreateTable("map",		'Map',			'CreateTable');
+		self::CreateTable("tag_map",	'TagMap',		'CreateTable');
 
 		// Users and Roles.
 		self::CreateTable("users", 'User', 'CreateTable');
@@ -165,7 +163,14 @@ class LeumSetup
 		}
 		catch (Exception $e)
 		{
-			throw $e;
+			if($e->GetCode() == "23000")
+			{
+				Message::Create("warning", "Role or Permission already exists.");
+				Log::Write("A role or permission already exists.", LOG::WARNING, "setup.txt");
+			}
+			else
+				throw $e;
+				
 		}
 	}
 

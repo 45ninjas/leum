@@ -57,7 +57,7 @@ class MediaViewer
 		{
 			$title = "File Not Found.";
 			$desc = "The file could not be found on the system";
-			DoMsg($title, $desc);
+			$this->DoMsg($title, $desc);
 			return;
 		}
 		switch ($this->media->type)

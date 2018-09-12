@@ -9,7 +9,7 @@ class Tag
 	{
 		$sql = "CREATE table tags
 		(
-			tag_id int unsigned auto_increment primary key,
+			tag_id bigint unsigned auto_increment primary key,
 			slug varchar(32) not null unique key,
 			count int not null default '0'
 		)";

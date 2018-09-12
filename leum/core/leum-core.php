@@ -33,7 +33,7 @@ set_error_handler("LeumErrorHandler");
 set_exception_handler("LeumExceptionHandler");
 
 require_once "media.php";
-require_once "mapping.php";
+require_once "tagMap.php";
 require_once "tag.php";
 require_once "query.php";
 

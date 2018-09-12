@@ -17,7 +17,7 @@ define('LOG_LEVEL', Log::INFO);
 define('API_URL', ROOT . "/api");
 
 // Default page size.
-define('PAGE_SIZE', 100);
+define('PAGE_SIZE', 200);
 
 // Size of thumbnails (pixels.)
 define('THUMB_SIZE', 196);
@@ -27,7 +27,7 @@ define('AUTH_PASS_COST', 10);
 
 
 
-define('ACTIVE_PLUGINS', ['git_status', 'shows']);
+define('ACTIVE_PLUGINS', ['git_status'/*, 'shows'*/]);
 
 
 

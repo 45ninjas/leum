@@ -25,16 +25,16 @@ class edit_media implements IPage
 			$mediaId = $arguments[0];
 		}
 
-		if(isset($_POST['modify']) && isset($_POST['title']) && isset($_POST['path']) && isset($_POST['source']) && isset($_POST['tags']))
+		if(isset($_POST['modify']) && isset($_POST['title']) && isset($_POST['file']) && isset($_POST['description']) && isset($_POST['tags']))
 		{
 			$this->mediaItem = new Media();
 			$this->mediaItem->title = $_POST['title'];
-			$this->mediaItem->path = $_POST['path'];
-			$this->mediaItem->source = $_POST['source'];
+			$this->mediaItem->file = $_POST['file'];
+			$this->mediaItem->description = $_POST['description'];
 
 			$tags = ParseSlugString($_POST['tags']);
 			$index = Media::InsertSingle($dbc, $this->mediaItem,$mediaId);
-			Mapping::SetMappedTags($dbc, $index, $tags, true);
+			TagMap::SetMappedTags($dbc, $index, $tags, true);
 
 			if($_POST['modify'] === "generate-thumbnail")
 			{
@@ -81,11 +81,11 @@ class edit_media implements IPage
 							<label for="title">Title</label>
 							<input class="pure-u-1" tabindex="1" type="text" name="title" id="title" placeholder="Title" <?php $this->EchoValue($this->mediaItem->title); ?>>
 
-							<label for="path">Path</label>
-							<input class="pure-u-1" tabindex="2" type="text" name="path" id="path" placeholder="Path" <?php $this->EchoValue($this->mediaItem->path); ?>>
+							<label for="file">File</label>
+							<input class="pure-u-1" tabindex="2" type="text" name="file" id="file" placeholder="Path" <?php $this->EchoValue($this->mediaItem->file); ?>>
 
-							<label for="source">Source</label>
-							<textarea class="pure-u-1 leum-textarea" tabindex="3" name="source" id="source" placeholder="Source of Media item"><?php if($this->modify) echo $this->mediaItem->source; ?></textarea>
+							<label for="description">Description</label>
+							<textarea class="pure-u-1 leum-textarea" tabindex="3" name="description" id="description" placeholder="Description"><?php if($this->modify) echo $this->mediaItem->description; ?></textarea>
 
 							<label><?php echo "media_id: ". $this->mediaItem->media_id; ?></label>
 						</div>

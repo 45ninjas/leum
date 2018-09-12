@@ -57,10 +57,10 @@ class list_tags implements IPage
 						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/tag/$item->tag_id"; ?>">
 							<i class="fa fa-edit"></i>
 						</a>
-						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/tag/$item->tag_id"; ?>">
+						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->slug; ?>" href="<?php echo ROOT."/api/v1/tag/$item->tag_id"; ?>">
 							<i class="fa fa-trash"></i>
 						</a>
-						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/browse/?q=$item->slug"; ?>">
+						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/browse/?t=$item->slug"; ?>">
 							<i class="fa fa-eye"></i>
 						</a>
 					</td>

@@ -55,7 +55,7 @@ class list_media implements IPage
 				<tr>
 					<td class= "id" ><?php echo $item->media_id; ?></td>
 					<td class="title" title="<?=$item->title?>"><?php echo $item->title; ?></td>
-					<td class="path" title="<?=$item->path?>"><?php echo $item->path; ?></td>
+					<td class="path" title="<?=$item->file?>"><?php echo $item->file; ?></td>
 					<td class="date" ><?php echo $item->GetDate("Y-m-d"); ?></td>
 					<td>
 						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/media/$item->media_id"; ?>">

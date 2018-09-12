@@ -10,7 +10,7 @@ require_once SYS_ROOT . "/leum/page-parts/media-viewer.php";
 class browse implements IPage
 {
 	public $pageNum = 0;
-	public $pageSize = 50;
+	public $pageSize = PAGE_SIZE;
 
 	private $pageButtons;
 	private $itemsToShow;

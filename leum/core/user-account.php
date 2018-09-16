@@ -42,7 +42,7 @@ class UserAccount
 		throw new Exception('not implemented');
 	}
 
-	public static function CreateUser($dbc, $username, $password, $email, &$errors)
+	public static function CreateUser($dbc, $username, $password, $email, &$errors, &$userId)
 	{
 		$errors = array();
 
@@ -80,20 +80,18 @@ class UserAccount
 		// Insert them into the database.
 		try
 		{
+			// Insert the user into the database.
+			$statement = $dbc->prepare("INSERT INTO users (email, username, hash) VALUES (?, ?, ?)");
+			$statement->execute([$email, $username, $hash]);
+			$userId = $dbc->lastInsertId();
+
 			// Get the new_user_role id.
 			$statement = $dbc->prepare("SELECT role_id FROM roles WHERE slug = ?");
 			$statement->execute([NEW_USER_ROLE]);
 			$roleId = $statement->fetchColumn();
 
-			// Actually insert the user into the database.
-			$statement = $dbc->prepare("INSERT INTO users (email, username, hash) VALUES (?, ?, ?)");
-			$statement->execute([$email, $username, $hash]);
-			$userId = $dbc->lastInsertId();
-
 			// Assign the new user role.
-			var_dump($roleId);
 			UserRoleMap::Map($dbc, $userId, $roleId);
-
 			return true;
 		}
 		catch(PDOException $e)

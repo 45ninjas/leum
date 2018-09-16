@@ -76,9 +76,9 @@ class User
 		(
 			user_id int unsigned auto_increment PRIMARY KEY,
 			username varchar(255) NOT NULL UNIQUE,
-			hash varchar(255) NOT NULL,
-			last_login datetime NOT NULL,
-			email text UNIQUE
+			hash varchar(255),
+			last_login datetime,
+			email text
 		)";
 
 		$dbc->exec($sql);

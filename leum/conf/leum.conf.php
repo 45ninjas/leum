@@ -1,6 +1,6 @@
 <?php 
 // The web root of the site. (no trailing slash).
-define('ROOT', '/leum');
+define('ROOT', '');
 // Title of this application.
 define('APP_TITLE', 'Leum');
 define('TITLE_FORMAT', "%title - %appTitle");
@@ -17,7 +17,7 @@ define('LOG_LEVEL', Log::INFO);
 define('API_URL', ROOT . "/api");
 
 // Default page size.
-define('PAGE_SIZE', 200);
+define('PAGE_SIZE', 250);
 
 // Size of thumbnails (pixels.)
 define('THUMB_SIZE', 196);
@@ -27,7 +27,13 @@ define('AUTH_PASS_COST', 10);
 
 
 
-define('ACTIVE_PLUGINS', ['git_status'/*, 'shows'*/]);
+define('ACTIVE_PLUGINS',[
+	// Displays the most recent commit at the bottom of every page.
+	'git_status',
+	
+	// Support for shows and episodes. Useful for anime series and tv shows.
+	'shows',
+]);
 
 
 

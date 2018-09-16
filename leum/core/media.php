@@ -211,7 +211,7 @@ class Media
 		// Create the sql string.
 		$sql = "SELECT sql_calc_found_rows media.* from media
 		left join tag_map on media.id = tag_map.media
-		left join tags on tag_map.tag = tags.tag_id";
+		left join tags on tag_map.tag = tags.id";
 
 		// Add the required tags to the query.
 		if(isset($tags) && count($tags) > 0)

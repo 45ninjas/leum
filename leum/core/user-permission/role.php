@@ -371,7 +371,11 @@ class UserRoleMap
 	//UserRoleMap::Map($dbc, $user, $role);
 	public static function Map($dbc, $user, $role)
 	{
-		$role = Role::GetId($role);
+		if(is_string($role))
+			$role = Role::GetId($role, $dbc);
+		else
+			$role = Role::GetId($role);
+
 		$user = User::GetId($user);
 
 		$sql = "INSERT into user_role_map (role_id, user_id) values (?, ?)";

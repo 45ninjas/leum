@@ -24,7 +24,7 @@ class no_permission implements IPage
 
 	<div class="content">
 		<?php if(isset($this->message)): ?><h2 class="content-subhead"><?=$this->message;?></h2><?php endif; ?>
-		<p>To access this page your account requires: <?=$this->permission?>.</p>
+		<p>To access this page your account requires the following permissions: <?=$this->permission?>.</p>
 		<img class="pure-img middle" src="<?php asset("/resources/graphics/yotsuba-block.jpg") ?>">
 	</div>
 </div>

@@ -5,6 +5,7 @@ require_once "log.php";
 
 // Get config
 require_once SYS_ROOT . '/leum/conf/leum.conf.php';
+require_once "message.php";
 
 function LeumErrorHandler($errorno, $errstr, $errfile, $errline)
 {
@@ -41,7 +42,6 @@ require_once "user.php";
 require_once "user-account.php";
 require_once "user-permission/role.php";
 require_once "user-permission/permission.php";
-require_once "message.php";
 
 require_once "plugins.php";
 

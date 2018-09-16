@@ -14,12 +14,12 @@ class Episode
 	{
 		$sql = "CREATE table shows_episodes
 		(
-			`show` int not null,
+			`show` int unsigned,
 			slug varchar(32) not null unique key,
 			season int not null,
 			episode int not null,
 			title varchar(128) not null,
-			media int unsigned not null,
+			media bigint unsigned not null,
 			unique episode_id (`show`, season, episode),
 			foreign key (media) references media(id),
 			foreign key (`show`) references shows_shows(id)

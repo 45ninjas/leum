@@ -66,8 +66,8 @@ class Media
 			return false;
 
 		$response["title"] = $media->title;
-		$response["edit link"] = ROOT . "/edit/media/$media->media_id";
-		$response["id"] = $media->media_id;
+		$response["edit link"] = ROOT . "/edit/media/$media->id";
+		$response["id"] = $media->id;
 		$response["tags"] = $media->GetTags($this->dbc, true);
 
 		require_once SYS_ROOT . "/leum/page-parts/media-viewer.php";
@@ -92,7 +92,7 @@ class Media
 
 		if($this->IsArgNumber())
 		{
-			$mediaItem->media_id = $this->api->args[0];
+			$mediaItem->id = $this->api->args[0];
 			if(isset($data['set-tags']))
 			{
 				$newSlugs = explode(',', $data['set-tags']);

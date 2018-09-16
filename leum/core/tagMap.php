@@ -12,15 +12,15 @@ class TagMap
 			tag bigint unsigned not null,
 			media bigint unsigned not null,
 			unique map (tag, media),
-			foreign key (media) references media(media_id) on delete cascade,
-			foreign key (tag) references tags(tag_id) on delete cascade
+			foreign key (media) references media(id) on delete cascade,
+			foreign key (tag) references tags(id) on delete cascade
 		);
 
 		drop procedure if exists tag_count;
 
 		create procedure tag_count (in tagId bigint)
-			select count(tag) into @ammount from tag_map where tag = tagIdl
-			update tags set count = @ammount where tag_id = tagId;
+			select count(tag) into @ammount from tag_map where tag = tagId
+			update tags set count = @ammount where id = tagId;
 		end;
 
 		drop trigger if exists tag_count_update;
@@ -37,24 +37,24 @@ class TagMap
 	public static function Map($dbc, $media, $tag)
 	{
 		// get the index for both media and tag.
-		$media_id = self::GetMediaId($media);
+		$id = self::GetMediaId($media);
 		$tag_id = self::GetTagId($tag);
 
 		$sql = "INSERT into tag_map (media, tag) values (?, ?)";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$media_id, $tag_id]);
+		$statement->execute([$id, $tag_id]);
 	}
 	public static function Unmap($dbc, $media, $tag)
 	{
 		// get the index for both media and tag.
-		$media_id = self::GetMediaId($media);
+		$id = self::GetMediaId($media);
 		$tag_id = self::GetTagId($tag);
 
 		$sql = "DELETE from tag_map where media = ? AND tag = ?";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$media_id, $tag_id]);
+		$statement->execute([$id, $tag_id]);
 	}
 	public static function UnmapMultiple($dbc, $media, $tags)
 	{
@@ -64,45 +64,45 @@ class TagMap
 		if($tags == null || count($tags) == 0)
 			return 0;
 
-		$media_id = self::GetMediaId($media);
+		$id = self::GetMediaId($media);
 
 		$indexPlaceholder = self::PDOPlaceHolder($tags);
 		$sql = "DELETE from tag_map where media = ? and tag in ('$indexPlaceholder')";
 
 		$statement = $dbc->prepare($sql);
 		
-		array_unshift($tags, $media_id);
+		array_unshift($tags, $id);
 		var_dump($tags);
 		$statement->execute($tags);
 		return $statement->rowCount();
 	}
 	public static function UnmapAll($dbc, $media)
 	{
-		$media_id = self::GetMediaId($media);
+		$id = self::GetMediaId($media);
 
 		$sql = "DELETE from tag_map where media = ?";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$media_id]);
+		$statement->execute([$id]);
 
 		return $statement->rowCount();
 	}
 	// TODO: Move this to media?
 	public static function GetMappedTags($dbc, $media, $slugsOnly = false)
 	{
-		$media_id = self::GetMediaId($media);
+		$id = self::GetMediaId($media);
 
 		if($slugsOnly)
 			$sql = "SELECT tags.slug from tag_map";
 		else
 			$sql = "SELECT tag_map.tag, tags.slug, tags.count from tag_map";
 
-		$sql .= " inner join media ON tag_map.media = media.media_id";
+		$sql .= " inner join media ON tag_map.media = media.id";
 		$sql .= " inner join tags on tag_map.tag = tags.tag_id";
-		$sql .= " where media.media_id = ?";
+		$sql .= " where media.id = ?";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$media_id]);
+		$statement->execute([$id]);
 
 		if($slugsOnly)
 			return $statement->fetchAll(PDO::FETCH_COLUMN);
@@ -111,12 +111,12 @@ class TagMap
 	}
 	public static function SetMappedTags($dbc, $media, $newSlugs = null, $allowTagCreation = false)
 	{
-		$media_id = self::GetMediaId($media);
+		$id = self::GetMediaId($media);
 
 		// Looks like there are no tags so let's delete all maps for this item.
 		if(is_null($newSlugs) || count($newSlugs) == 0)
 		{
-			self::UnmapAll($dbc, $media_id);
+			self::UnmapAll($dbc, $id);
 			return "deleted all tags";
 		}
 
@@ -129,10 +129,10 @@ class TagMap
 		$newTagIds = $statement->fetchAll(PDO::FETCH_COLUMN);
 
 		// Get the tags that are already mapped to this media item.
-		$sql = "SELECT tags.tag_id from tag_map inner join tags on tag_map.tag = tags.tag_id where media_id = ?";
+		$sql = "SELECT tags.tag_id from tag_map inner join tags on tag_map.tag = tags.tag_id where id = ?";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$media_id]);
+		$statement->execute([$id]);
 		$tagIdsInDb = $statement->fetchAll(PDO::FETCH_COLUMN);
 
 		// Add any new tags.
@@ -178,10 +178,10 @@ class TagMap
 			try
 			{
 				while ($tag = array_pop($removeTags))
-					self::Unmap($dbc, $media_id, $tag);
+					self::Unmap($dbc, $id, $tag);
 
 				while ($tag = array_pop($addTags))
-					self::Map($dbc, $media_id, $tag);
+					self::Map($dbc, $id, $tag);
 
 				$dbc->commit();
 			}
@@ -201,7 +201,7 @@ class TagMap
 	{
 		// Get the index for the media item.
 		if($media instanceof Media)
-			return $media->media_id;
+			return $media->id;
 		elseif(is_numeric($media))
 			return $media;
 		else

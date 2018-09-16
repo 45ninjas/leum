@@ -21,7 +21,7 @@ class Episode
 			title varchar(128) not null,
 			media int unsigned not null,
 			unique episode_id (`show`, season, episode),
-			foreign key (media) references media(media_id),
+			foreign key (media) references media(id),
 			foreign key (`show`) references shows_shows(id)
 		);";
 		$dbc->exec($sql);

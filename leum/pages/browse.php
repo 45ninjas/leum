@@ -98,12 +98,12 @@ function DoItem($mediaItem)
 		$thumbnailUrl = GetAsset("/resources/graphics/no-thumb.png");
 
 	if($this->useModal)
-		$href = "view$mediaItem->media_id";
+		$href = "view$mediaItem->id";
 	else
-		$href = ROOT . "/view/$mediaItem->media_id";
+		$href = ROOT . "/view/$mediaItem->id";
 
 	?>
-	<a id=<?=$href;?> data-media-index="<?=$mediaItem->media_id;?>" class="item-tile" href="#<?=$href;?>">
+	<a id=<?=$href;?> data-media-index="<?=$mediaItem->id;?>" class="item-tile" href="#<?=$href;?>">
 		<img src="<?=$thumbnailUrl;?>">
 	</a>
 	<?php

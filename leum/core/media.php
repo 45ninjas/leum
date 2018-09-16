@@ -1,7 +1,7 @@
 <?php
 class Media
 {
-	public $media_id;
+	public $id;
 	public $type;
 	public $parent;
 	public $title;
@@ -14,8 +14,8 @@ class Media
 		// Create the media table.
 		$sql = "CREATE table media
 		(
-			media_id bigint unsigned auto_increment primary key,
-			parent bigint unsigned references media_id,
+			id bigint unsigned auto_increment primary key,
+			parent bigint unsigned references id,
 			type varchar(32),
 			title varchar(256),
 			description text,
@@ -47,9 +47,9 @@ class Media
 	}
 	public function GetTags($dbc, $slugsOnly = false)
 	{
-		if(isset($this->media_id))
+		if(isset($this->id))
 		{
-			return TagMap::GetMappedTags($dbc, $this->media_id, $slugsOnly);
+			return TagMap::GetMappedTags($dbc, $this->id, $slugsOnly);
 		}
 		else
 			return null;
@@ -100,7 +100,7 @@ class Media
 		$media = self::GetID($media);
 
 		// Make some SQL magic.
-		$sql = "SELECT * from media where media_id = ?";
+		$sql = "SELECT * from media where id = ?";
 		
 		// Execute the query
 		$statement = $dbc->prepare($sql);
@@ -109,17 +109,17 @@ class Media
 		// Convert the row to a Media class and return it.
 		return $statement->fetchObject(__CLASS__);
 	}
-	static function GetMultiple($dbc, $media_ids)
+	static function GetMultiple($dbc, $ids)
 	{
-		if(!is_array($media_ids))
+		if(!is_array($ids))
 			die("Indexes is not an array.");
 		// Get multiple items.
-		$indexPlaceholder = join(',', array_fill(0, count($media_ids), '?'));
-		$sql = "SELECT * from media where media_id in ('$indexPlaceholder')";
+		$indexPlaceholder = join(',', array_fill(0, count($ids), '?'));
+		$sql = "SELECT * from media where id in ('$indexPlaceholder')";
 		$sql .= " order by date desc";
 
 		$statement = $dbc->prepare($sql);
-		$statement->execute([$media_ids]);
+		$statement->execute([$ids]);
 
 		// Convert those multiple items into instances.
 		$items = array();
@@ -146,7 +146,7 @@ class Media
 	{
 		$media = self::GetID($media);
 
-		$sql = "DELETE from media where media_id = ?";
+		$sql = "DELETE from media where id = ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$media]);
@@ -160,7 +160,7 @@ class Media
 			die("Indexes is not an array.");
 
 		$indexPlaceholder = join(',', array_fill(0, count($indexes), '?'));
-		$sql = "DELETE from media where media_id in ('$indexPlaceholder')";
+		$sql = "DELETE from media where id in ('$indexPlaceholder')";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute($indexes);
@@ -172,8 +172,8 @@ class Media
 		if($mediaData instanceof Media)
 		{
 			$media = $mediaData;
-			if(isset($mediaData->media_id))
-				$index = $mediaData->media_id;
+			if(isset($mediaData->id))
+				$index = $mediaData->id;
 		}
 		else
 		{
@@ -185,7 +185,7 @@ class Media
 		if(is_numeric($index))
 		{
 			// Updating existing media
-			$sql = "UPDATE media SET title = ?, description = ?, file = ? WHERE media_id = ?";
+			$sql = "UPDATE media SET title = ?, description = ?, file = ? WHERE id = ?";
 
 			$statement = $dbc->prepare($sql);
 			$statement->execute([$media->title, $media->description, $media->file, $index]);
@@ -210,7 +210,7 @@ class Media
 
 		// Create the sql string.
 		$sql = "SELECT sql_calc_found_rows media.* from media
-		left join tag_map on media.media_id = tag_map.media
+		left join tag_map on media.id = tag_map.media
 		left join tags on tag_map.tag = tags.tag_id";
 
 		// Add the required tags to the query.
@@ -238,7 +238,7 @@ class Media
 		}
 
 		// Group and limit the query.
-		$sql .= "\nGROUP BY media_id order by date desc limit ? offset ?";
+		$sql .= "\nGROUP BY id order by date desc limit ? offset ?";
 		array_push($parameters, $pageSize);
 		array_push($parameters, $offset);
 
@@ -250,7 +250,7 @@ class Media
 	private static function GetID($media)
 	{
 		if($media instanceof Media)
-			return $media->media_id;
+			return $media->id;
 		else if(is_numeric($media))
 			return $media;
 
@@ -259,7 +259,7 @@ class Media
 
 	public static function GetFromPath($dbc, $path)
 	{
-		$sql = "SELECT media_id from media where file = ?";
+		$sql = "SELECT id from media where file = ?";
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$file]);
 

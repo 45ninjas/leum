@@ -87,7 +87,7 @@ class edit_media implements IPage
 							<label for="description">Description</label>
 							<textarea class="pure-u-1 leum-textarea" tabindex="3" name="description" id="description" placeholder="Description"><?php if($this->modify) echo $this->mediaItem->description; ?></textarea>
 
-							<label><?php echo "media_id: ". $this->mediaItem->media_id; ?></label>
+							<label><?php echo "id: ". $this->mediaItem->id; ?></label>
 						</div>
 
 						<div class="pure-u-1 pure-u-sm-1-2">
@@ -109,7 +109,7 @@ class edit_media implements IPage
 
 				<button form="media-edit" tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 				<?php if($this->modify): ?>
-				<a class="pure-button button-delete" tabindex="5" data-title="<?php echo $this->mediaItem->title; ?>" href="<?php echo ROOT."/api/v2/media/" .$this->mediaItem->media_id; ?>">
+				<a class="pure-button button-delete" tabindex="5" data-title="<?php echo $this->mediaItem->title; ?>" href="<?php echo ROOT."/api/v2/media/" .$this->mediaItem->id; ?>">
 					<i class="fa fa-trash"></i>
 					Delete
 				</a>

@@ -53,18 +53,18 @@ class list_media implements IPage
 				{
 				?>
 				<tr>
-					<td class= "id" ><?php echo $item->media_id; ?></td>
+					<td class= "id" ><?php echo $item->id; ?></td>
 					<td class="title" title="<?=$item->title?>"><?php echo $item->title; ?></td>
 					<td class="path" title="<?=$item->file?>"><?php echo $item->file; ?></td>
 					<td class="date" ><?php echo $item->GetDate("Y-m-d"); ?></td>
 					<td>
-						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/media/$item->media_id"; ?>">
+						<a class="pure-button button-compact" href="<?php echo ROOT."/edit/media/$item->id"; ?>">
 							<i class="fa fa-edit"></i>
 						</a>
-						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/media/$item->media_id"; ?>">
+						<a class="pure-button button-delete button-compact" data-title="<?php echo $item->title; ?>" href="<?php echo ROOT."/api/v1/media/$item->id"; ?>">
 							<i class="fa fa-trash"></i>
 						</a>
-						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/view/$item->media_id"; ?>">
+						<a class="pure-button pure-button-primary button-compact" href="<?php echo ROOT."/view/$item->id"; ?>">
 							<i class="fa fa-eye"></i>
 						</a>
 					</td>

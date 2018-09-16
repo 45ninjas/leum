@@ -27,7 +27,7 @@ class Thumbnails
 			catch( Exception $e)
 			{
 				$results["failed"] ++;
-				echo "Failed to process $item->media_id. ".$e->getMessage()."\n";
+				echo "Failed to process $item->id. ".$e->getMessage()."\n";
 			}
 		}
 		return $results;

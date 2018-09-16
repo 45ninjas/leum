@@ -19,10 +19,10 @@ class Browse
 			// Change the sql to only get items with the tags.
 			$tagsPlaceholder = str_repeat('?, ', count($tags) - 1) . "?";
 			$sql = "SELECT sql_calc_found_rows media.* FROM map
-				INNER JOIN media ON map.media_id = media.media_id
+				INNER JOIN media ON map.id = media.id
 				INNER JOIN tags ON map.tag_id = tags.tag_id
 				WHERE tags.slug IN ( $tagsPlaceholder )
-				GROUP BY media_id";
+				GROUP BY id";
 
 			$arguments = $tags;
 		}

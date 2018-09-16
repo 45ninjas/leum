@@ -5,14 +5,14 @@ class MediaView extends View
 {
 	function Singular ($item, $classString = "")
 	{
-		echo "<div class=\"tag $classString\">$item->media_id, $item->title, $item->source</div>";
+		echo "<div class=\"tag $classString\">$item->id, $item->title, $item->source</div>";
 	}
 
 	function DoTable ($items, $tableClass="", $rowClass="", $emptyStr = "-")
 	{
 		$columns = array
 		(
-			"media_id"	=> "ID",
+			"id"	=> "ID",
 			"title"		=> "Title",
 			"source"	=> "Source",
 			"path"		=> "Path",

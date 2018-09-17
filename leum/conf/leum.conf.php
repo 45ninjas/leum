@@ -36,6 +36,9 @@ define('ACTIVE_PLUGINS',[
 
 	// Wallpapers for login and home pages.
 	'wallpapers',
+
+	// Importer
+	'importer',
 ]);
 
 

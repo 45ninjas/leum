@@ -132,7 +132,7 @@ class Tag
 			$slug = $tagData;
 		
 		// Clean the slug.
-		$slug = self::CreateSlug($slug);
+		$slug = LeumCore::CreateSlug($slug);
 
 		if(isset($index) && is_numeric($index))
 		{

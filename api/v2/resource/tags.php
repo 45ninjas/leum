@@ -1,5 +1,6 @@
 <?php namespace API;
 use Tag as CoreTag;
+use LeumCore as LeumCore;
 class Tags
 {
 	private $dbc;
@@ -22,7 +23,7 @@ class Tags
 				if(isset($_GET['limit']) && is_numeric($_GET['limit']))
 					$limit = $_GET['limit'];
 
-				$slug = CoreTag::CreateSlug($_GET['q']);
+				$slug = LeumCore::CreateSlug($_GET['q']);
 				return CoreTag::FindLike($this->dbc, $slug, false, $limit);
 			}
 			else

@@ -1,6 +1,6 @@
 <?php namespace API;
 use Media as CoreMedia;
-use Mapping as CoreMapping;
+use TagMap as CoreMapping;
 class Media
 {
 	private $dbc;

@@ -68,6 +68,8 @@ class Thumbnails
 
 			unlink($tmp);
 		}
+		
+		return $targetFile;
 	}
 	public static function SnapshotVideo($input, $output, $percentage = 0.4)
 	{

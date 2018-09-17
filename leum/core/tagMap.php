@@ -122,14 +122,14 @@ class TagMap
 
 		// Get the tag_id's of the new slugs.
 		$indexPlaceholder = self::PDOPlaceHolder($newSlugs);
-		$sql = "SELECT tags.tag_id FROM tags WHERE tags.slug IN ( $indexPlaceholder )";
+		$sql = "SELECT tags.id FROM tags WHERE tags.slug IN ( $indexPlaceholder )";
 		$statement = $dbc->prepare($sql);
 		$statement->execute($newSlugs);
 
 		$newTagIds = $statement->fetchAll(PDO::FETCH_COLUMN);
 
 		// Get the tags that are already mapped to this media item.
-		$sql = "SELECT tags.tag_id from tag_map inner join tags on tag_map.tag = tags.tag_id where id = ?";
+		$sql = "SELECT tags.id from tag_map inner join tags on tag_map.tag = tags.id where id = ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$id]);

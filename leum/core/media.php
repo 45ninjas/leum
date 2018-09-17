@@ -180,7 +180,7 @@ class Media
 			$media = new Media();
 			$media->title = $mediaData['title'];
 			$media->description = $mediaData['description'];
-			$media->file = $mediaData['path'];
+			$media->file = $mediaData['file'];
 		}
 		if(is_numeric($index))
 		{

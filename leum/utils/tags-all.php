@@ -61,7 +61,7 @@ function GetAllInDir($dbc, $dir, $page, $pageSize)
 {
 	$offset = $pageSize * $page;
 	// Get ALL items
-	$sql = "SELECT sql_calc_found_rows * from media where path LIKE CONCAT(?, '%') order by date desc limit ? offset ?";
+	$sql = "SELECT sql_calc_found_rows * from media where file LIKE CONCAT(?, '%') order by date desc limit ? offset ?";
 
 	$statement = $dbc->prepare($sql);
 	$statement->execute([$dir,$pageSize, $offset]);
@@ -75,13 +75,13 @@ function DoSingle($dbc, $media)
 
 	$tags = $media->GetTags($dbc, true);
 
-	$dirname = str_replace('\\', '/', dirname($media->path));
+	$dirname = str_replace('\\', '/', dirname($media->file));
 
 	$fileTags = explode('/', $dirname);
 
 	foreach ($fileTags as $value)
 	{
-		$slug = Tag::CreateSlug($value);
+		$slug = LeumCore::CreateSlug($value);
 
 		if(empty($slug))
 			continue;
@@ -97,7 +97,7 @@ function DoSingle($dbc, $media)
 		}
 	}
 
-	Mapping::SetMappedTags($dbc, $media, $tags);
+	TagMap::SetMappedTags($dbc, $media, $tags);
 }
 function AddTag($dbc, $slug)
 {

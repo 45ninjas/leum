@@ -29,6 +29,7 @@ class Dispatcher
 			$route,
 			$count
 		);
+
 		self::$routes[] = [$route, $count, $target];
 	}
 	private static function PrepareResolve(&$groups)

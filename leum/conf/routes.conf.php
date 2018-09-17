@@ -48,8 +48,5 @@ function FrontRoutes()
 	Dispatcher::AddRoute('register',			REGISTER_PAGE);
 	Dispatcher::AddRoute(LOGIN_URL,				LOGIN_PAGE);
 	Dispatcher::AddRoute('profile',				'pages/user/profile.php');
-
-	// Import utility
-	Dispatcher::AddRoute('edit/import',			'pages/edit/utilities/media_importer.php');
 }
 ?>

@@ -22,8 +22,8 @@ function ImportDirectory($mediaDirectory, $dbc)
 		{
 			$data = array();
 			$data['title'] = $info->getFilename();
-			$data['source'] = "Leum automatic media importer.";
-			$data['path'] = $localPath;
+			$data['description'] = "Leum automatic media importer.";
+			$data['file'] = $localPath;
 			$media = Media::InsertSingle($dbc, $data);
 
 			if($media == false)

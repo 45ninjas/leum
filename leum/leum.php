@@ -25,6 +25,8 @@ class Leum
 
 	public $messages;
 
+	public $pageClass;
+
 	public function __construct()
 	{
 		// Set the instance variable for singleton, get a database object and initialize the dispatcher.
@@ -155,9 +157,13 @@ class Leum
 		// Initialize the page and set the arguments.
 		$newPage = new $pageClass($this, $this->dbc, $this->user, $this->arguments);
 
-		// Just in-case a new page was created during the creating of this page. Don't overwrite the new page. As it's very likely an error.
-		if($this->page == null)
-			$this->page = $newPage;
+		// If the page is not null leave. Looks like another page was loaded first.
+		// Most likely an error.
+		if($this->page != null)
+			return;
+
+		$this->page = $newPage;
+		$this->pageClass = $pageClass;
 	}
 
 	// Similar idea to how enqueue works in wordpress. 

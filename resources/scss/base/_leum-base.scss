@@ -197,13 +197,6 @@
 	max-width: 1px;
 	cursor: alias;
 }
-/* == Login Box ==*/
-.login-box
-{
-	width: 22em;
-	display: block;
-	margin: auto;
-}
 
 /* == Titles ==*/
 .title
@@ -225,4 +218,9 @@
 .foot-note
 {
 	font-size: 75%;
+}
+
+.image
+{
+	max-width: 100%;
 }

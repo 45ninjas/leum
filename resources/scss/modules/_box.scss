@@ -1,0 +1,25 @@
+.box
+{
+	box-shadow: 0 0 1em black;
+	background-color: $back-colour;
+	border-radius: $border-radius;
+
+	.header
+	{
+		border: none;
+		border-radius: $border-radius $border-radius 0 0;
+		padding: 1em;
+
+		display: block;
+		width: auto;
+
+		h2, h1, h3
+		{
+			margin: 0;
+		}
+	}
+	.content,
+	{
+		padding: 1em;
+	}
+}

@@ -184,13 +184,6 @@
   cursor: alias;
 }
 
-/* == Login Box ==*/
-.login-box {
-  width: 22em;
-  display: block;
-  margin: auto;
-}
-
 /* == Titles ==*/
 .title {
   border-bottom-width: 1px;
@@ -209,6 +202,10 @@
 
 .foot-note {
   font-size: 75%;
+}
+
+.image {
+  max-width: 100%;
 }
 
 html {
@@ -636,6 +633,46 @@ ul.tagfield li a.tag-delete {
   background: none;
   cursor: default;
   box-shadow: none;
+}
+
+.box {
+  box-shadow: 0 0 1em black;
+  background-color: #fff;
+  border-radius: 2px;
+}
+.box .header {
+  border: none;
+  border-radius: 2px 2px 0 0;
+  padding: 1em;
+  display: block;
+  width: auto;
+}
+.box .header h2, .box .header h1, .box .header h3 {
+  margin: 0;
+}
+.box .content {
+  padding: 1em;
+}
+
+html.login .main,
+html.register .main {
+  display: flex;
+  background-color: #5b6f81;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(5px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+html.login .login-box,
+html.register .login-box {
+  width: 22em;
+  display: block;
+  margin: auto;
 }
 
 /*# sourceMappingURL=leum.css.map */

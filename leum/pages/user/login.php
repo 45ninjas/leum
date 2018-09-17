@@ -43,14 +43,14 @@ class login implements IPage
 	{
 ?>
 
-<div class="main">
-	<div class="header">
-		<div class="content">
-			<h1><?=$this->title;?></h1>
+<div class="main" <?php if(class_exists("Wallpapers")) echo Wallpapers::BackgroundStyle(); ?>>
+	<div class="content login-box box">
+		<div class="header">
+			<h2><?=$this->title?></h2>
 		</div>
-	</div>
-	<div class="content login-box">
-		<?php if($this->forgot) $this->ShowReset(); else $this->ShowLogin(); ?>
+		<div class="content">
+			<?php if($this->forgot) $this->ShowReset(); else $this->ShowLogin(); ?>
+		</content>
 	</div>
 </div>
 

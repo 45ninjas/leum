@@ -98,7 +98,7 @@ class TagMap
 			$sql = "SELECT tag_map.tag, tags.slug, tags.count from tag_map";
 
 		$sql .= " inner join media ON tag_map.media = media.id";
-		$sql .= " inner join tags on tag_map.tag = tags.tag_id";
+		$sql .= " inner join tags on tag_map.tag = tags.id";
 		$sql .= " where media.id = ?";
 
 		$statement = $dbc->prepare($sql);

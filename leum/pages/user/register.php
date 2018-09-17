@@ -43,27 +43,27 @@ class register implements IPage
 	{
 ?>
 
-<div class="main">
-	<div class="header">
-		<div class="content">
-			<h1><?=$this->title;?></h1>
+<div class="main" <?php if(class_exists("Wallpapers")) echo Wallpapers::BackgroundStyle(); ?>>
+	<div class="content login-box box">
+		<div class="header">
+			<h2><?=$this->title?></h2>
 		</div>
-	</div>
-	<div class="content login-box">
-		<form class="pure-form" method="POST">
-			<fieldset class="pure-group">
-				<input class="pure-input-1" id="username" type="text" name="username" placeholder="Username" <?php if(isset($this->inputs)) echo "value=\"" . $this->inputs['username'] . "\""; ?>>
-				<?php Message::ShowMessages("username"); ?>
-				<input class="pure-input-1" type="password" name="password" placeholder="Password">
-				<?php Message::ShowMessages("password"); ?>
-				<input class="pure-input-1" type="text" name="email" placeholder="Email Address" <?php if(isset($this->inputs)) echo "value=\"" . $this->inputs['email'] . "\""; ?>>
-				<?php Message::ShowMessages("email"); ?>
-			</fieldset>
-			<label for="check2" class="pure-checkbox" for="check2">
-				<input id="check2" type="checkbox" name="check2"> I understand that <strong>security</strong> and <strong>privacy</strong> cannot be guaranteed and are not regarded as high priorities in the current state of development of leum.
-			</label>
-			<button type="submit" name="create-user" class="pure-button pure-button-primary">Create User</button>
-		</form>
+		<div class="content">
+			<form class="pure-form" method="POST">
+				<fieldset class="pure-group">
+					<input class="pure-input-1" id="username" type="text" name="username" placeholder="Username" <?php if(isset($this->inputs)) echo "value=\"" . $this->inputs['username'] . "\""; ?>>
+					<?php Message::ShowMessages("username"); ?>
+					<input class="pure-input-1" type="password" name="password" placeholder="Password">
+					<?php Message::ShowMessages("password"); ?>
+					<input class="pure-input-1" type="text" name="email" placeholder="Email Address" <?php if(isset($this->inputs)) echo "value=\"" . $this->inputs['email'] . "\""; ?>>
+					<?php Message::ShowMessages("email"); ?>
+				</fieldset>
+				<label for="check2" class="pure-checkbox" for="check2">
+					<input id="check2" type="checkbox" name="check2"> I understand that <strong>security</strong> and <strong>privacy</strong> cannot be guaranteed and are not regarded as high priorities in the current state of development of leum.
+				</label>
+				<button type="submit" name="create-user" class="pure-button pure-button-primary pure-input-1">Create User</button>
+			</form>
+		</div>
 	</div>
 </div>
 

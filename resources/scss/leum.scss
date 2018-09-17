@@ -26,3 +26,7 @@
 @import 'modules/messages';
 @import 'modules/media-viewer';
 @import 'modules/suggestion-input';
+@import 'modules/box';
+
+// Get the page specific styles
+@import 'pages/login';

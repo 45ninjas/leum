@@ -1,0 +1,27 @@
+html.login,
+html.register
+{
+	.main
+	{
+		display: flex;
+		background-color: #5b6f81;
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+
+		backdrop-filter: blur(5px);
+
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+	}
+
+	.login-box
+	{
+		width: 22em;
+		display: block;
+		margin: auto;
+	}
+}

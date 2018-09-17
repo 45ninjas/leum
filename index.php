@@ -19,7 +19,7 @@ if(!empty($leumContent))
 
 ?>
 <!DOCTYPE html>
-<html>
+<html class="<?=Leum::Instance()->pageClass?>">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, inital-scale=1.0">
@@ -33,7 +33,7 @@ if(!empty($leumContent))
 	<?php TheHead(); ?>
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
 </head>
-<body class="static-title">
+<body class="static-title <?=Leum::Instance()->pageClass?>">
 	<?php include "leum/page-parts/leum-menu.php" ?>
 	<?php TheContent(); ?>
 	<!-- Modal Stuff -->

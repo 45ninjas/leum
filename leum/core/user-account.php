@@ -42,7 +42,7 @@ class UserAccount
 		throw new Exception('not implemented');
 	}
 
-	public static function CreateUser($dbc, $username, $password, $email, &$errors, &$userId)
+	public static function CreateUser($dbc, $username, $password, $email, &$errors, &$userId = null)
 	{
 		$errors = array();
 

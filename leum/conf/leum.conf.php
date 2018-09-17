@@ -33,6 +33,9 @@ define('ACTIVE_PLUGINS',[
 	
 	// Support for shows and episodes. Useful for anime series and tv shows.
 	'shows',
+
+	// Wallpapers for login and home pages.
+	'wallpapers',
 ]);
 
 

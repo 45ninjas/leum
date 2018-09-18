@@ -12,7 +12,7 @@ define('THUMB_DIR', '/content/thumbs');
 
 // Where the leum logs are stored.
 define('LOG_DIR', SYS_ROOT . '/logs');
-define('LOG_LEVEL', Log::INFO);
+define('LOG_LEVEL', Log::DEBUG);
 
 define('API_URL', ROOT . "/api");
 

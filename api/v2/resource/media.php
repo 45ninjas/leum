@@ -1,6 +1,7 @@
 <?php namespace API;
 use Media as CoreMedia;
 use TagMap as CoreMapping;
+use Log as Log;
 class Media
 {
 	private $dbc;
@@ -97,7 +98,10 @@ class Media
 			{
 				$newSlugs = explode(',', $data['set-tags']);
 				$addNew = $data['add-new'] == true;
-				return CoreMapping::SetMappedTags($this->dbc,$mediaItem, $newSlugs, $addNew);
+				if(CoreMapping::SetMappedTags($this->dbc,$mediaItem, $newSlugs, $addNew))
+					return ['tags' => CoreMapping::GetMappedTags($this->dbc, $mediaItem,true) ];
+				
+				return null;
 			}
 			else
 			{

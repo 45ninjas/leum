@@ -153,27 +153,17 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 	}
 	this.SetTags = function(slugs)
 	{
-		// Remove the existing tags.
-		if(tags != null)
+		tags = new Array();
+
+		slugs.forEach( function(element)
 		{
-			tags = new Array();
-			while (field.firstChild)
-			{
-				field.removeChild(field.firstChild);
-			}
-    	}
-    	// Add the new tags.
-    	if(slugs != null)
-    	{
-			for (var i = 0; i < slugs.length; i++)
-			{
-				if(slugs[i] != null && slugs[i] != "")
-				this.AddTag(slugs[i]);
-			}
-		}
+			tags.push(element);
+		});
+
+		this.UpdateField();
 	}
 
-    this.AddTag = function(slug, inital = true)
+    this.AddTag = function(slug, updateChanges = true)
     { 
     	// Make sure the tag is not in the array.
     	if(!InArray(tags, slug))
@@ -181,49 +171,75 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 	    	// Update the tags array to store the new tag.
 	    	tags.push(slug);
 
-	    	// Add some elements to the document to show that the new tag has been added.
-	    	var tagElement = document.createElement("span");
-	    	tagElement.classList.add("tag");
-	    	tagElement.classList.add("pure-button");
-	    	tagElement.dataset.slug = slug;
-
-	    	// The actual text of the tag.
-	    	var tagText = document.createElement("span");
-	    	tagText.appendChild(document.createTextNode(slug));
-	    	tagElement.appendChild(tagText);
-
-	    	// The close/remove button on the tag.
-	    	var tagRemove = document.createElement("span");
-	    	tagRemove.innerHTML = "<i class=\"fa fa-close\"></i>";
-	    	tagRemove.classList.add("remove-button");
-	    	tagElement.appendChild(tagRemove);
-
-	    	field.appendChild(tagElement);
-
-	    	if(!inital)
-    			TagsChanged();
+	    	if(!updateChanges)
+    			TagsChanged(editor);
 	    }
 	    else
     		console.log("Slug " + slug + " already exists.");
     }
-    this.RemoveTag = function(slug)
+    this.CreateTagElement = function(slug)
+    {
+    	// Add some elements to the document to show that the new tag has been added.
+    	var tagElement = document.createElement("span");
+    	tagElement.classList.add("tag");
+    	tagElement.classList.add("pure-button");
+    	tagElement.dataset.slug = slug;
+
+    	// The actual text of the tag.
+    	var tagText = document.createElement("span");
+    	tagText.appendChild(document.createTextNode(slug));
+    	tagElement.appendChild(tagText);
+
+    	// The close/remove button on the tag.
+    	var tagRemove = document.createElement("span");
+    	tagRemove.innerHTML = "<i class=\"fa fa-close\"></i>";
+    	tagRemove.classList.add("remove-button");
+    	tagElement.appendChild(tagRemove);
+
+    	field.appendChild(tagElement);
+    }
+    this.RemoveTag = function(slug, updateChanges = false)
     {
     	console.log("Removing: " +  slug);
-    	console.log(tags);
     	if(InArray(tags, slug))
     	{
     		// Remove the slug from the list of tags.
     		var index = tags.indexOf(slug);
-    		// if(index > -1)   This statement is redundant as the only way to execute this code is if the item is in the array.
     		tags.splice(index, 1);
 
-    		// Remove the visual tag.
-    		var tag = field.querySelector("[data-slug=\"" + slug + "\"]");
-    		field.removeChild(tag);
-    		TagsChanged();
+	    	if(!updateChanges)
+    			TagsChanged(editor);
     	}
     	else
     		console.log("Slug " + slug + " does not exist, can't remove.");
+    }
+    this.UpdateField = function()
+    {
+    	var currentSlugs = new Array();
+
+    	// Figure out what slugs already exist as 'visual' tags. Remove the ones
+    	// that are no longer needed.
+    	var tagElements = [].slice.call(field.children);
+
+    	if(tagElements != null)
+    	{
+	    	tagElements.forEach(function(element)
+	    	{
+	    		var slug = element.dataset.slug;
+
+	    		if(tags.includes(slug))
+	    			currentSlugs.push(slug);
+	    		else
+	    			field.removeChild(element);
+	    	});
+	    }
+
+    	// Add all the 'visual' tags that don't exist yet.
+    	for (var i = 0; i < tags.length; i++)
+    	{
+    		if(tags[i] != null && tags[i] != "" && !currentSlugs.includes(tags[i]))
+    			this.CreateTagElement(tags[i]);
+    	}
     }
     this.Clear = function()
     {
@@ -237,19 +253,35 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
     	return array.indexOf(value) > -1;
     }
 
-    function TagsChanged()
+    function TagsChanged(editor)
     {
     	tagString = tags.join(seperator);
-    	console.log(tagString);
     	if(tagInput != null)
     			tagInput.value = tagString;
     	if(editor.autoUpdate && mediaId != null)
     	{
-    		// console.log("Updating");
+
+    		console.log(tagString);
 			var url = apiUrl + "/v2/media/" + mediaId;
 			$.post(url, {'set-tags':tagString, 'add-new':true}, function(data)
 			{
-				// console.log(data);
+				console.log(data);
+				if(data == null)
+					return;
+
+				if(data['error'])
+				{
+					alert(data['error']);
+					console.log(data);
+					return;
+				}
+
+				if(data['tags'])
+				{
+					tags = data['tags'];
+					editor.UpdateField();					
+				}
+
 			});
     	}
     }

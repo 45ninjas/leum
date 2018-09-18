@@ -92,6 +92,12 @@ function MediaViewer()
 		var url = GetRootDir() + "/api/v2/media/" + mediaIndex + "?usage=viewer";
 		var jqxhr = $.getJSON(url, function(data)
 		{
+			if(data['error'])
+			{
+				alert(data['error']);
+				console.log(data);
+				return;
+			}
 			if(data != false)
 			{
 				SetTitle(data["title"]);

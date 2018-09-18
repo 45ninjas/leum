@@ -43,6 +43,7 @@ class TagMap
 		$sql = "INSERT into tag_map (media, tag) values (?, ?)";
 
 		$statement = $dbc->prepare($sql);
+
 		$statement->execute([$id, $tag_id]);
 	}
 	public static function Unmap($dbc, $media, $tag)
@@ -129,7 +130,7 @@ class TagMap
 		$newTagIds = $statement->fetchAll(PDO::FETCH_COLUMN);
 
 		// Get the tags that are already mapped to this media item.
-		$sql = "SELECT tags.id from tag_map inner join tags on tag_map.tag = tags.id where id = ?";
+		$sql = "SELECT tag from tag_map where media = ?";
 
 		$statement = $dbc->prepare($sql);
 		$statement->execute([$id]);
@@ -195,6 +196,8 @@ class TagMap
 		}
 		else
 			throw new Exception("Unable to begin a transaction on database.");
+
+		return true;
 	}
 
 	private static function GetMediaId($media)

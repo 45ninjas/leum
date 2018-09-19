@@ -4,22 +4,35 @@
 */
 class home implements IPage
 {
+	private $header;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
 		$leum->SetTitle("Home");
+
+		$menuArgs = ['items' => [
+			['content' => "Browse", "href" => ROOT . "/browse"],
+			['content' => "Edit", "href" => ROOT . "/edit"],
+			['content' => "GitHub", "href" => ROOT . "https://github.com/Those45Ninjas/leum"],
+			]];
+
+		$menu = Front::GetWidget('menu', $menuArgs);
+
+		$this->header = Front::GetWidget('page_header', [
+			"title" => APP_TITLE,
+			"subtitle" => "A boring old homepage",
+			"menu" => $menu
+		]);
+
 	}
 	public function Content()
 	{
 		?>
 <div class="main">
-	<div class="header">
-		<div class="content">
-			<h1>Leum</h1>
-			<h2>Another new project that will never get finished.</h2>
-		</div>
-	</div>
+
+	<?php if(isset($this->header)) $this->header->Show(); ?>
 
 	<div class="content">
+		<p>View this project on <a href="https://github.com/Those45Ninjas/leum">GitHub</a>. Read the docs at <a href="https://leum.readthedocs.io/en/latest/">Read the Docs</a>.</p>
 		<h2 class="content-subhead">Project Requirements</h2>
 		<p>This project needs to fulfil the following requirements to be successful.</p>
 		<ul>

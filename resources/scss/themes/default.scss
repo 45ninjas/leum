@@ -3,14 +3,12 @@ $title-colour: #444;
 $primary: #0078e7;
 $back-colour: #fff;
 
-$dark-bg: #15191b;
+$dark-bg: #1e2026;
 $dark-text: desaturate(lighten($dark-bg, 65%), 80%);
-// $dark-text: #DCDCDC;
 $dark-alt-bg: darken($dark-bg, 4%);
-//$dark-alt-bg: #0F1316;
 
 $border-radius: 2px;
 
-$dark-dark: #0a0c0e;
+$dark-dark: desaturate(darken($dark-bg, 10%), 5%);
 
 $devide-border-colour: #dbdbdb;

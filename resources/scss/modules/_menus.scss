@@ -1,0 +1,20 @@
+.menu
+{
+	.menu-item
+	{
+		display: inline-block;
+		padding: 0.5em;
+		color: inherit;
+	}
+}
+
+.header .menu-item
+{
+	font-weight: 600;
+	text-decoration: none;
+	color: $dark-text;
+}
+.header .menu-item:hover
+{
+	color: darken($dark-text, 30%);
+}

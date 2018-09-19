@@ -98,7 +98,7 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 	}
 	this.ChooseSuggestion = function(slug)
 	{
-		this.AddTag(slug, false);
+		this.AddTag(slug);
 		ClearSugestions();
 	}
 	function AddSugestion(sugestion)
@@ -163,16 +163,14 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 		this.UpdateField();
 	}
 
-    this.AddTag = function(slug, updateChanges = true)
+    this.AddTag = function(slug)
     { 
     	// Make sure the tag is not in the array.
     	if(!InArray(tags, slug))
     	{
 	    	// Update the tags array to store the new tag.
 	    	tags.push(slug);
-
-	    	if(!updateChanges)
-    			TagsChanged(editor);
+   			TagsChanged(editor);
 	    }
 	    else
     		console.log("Slug " + slug + " already exists.");
@@ -198,7 +196,7 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
 
     	field.appendChild(tagElement);
     }
-    this.RemoveTag = function(slug, updateChanges = false)
+    this.RemoveTag = function(slug)
     {
     	console.log("Removing: " +  slug);
     	if(InArray(tags, slug))
@@ -206,9 +204,7 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
     		// Remove the slug from the list of tags.
     		var index = tags.indexOf(slug);
     		tags.splice(index, 1);
-
-	    	if(!updateChanges)
-    			TagsChanged(editor);
+    		TagsChanged(editor);
     	}
     	else
     		console.log("Slug " + slug + " does not exist, can't remove.");
@@ -258,32 +254,37 @@ function TagEditor(textBox, tagField, tagInput, suggestionBox)
     	tagString = tags.join(seperator);
     	if(tagInput != null)
     			tagInput.value = tagString;
-    	if(editor.autoUpdate && mediaId != null)
+    	if(editor.autoUpdate)
     	{
-
-    		console.log(tagString);
-			var url = apiUrl + "/v2/media/" + mediaId;
-			$.post(url, {'set-tags':tagString, 'add-new':true}, function(data)
-			{
-				console.log(data);
-				if(data == null)
-					return;
-
-				if(data['error'])
+    		if(mediaId != null)
+    		{
+	    		console.log(tagString);
+				var url = apiUrl + "/v2/media/" + mediaId;
+				$.post(url, {'set-tags':tagString, 'add-new':true}, function(data)
 				{
-					alert(data['error']);
 					console.log(data);
-					return;
-				}
+					if(data == null)
+						return;
 
-				if(data['tags'])
-				{
-					tags = data['tags'];
-					editor.UpdateField();					
-				}
+					if(data['error'])
+					{
+						alert(data['error']);
+						console.log(data);
+						return;
+					}
 
-			});
-    	}
+					if(data['tags'])
+					{
+						tags = data['tags'];
+						editor.UpdateField();			
+					}
+
+				});
+			}
+		}
+		else
+		{
+			editor.UpdateField();
+		}
     }
-
 }

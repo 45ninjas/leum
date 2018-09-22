@@ -11,7 +11,7 @@ class edit_media implements IPage
 	private $modify = false;
 	private $viewer;
 
-	private $tagString = "";
+	private $tagField;
 
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
@@ -51,7 +51,7 @@ class edit_media implements IPage
 				$leum->Show404Page("Media item $mediaId does not exist in the database.");
 				return;
 			}
-			$this->tagString = implode(',', $this->mediaItem->GetTags($dbc, true));
+			$tags = $this->mediaItem->GetTags($dbc, true);
 			$this->title = "Edit Media";
 		}
 		else
@@ -61,6 +61,11 @@ class edit_media implements IPage
 
 		$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 		$leum->SetTitle($this->title);
+
+		$this->tagField = Front::GetWidget("tag_field", [
+			"tags" => $tags,
+			"read only" => false
+		]);
 	}
 	public function Content()
 	{ ?>
@@ -98,14 +103,15 @@ class edit_media implements IPage
 				</fieldset>
 
 				<label for="tag-input-field">Tags</label>
-				<div class="tag-input">
+				<?php $this->tagField->Show(); ?>
+				<!-- <div class="tag-input">
 					<input class="pure-u-1" tabindex="4" type="text" id="tag-input-text" placeholder="tag">
 					<input id="tag-input" type="hidden" name="tags" value="<?=$this->tagString;?>">
 					<ul class="suggestion-box" id="suggestion-box" hidden>
 					</ul>
 				</div>
 				<div id="tag-field" class="tags tag-field">
-				</div>
+				</div> -->
 
 				<button form="media-edit" tabindex="4" type="submit" name="modify" class="pure-button pure-button-primary"><?php if($this->modify) echo "Apply"; else echo "Create";?></button>
 				<?php if($this->modify): ?>

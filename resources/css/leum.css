@@ -265,129 +265,6 @@ h1, h2 {
   box-shadow: inset 0 1px 3px #080809;
 }
 
-.title-menu .user-dropdown, .title-menu {
-  box-shadow: 0 2px 5px #00000080;
-}
-
-.static-title .title-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
-.title-menu {
-  display: flex;
-  justify-content: space-between;
-  z-index: 10;
-  background-color: #080809;
-  color: #fff;
-  height: 2.5em;
-  line-height: 2.5em;
-}
-.title-menu .item {
-  padding: 0 0.8em;
-  font-size: 125%;
-}
-.title-menu .item:hover,
-.title-menu .user-dropdown a:hover {
-  color: #fff;
-  transition: color 0.1s;
-}
-.title-menu .title-menu-heading {
-  text-transform: uppercase;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  color: #fff;
-}
-.title-menu .profile,
-.title-menu .fa {
-  font-size: 1.5em;
-  height: 1em;
-  width: auto;
-  vertical-align: middle;
-}
-.title-menu .user-dropdown {
-  font-size: 1.25rem;
-  width: 300px;
-  right: 0;
-  top: 2.15em;
-  padding: 1em;
-  position: absolute;
-  display: block;
-  z-index: 15;
-  background-color: #1b1c1f;
-}
-.title-menu .user-dropdown .user-header {
-  display: flex;
-  margin-bottom: 1em;
-}
-.title-menu .user-dropdown .user-header .profile {
-  height: 2em;
-  width: 2em;
-  margin-right: 0.5em;
-  flex-shrink: 0;
-}
-.title-menu .user-dropdown .user-header .username,
-.title-menu .user-dropdown .user-header .email {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.title-menu .user-dropdown .user-header .email {
-  font-size: 1rem;
-}
-.title-menu .user-dropdown .user-header .username {
-  text-align: left;
-  font-weight: 600;
-  color: #fff;
-}
-.title-menu .user-dropdown hr {
-  border: 1px solid #555;
-}
-.title-menu .user-dropdown ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 2px solid #555;
-}
-.title-menu .user-dropdown ul:first-child {
-  border-top: none;
-}
-.title-menu .user-dropdown li {
-  margin: 0.5em 0em;
-}
-.title-menu .user-dropdown li .fa {
-  font-size: inherit;
-  margin-left: 1em;
-  float: left;
-  position: absolute;
-}
-.title-menu .user-dropdown li span {
-  margin-left: 2.5em;
-}
-.title-menu .user-dropdown a {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  width: 100%;
-  color: #c8c8c8;
-}
-.title-menu .user-dropdown a.regiser-link {
-  margin-bottom: 0.75em;
-}
-.title-menu .user-dropdown li:last-of-type {
-  margin-bottom: 0;
-}
-
-.profile {
-  display: inline-block;
-  height: 2em;
-  width: auto;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 ul.tagfield {
   list-style: none;
   display: inline;
@@ -667,7 +544,131 @@ ul.tagfield li a.tag-delete {
 }
 
 .header .menu-item:hover {
-  color: #aeaeae;
+  color: #7b7b7b;
+}
+
+.title-menu .user-dropdown, .title-menu {
+  box-shadow: 0 2px 5px #00000080;
+}
+
+.static-title .title-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.title-menu {
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  background-color: #080809;
+  color: #fff;
+  height: 2.5em;
+  line-height: 2.5em;
+}
+.title-menu .menu-item {
+  color: #c8c8c8;
+  padding: 0 0.8em;
+  text-decoration: none;
+}
+.title-menu .menu-item:hover,
+.title-menu .user-dropdown a:hover {
+  color: #fff;
+  transition: color 0.1s;
+}
+.title-menu .title-menu-heading {
+  text-transform: uppercase;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+.title-menu .profile,
+.title-menu .fa {
+  font-size: 1.5em;
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+}
+.title-menu .user-dropdown {
+  font-size: 1.25rem;
+  width: 300px;
+  right: 0;
+  top: 2.15em;
+  padding: 1em;
+  position: absolute;
+  display: block;
+  z-index: 15;
+  background-color: #1b1c1f;
+}
+.title-menu .user-dropdown .user-header {
+  display: flex;
+  margin-bottom: 1em;
+}
+.title-menu .user-dropdown .user-header .profile {
+  height: 2em;
+  width: 2em;
+  margin-right: 0.5em;
+  flex-shrink: 0;
+}
+.title-menu .user-dropdown .user-header .username,
+.title-menu .user-dropdown .user-header .email {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.title-menu .user-dropdown .user-header .email {
+  font-size: 1rem;
+}
+.title-menu .user-dropdown .user-header .username {
+  text-align: left;
+  font-weight: 600;
+  color: #fff;
+}
+.title-menu .user-dropdown hr {
+  border: 1px solid #555;
+}
+.title-menu .user-dropdown ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid #555;
+}
+.title-menu .user-dropdown ul:first-child {
+  border-top: none;
+}
+.title-menu .user-dropdown li {
+  margin: 0.5em 0em;
+}
+.title-menu .user-dropdown li .fa {
+  font-size: inherit;
+  margin-left: 1em;
+  float: left;
+  position: absolute;
+}
+.title-menu .user-dropdown li span {
+  margin-left: 2.5em;
+}
+.title-menu .user-dropdown a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  color: #c8c8c8;
+}
+.title-menu .user-dropdown a.regiser-link {
+  margin-bottom: 0.75em;
+}
+.title-menu .user-dropdown li:last-of-type {
+  margin-bottom: 0;
+}
+
+.profile {
+  display: inline-block;
+  height: 2em;
+  width: auto;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 html.login .main,
@@ -689,6 +690,12 @@ html.register .login-box {
   width: 22em;
   display: block;
   margin: auto;
+}
+html.login .foot-note,
+html.register .foot-note {
+  position: fixed;
+  left: 0;
+  bottom: 0;
 }
 
 /*# sourceMappingURL=leum.css.map */

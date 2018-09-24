@@ -29,6 +29,8 @@ class Leum
 
 	public $pageClass;
 
+	private $titleBar;
+
 	public function __construct()
 	{
 		// Set the instance variable for singleton, get a database object and initialize the dispatcher.
@@ -46,10 +48,12 @@ class Leum
 			if(substr($this->request,-1) == '/')
 				$this->request = substr($this->request, 0, -1);
 		}
-		$this->Init();
+
 		$this->Dispatch();
 
 		$this->UserInit();
+
+		$this->Init();
 
 		// Show the 404 page if we have no route/page.
 		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/leum/$this->routeResolve"))
@@ -82,6 +86,10 @@ class Leum
 	}
 	private function Init()
 	{
+		$menu = Front::GetWidget('menu', ['items' => PRIMARY_MENU]);
+		// Create the title_bar.
+		$this->titleBar = Front::GetWidget('title_bar', ['menu' => $menu]);
+		// $this->titleBar->menu = 
 	}
 	private function UserInit()
 	{
@@ -203,12 +211,13 @@ class Leum
 	// Tells the page to show it's output.
 	public function Output()
 	{
+		// the title_bar widget.
+		$this->titleBar->Show();
+
+		// the page's content.
 		$this->page->Content();
 
-		// echo "<div class=\"content foot-note\">";
-		// echo "<p>Leum pre-alpha<br>" . $_SERVER['SERVER_SOFTWARE'] . "</p>";
-		// echo "</div>";
-
+		// the footer.
 		echo "<!-- leum.front.footer hook -->\n";
 		LeumCore::InvokeHook('leum.front.footer');
 

@@ -18,5 +18,11 @@ html.register .login-box {
   display: block;
   margin: auto;
 }
+html.login .foot-note,
+html.register .foot-note {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
 
 /*# sourceMappingURL=login.css.map */

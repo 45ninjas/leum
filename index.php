@@ -34,7 +34,6 @@ if(!empty($leumContent))
 	<link rel="stylesheet" type="text/css" href="<?php Asset("/resources/css/leum.css"); ?>">
 </head>
 <body class="static-title <?=Leum::Instance()->pageClass?>">
-	<?php include "leum/page-parts/leum-menu.php" ?>
 	<?php TheContent(); ?>
 	<!-- Modal Stuff -->
 	<div id="modal-background" hidden></div>

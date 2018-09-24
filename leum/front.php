@@ -4,7 +4,7 @@
  */
 class Front
 {
-	static function GetWidget($name, $arguments)
+	static function GetWidget($name, $arguments = null)
 	{
 		try
 		{

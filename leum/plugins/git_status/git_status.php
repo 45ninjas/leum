@@ -57,8 +57,8 @@ class Git_Status extends Plugin
 		$link = "https://github.com/Those45Ninjas/leum/commit/$this->hash";
 
 		// Show the output in some pretty html for the browser to parse.
-		echo '<div class="content foot-note">' . PHP_EOL;
-		echo "\t<p>Last commit: <a href=\"$link\">[$this->hash]</a> $this->message $this->date</p>" . PHP_EOL;
+		echo '<div class="foot-note">' . PHP_EOL;
+		echo "\t<p class=\"content\">Last commit: <a href=\"$link\">[$this->hash]</a> $this->message $this->date</p>" . PHP_EOL;
 		echo '</div>' . PHP_EOL;
 	}
 }

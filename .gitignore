@@ -10,6 +10,7 @@
 *.sublime-project
 *.sublime-workspace
 sass-build.bat
+sass-build.sh
 /docs/autobuilder.sh
 
 # docs

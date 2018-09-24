@@ -20,7 +20,6 @@
 }
 
 // Get the modules.
-@import 'modules/title-menu';
 @import 'modules/tag-field';
 @import 'modules/modal';
 @import 'modules/messages';
@@ -28,6 +27,7 @@
 @import 'modules/suggestion-input';
 @import 'modules/box';
 @import 'modules/menus';
+@import 'modules/title-menu';
 
 // Get the page specific styles
 @import 'pages/login';

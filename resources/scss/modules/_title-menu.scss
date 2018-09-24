@@ -18,13 +18,15 @@
 	color: #fff;
 	height: 2.5em;
 	line-height: 2.5em;
-	
-	.item
+
+	.menu-item
 	{
+		color: $dark-text;
 		padding: 0 0.8em;
-		font-size: 125%;
+		text-decoration: none;
 	}
-	.item:hover,
+
+	.menu-item:hover,
 	.user-dropdown a:hover
 	{
 		color: #fff;

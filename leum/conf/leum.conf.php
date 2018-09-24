@@ -49,4 +49,5 @@ include_once "routes.conf.php";
 // Get the database connection.
 include_once "database.conf.php";
 include_once "permissions.conf.php";
+include_once "menus.conf.php";
 ?>

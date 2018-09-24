@@ -24,7 +24,7 @@ function GetAsset($asset)
 {
 	return ROOT.$asset;
 }
-// move to front.
+// move to front, deprecate or put in users.
 function ProfilePicture($colour = "#4eb4f5")
 {
 	if(isset(Leum::Instance()->user))

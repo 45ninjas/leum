@@ -50,9 +50,18 @@ class browse implements IPage
 		if(isset($_GET['et']) && !empty($_GET['et']))
 			$this->unwantedTags = explode(',', $_GET['et']);
 
-		// Get media items based on the unwanted tags, wanted tags and page number.
-		$this->itemsToShow = Media::GetWithTags($dbc, $this->wantedTags, $this->unwantedTags, $this->pageNum, $this->pageSize);
+		// Create the query.
+		$query = new MediaQuery($dbc);
+		$query->Order('date','desc');
+		$query->Fields(['media.*']);
+		$query->Pages($this->pageNum, $this->pageSize);
 
+		if(isset($this->wantedTags))
+			$query->Tags($this->wantedTags);
+
+		$this->itemsToShow = $query->Execute();
+
+		// Get the results?
 		$this->totalResults = LeumCore::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
 

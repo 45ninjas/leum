@@ -6,25 +6,36 @@ class error_generic implements IPage
 {
 	private $message;
 	private $code;
+	private $header;
+	private $content;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
 		$this->message = $arguments['error-message'];
 		$this->code = $arguments['error-code'];
+
+		if(isset($arguments['error-content']))
+			$this->content = $arguments['error-content'];
+
+		$leum->SetTitle($this->code);
+
+		$args = [
+			'title'		=> $this->code,
+			'subtitle'	=> $this->message
+		];
+		$this->header = Front::GetWidget('page_header', $args);
 	}
 
 	public function Content()
 	{?>
 <div class="main">
-	<div class="header">
-		<div class="content">
-			<h1><?=$this->code?></h1>
-			<h2>Looks like there is an issue.</h2>
-		</div>
-	</div>
-
+	<?php
+		if($this->header != false)
+			$this->header->Show();
+	?>
 	<div class="content">
-		<?php if(isset($this->message)): ?><h2 class="content-subhead"><?=$this->message;?></h2><?php endif; ?>
-		<img class="pure-img middle" src="<?php asset("/resources/graphics/yotsuba-kowai-paint.png") ?>">
+		<?php Message::ShowMessages("exception"); ?>
+		<?php if(isset($this->content)) echo $this->content; ?>
+		<img class="pure-img middle" src="<?php asset("/resources/graphics/yotsuba-munch.png") ?>">
 	</div>
 </div>
 <?php }

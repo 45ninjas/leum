@@ -7,33 +7,8 @@ require_once "log.php";
 require_once SYS_ROOT . '/leum/conf/leum.conf.php';
 require_once "message.php";
 
-function LeumErrorHandler($errorno, $errstr, $errfile, $errline)
-{
-	// Write the error.
-	$message = "[$errorno] $errstr in $errfile [$errline]";
-	Message::Create("error","Error: $message\n");
-	Message::ShowMessages("default", "content");
-
-	// Log it if we can.
-	if(class_exists("Log"))
-		Log::Write($message, Log::ERROR);
-}
-
-function LeumExceptionHandler($exception)
-{
-	// Write the exception.
-	$message = $exception->GetMessage() . " " . $exception->getFile() . "(" . $exception->getLine() .")" . PHP_EOL . $exception->getTraceAsString();
-	Message::Create("error","Uncaught Exception: $message\n");
-	Message::ShowMessages("default", "content");
-	// Log it if we can.
-	if(class_exists("Log"))
-		Log::Write($message, Log::EXCEPTION);
-}
-
-set_error_handler("LeumErrorHandler");
-set_exception_handler("LeumExceptionHandler");
-
 require_once "media.php";
+require_once "mediaQuery.php";
 require_once "tagMap.php";
 require_once "tag.php";
 require_once "query.php";

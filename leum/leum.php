@@ -1,5 +1,6 @@
 <?php 
 // TODO: Clean this mess! rename it to leumFront?
+require_once 'front/error-handlers.php';
 require_once 'core/leum-core.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
@@ -36,35 +37,44 @@ class Leum
 		// Set the instance variable for singleton, get a database object and initialize the dispatcher.
 		self::$_instance = $this;
 		$this->dbc = LeumCore::$dbc;
-
-		$this->defaultRole = Role::GetSingle($this->dbc, DEFAULT_ROLE, true);
-
-		// Get the request and remove the trailing slash.
-		if(isset($_GET['request']))
+		try
 		{
-			$this->request = $_GET['request'];
 
-			// Remove that pesky trailing slash.
-			if(substr($this->request,-1) == '/')
-				$this->request = substr($this->request, 0, -1);
+			$this->defaultRole = Role::GetSingle($this->dbc, DEFAULT_ROLE, true);
+
+			// Get the request and remove the trailing slash.
+			if(isset($_GET['request']))
+			{
+				$this->request = $_GET['request'];
+
+				// Remove that pesky trailing slash.
+				if(substr($this->request,-1) == '/')
+					$this->request = substr($this->request, 0, -1);
+			}
+
+			$this->Dispatch();
+
+			$this->UserInit();
+
+			$this->Init();
+
+			// Show the 404 page if we have no route/page.
+			if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/leum/$this->routeResolve"))
+			{
+				self::Show404Page();
+				return;
+			}
+
+			// If no page has been set then, use the page the dispatcher found.
+			if(!isset($this->page))
+				$this->LoadPage($this->routeResolve);
 		}
-
-		$this->Dispatch();
-
-		$this->UserInit();
-
-		$this->Init();
-
-		// Show the 404 page if we have no route/page.
-		if(!isset($this->routeResolve) || !is_file(SYS_ROOT . "/leum/$this->routeResolve"))
+		catch(Exception $e)
 		{
-			self::Show404Page();
-			return;
+			// Make the error page show up on an exception.
+			Leum::Instance()->ShowErrorPage(500, "Server Error");
+			LeumExceptionHandler($e, false);
 		}
-
-		// If no page has been set then, use the page the dispatcher found.
-		if(!isset($this->page))
-			$this->LoadPage($this->routeResolve);
 	}
 	private function Dispatch()
 	{
@@ -152,7 +162,6 @@ class Leum
 				$this->ShowErrorPage(500, $error);
 			return;
 		}
-
 		include $pageFile;
 		// Show a 500 page if the class does not exist.
 		if(!class_exists($pageClass))

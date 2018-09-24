@@ -55,7 +55,10 @@ class edit_media implements IPage
 			$this->title = "Edit Media";
 		}
 		else
+		{
+			$tags = array();
 			$this->mediaItem = new Media();
+		}
 
 		$this->viewer = new MediaViewer($this->mediaItem, true);
 

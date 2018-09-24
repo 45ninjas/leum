@@ -15,3 +15,7 @@ sass-build.sh
 
 # docs
 /docs/_*
+
+# Sensitive configuration files.
+/leum/conf/database.conf.php
+/leum/plugins/omdb_source/omdb_config.conf.php

@@ -21,6 +21,10 @@ class Import implements IPage
 		{
 			$this->directory = $_GET['directory'];
 			$importer = new ImportUtility();
+			
+			if(isset($_GET['description']))
+				$importer->description = $_GET['description'];
+
 			$this->imports = $importer->ImportDirectory($this->directory);
 		}
 

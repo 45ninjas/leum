@@ -39,6 +39,9 @@ define('ACTIVE_PLUGINS',[
 
 	// Importer
 	'importer',
+
+	// omdb data source
+	'omdb_source',
 ]);
 
 

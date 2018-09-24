@@ -10,7 +10,7 @@ define('DB_NAME', 'leum');
 
 // The user-name and password of a user with the correct permission to edit
 // the database.
-define('DB_PASS', 'kYhNoDh0ookLjIMa');
+define('DB_PASS', 'CHANGE ME!');
 define('DB_USER', 'leum');
 
 

@@ -11,9 +11,11 @@ Welcome to Leum's documentation!
    :caption: Contents:
 
    plugins
+   setup
    hooks
    log
    dispatcher
+   classes/mediaQuery
 
 Indices and tables
 ==================

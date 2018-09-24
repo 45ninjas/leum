@@ -6,13 +6,11 @@
 class MediaQuery
 {
 	private $dbc;
-	private $sql;
-	private $fields;
 
-	private $sqlParts = array();
-	private $argumentParts = array();
+	protected $sqlParts = array();
+	protected $argumentParts = array();
 
-	public $allowedFields = [
+	protected $allowedFields = [
 		// Allowed fields from media.
 		'*',				'media.*',
 		'id',				'media.id',
@@ -31,7 +29,7 @@ class MediaQuery
 		'tag_map.*',		'tag_map.media',
 		'tag_map.tag',
 	];
-	public $allowedTables = [
+	protected $allowedTables = [
 		'media',
 		'tags',
 		'tag_map',
@@ -44,14 +42,14 @@ class MediaQuery
 	const ORDER = 7;
 	const PAGINATE = 8;
 
-	function __construct($dbc)
+	public function __construct($dbc)
 	{
 		$this->dbc = $dbc;
 
 		$this->sqlParts[self::FIELDS] = "SELECT * from media";
 	}
 
-	function Fields($fields)
+	public function Fields($fields)
 	{
 		// Make sure all the fields are allowed.
 		$this->CheckFields($fields);
@@ -61,7 +59,7 @@ class MediaQuery
 		$this->sqlParts[self::FIELDS] = "SELECT sql_calc_found_rows $fields from media";
 	}
 
-	function Tags($tags)
+	public function Tags($tags)
 	{
 		// Join in the tags and tag_map tables.
 		$this->sqlParts[self::JOIN_TAGS] =
@@ -88,7 +86,7 @@ left join tags on tag_map.tag = tags.id";
 		// Only one of each media id.
 		$this->sqlParts[self::GROUP] = "group by id";
 	}
-	function Order($field = "date", $direction = "desc")
+	public function Order($field = "date", $direction = "desc")
 	{
 		// Make sure the field is allowed.
 		$this->CheckFields($field);
@@ -101,7 +99,7 @@ left join tags on tag_map.tag = tags.id";
 		// Add the sql and parameters to the query.
 		$this->sqlParts[self::ORDER] = "order by $field $direction";
 	}
-	function Type($type)
+	public function Type($type)
 	{
 		$sql = "type = ?";
 		if($type === NULL)
@@ -123,7 +121,7 @@ left join tags on tag_map.tag = tags.id";
 				$this->argumentParts[self::WHERE] = [$type];
 		}
 	}
-	function Pages($page = 0, $pageSize = PAGE_SIZE)
+	public function Pages($page = 0, $pageSize = PAGE_SIZE)
 	{
 		// Get the number of items to offset by.
 		$pageOffset = $page * $pageSize;
@@ -132,7 +130,7 @@ left join tags on tag_map.tag = tags.id";
 		$this->sqlParts[self::PAGINATE] = "limit ? offset ?";
 		$this->argumentParts[self::PAGINATE] = [$pageSize, $pageOffset];
 	}
-	function Execute()
+	public function Execute()
 	{
 		try
 		{

@@ -38,6 +38,24 @@ Class Overview
 		public mixed Execute ()
 	}
 
+Methods
+-------
+
+Fields(array $fields)
+	The fields method sets the columns to select from the database. If any item in the ``$fields`` array is not in ``$allowedFields`` an exception is thrown.
+
+Tags(array $tags)
+	Join the *tags* and *tag_map* tables and only return media with any of the provided tags. ``$tags`` is an array of tag slugs.
+
+Order(string $field, string $direction)
+	Order the query using the specified field and direction. If the field is not in the ``$allowedFields`` array an exception is thrown. If direction is anything other than *desc* or *asc* an exception is thrown.
+
+Type(mixed $type)
+	When type is a string the query will only get media with the same value in the media.type column. However when type is NULL the query will return media with no value set.
+
+Pages(int $page, int $pageSize)
+	Pagination. It's pretty self explanatory.
+
 
 Properties
 ----------

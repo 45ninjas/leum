@@ -3,6 +3,9 @@
 /content/thumbs/*
 /content/
 
+# Keep the backups out of it.
+/backups/
+
 # Don't sync the logs directory.
 /logs/*.txt
 

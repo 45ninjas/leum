@@ -32,7 +32,7 @@ class Thumbnails
 		}
 		return $results;
 	}
-	public static function MakeFor($dbc, $media)
+	public static function MakeFor($dbc, $media, $override = true)
 	{
 		// Get the media item's path;
 		if(!$media instanceof Media)
@@ -44,6 +44,9 @@ class Thumbnails
 		$path = $media->GetPath();
 
 		$targetFile = $media->GetThumbPath();
+
+		if(!$override && is_file($targetFile))
+			return $targetFile;
 
 		if(!is_dir(dirname($targetFile)))
 			mkdir(dirname($targetFile), 0770, true);

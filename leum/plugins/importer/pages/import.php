@@ -1,6 +1,6 @@
 <?php
 
-include SYS_ROOT . '/leum/plugins/importer/import-functions.php';
+include SYS_ROOT . '/leum/plugins/importer/import-utility.php';
 class Import implements IPage
 {
 	private $title;
@@ -31,20 +31,14 @@ class Import implements IPage
 		// Set the title
 		$this->title = "Import Utility";
 		$leum->SetTitle($this->title);
+
+		$args = ['title'=>$this->title, 'menu'=>Importer::HeaderMenu()];
+		$this->header = Front::GetWidget('page_header', $args);
 	}
 	public function Content()
 	{ ?>
 	<div class="main">
-		<div class="header">
-			<div class="content">
-				<h1><?=$this->title?></h1>
-				<div class="pure-menu pure-menu-horizontal">
-					<ul class="pure-menu">
-						<li class="pure-menu-item"><a href="<?=ROOT."/edit/";?>" class="pure-menu-link">&#10094; Edit</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		<?php $this->header->Show(); ?>
 		
 		<div class="content">
 			<?php
@@ -106,13 +100,21 @@ class Import implements IPage
 	function ShowControls()
 	{
 		?>
+		<h2>Import existing directory</h2>
 			<form class="pure-form">
-				<div id="dir-box" class="suggestion-input">
+				<div id="dir-box pure-input" class="suggestion-input">
 					<input class="user-input" type="text" name="directory">
 					<input class="suggestion" type="text" disabled>
 				</div>
-				<textarea name="description">Leum import utility import</textarea>
-				<!-- <label class="pure-checkbox" for="recursive"><input type="checkbox" id="recursive" name="recursive" checked>Recursive scan</label> -->
+				<label for="description">Description</label>
+				<textarea name="description" id="description">Leum import utility import</textarea>
+
+				<label class="pure-checkbox" for="dir-tags">
+					<input type="checkbox" id="dir-tags" name="dir-tags" checked> Use subdirectories as tags
+				</label>
+
+				<label for="type">Type</label>
+				<input type="text" name="type" id="type">
 				<input class="pure-button pure-button-primary" type="submit" name="list" value="Search">
 			</form>
 		<?php

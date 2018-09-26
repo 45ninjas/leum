@@ -181,23 +181,25 @@ class Media
 			$media->title = $mediaData['title'];
 			$media->description = $mediaData['description'];
 			$media->file = $mediaData['file'];
+			$media->parent = $mediaData['parent'];
+			$media->type = $mediaData['type'];
 		}
 		if(is_numeric($index))
 		{
 			// Updating existing media
-			$sql = "UPDATE media SET title = ?, description = ?, file = ? WHERE id = ?";
+			$sql = "UPDATE media SET title = ?, description = ?, file = ?, type = ?, parent = ? WHERE id = ?";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$media->title, $media->description, $media->file, $index]);
+			$statement->execute([$media->title, $media->description, $media->file, $media->type, $media->parent, $index]);
 			return $index;
 		}
 		else
 		{
 			// Inserting a new media item into the database
-			$sql = "INSERT INTO media (title, description, file) VALUES (?, ?, ?)";
+			$sql = "INSERT INTO media (title, description, file, type, parent) VALUES (?, ?, ?, ?, ?)";
 
 			$statement = $dbc->prepare($sql);
-			$statement->execute([$media->title, $media->description, $media->file]);
+			$statement->execute([$media->title, $media->description, $media->file, $media->type, $media->parent]);
 			return $dbc->lastInsertId();
 		}
 	} 

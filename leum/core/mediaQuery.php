@@ -159,8 +159,8 @@ left join tags on tag_map.tag = tags.id";
 		}
 		catch (exception $e)
 		{
-			Message::Create("debug", $sql);		
-			Message::Create("debug", $argsMsg);
+			Message::Create("debug", $sql, "exception");		
+			Message::Create("debug", $argsMsg, "exception");
 			throw $e;
 		}
 	}

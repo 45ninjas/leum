@@ -16,6 +16,7 @@ class Shows extends Plugin
 	{
 		LeumCore::AddHook("leum.front.routes", [$this, 'AssignRoutes']);
 		LeumCore::AddHook("leum.setup", [$this, 'Setup']);
+		LeumCore::AddHook("importer.export", [$this, 'Export']);
 	}
 	public function Setup()
 	{
@@ -54,6 +55,10 @@ class Shows extends Plugin
 	{
 		Dispatcher::AddRoute('shows', 'plugins/shows/pages/browse_shows.php');
 		Dispatcher::AddRoute('shows/%slug%', 'plugins/shows/pages/browse_shows.php');
+	}
+	public function Export($exporter)
+	{
+		$exporter->AddData('shows', "Hello World!");
 	}
 }
 

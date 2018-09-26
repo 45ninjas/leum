@@ -24,6 +24,7 @@ require_once SYS_ROOT . "/leum/utils/thumbnails.php";
 
 class LeumCore
 {
+	const VERSION = 'alpha 0.1.0';
 	public static $instance;
 	public $pluginManager;
 	public static $hooks = array();
@@ -93,7 +94,7 @@ class LeumCore
 		// Push the thing in.
 		self::$hooks[$hookName][] = $function;
 	}
-	public static function InvokeHook($hookName)
+	public static function InvokeHook($hookName, $context = null)
 	{
 		// Make sure the hook exists.
 		if(!isset(self::$hooks[$hookName]))
@@ -101,7 +102,7 @@ class LeumCore
 
 		foreach (self::$hooks[$hookName] as $anon)
 		{
-			$anon();
+			$anon($context);
 		}
 	}
 }

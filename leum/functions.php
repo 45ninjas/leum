@@ -36,26 +36,6 @@ function ProfilePicture($colour = "#4eb4f5")
 		echo "<i class=\"fa fa-user-circle\"></i>";
 }
 
-// deprecate
-function TheTitle()
-{
-	echo Leum::Instance()->title;
-}
-
-// deprecate
-function TheContent()
-{
-	if(Log::$highest != false)
-		Message::Create("info", "Wrote one ore more messages to the logs. Highest message was <i>" . Log::$logLevels[Log::$highest] . "</i>");
-	Message::ShowMessages("default");
-	Leum::Instance()->Output();
-}
-
-// deprecate
-function TheHead()
-{
-	Leum::Instance()->Head();
-}
 
 // deprecate
 function CreateSlugString($tags)

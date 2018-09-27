@@ -223,6 +223,11 @@ class Leum
 		// the title_bar widget.
 		$this->titleBar->Show();
 
+		// Show any messages.
+		if(Log::$highest != false)
+			Message::Create("info", "Wrote one ore more messages to the logs. Highest message was <i>" . Log::$logLevels[Log::$highest] . "</i>");
+		Message::ShowMessages("default");
+
 		// the page's content.
 		$this->page->Content();
 

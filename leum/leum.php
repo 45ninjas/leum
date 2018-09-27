@@ -289,10 +289,11 @@ class Leum
 			$_SESSION['user_id'] = $user->user_id;
 
 			// Redirect the user back to the page they where trying to access.
-			$redirect = "";
+			$redirect = "/";
 			if(isset($_GET['req']))
 				$redirect = $_GET['req'];
-			$this->Redirect($_GET['req']);
+
+			$this->Redirect($redirect);
 
 			return true;
 		}
@@ -327,7 +328,9 @@ class Leum
 		if(!$this->AllowedTo($permissions))
 		{
 			$this->ShowPermissionerrorPage("You don't have sufficient permissions");
+			return false;
 		}
+		return true;
 	}
 	public function Redirect($targetRequest)
 	{

@@ -40,7 +40,8 @@ class Title_Bar implements IWidget
 
 	public function UserDropdown()
 	{
-		$user = Leum::Instance()->user;
+		$leum = Leum::Instance();
+		$user = $leum->user;
 		if(isset($user)) : ?>
 			<div class="user-dropdown" id="user-dropdown" hidden="">
 				<div class="user-header">
@@ -65,7 +66,7 @@ class Title_Bar implements IWidget
 			</div>
 		<?php else : ?>
 			<div class="user-dropdown" id="user-dropdown" hidden="">
-				<form class="pure-form" action="<?=ROOT . "/" . LOGIN_URL;?>" method="POSt">
+				<form class="pure-form" action="<?=ROOT . "/" . LOGIN_URL;?>?req=<?=$leum->request;?>" method="POSt">
 					<fieldset class="pure-group">
 						<input type="text" class="pure-input-1" placeholder="Username" name="username">
 						<input type="password" class="pure-input-1" placeholder="Password" name="password">

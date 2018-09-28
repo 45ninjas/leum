@@ -31,7 +31,14 @@ class LeumCore
 	public static $dbc;
 	public function __construct()
 	{
-		self::$dbc = DBConnect();
+		$pdoOptions = [
+			PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_ASSOC,
+			PDO::ATTR_EMULATE_PREPARES		=> false,
+		];
+	
+		self::$dbc = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME .";charset=utf8", DB_USER, DB_PASS, $pdoOptions);
+
 		// Load the plugins first.
 		$this->pluginManager = new PluginManager(ACTIVE_PLUGINS);
 		self::$instance = $this;
@@ -45,7 +52,7 @@ class LeumCore
 	}
 	public static function GetTotalItems($dbc)
 	{
-		return $dbc->query("SELECT found_rows()")->fetch()["found_rows()"];
+		return self::$dbc->query("SELECT found_rows()")->fetch()["found_rows()"];
 	}
 
 	public static function CreateSlug($string)
@@ -104,6 +111,31 @@ class LeumCore
 		{
 			$anon($context);
 		}
+	}
+	public static function WriteError($message)
+	{
+		if($message instanceof Exception)
+		{
+			$msg = $message->GetMessage() . ", " . $message->GetFile() . "(" . $message->getLine() . ")";
+
+			Message::Create("exception", $message->GetMessage());
+			Log::Write($message . PHP_EOL . $message->getTraceAsString(), Log::EXCEPTION);
+		}
+		else
+		{
+			Message::Create("error", $message);
+			Log::Write($message, Log::ERROR);
+		}
+	}
+	public static function WriteWarning($message)
+	{
+		Message::Create("warning", $message);
+		Log::Write($message, Log::WARNING);
+	}
+	public static function WriteInfo($message)
+	{
+		Message::Create("info", $message);
+		Log::Write($message, Log::INFO);
 	}
 }
  ?>

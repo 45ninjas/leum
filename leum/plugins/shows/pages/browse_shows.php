@@ -8,6 +8,7 @@ require_once SYS_ROOT . '/leum/plugins/shows/views/show_view.php';
 class browse_shows implements IPage
 {
 	private $shows;
+	private $header;
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
 		$leum->SetTitle("Shows");
@@ -24,20 +25,19 @@ class browse_shows implements IPage
 		}
 		else
 			$this->shows = Show::Get($dbc);
+
+		$menu = Front::GetWidget('menu', ['items'=>[
+			['href' => ROOT . "/shows/add-new/", 'content' => 'Add Show']
+		]]);
+
+		$this->header = Front::GetWidget('page_header',['title'=>'Shows', 'menu'=>$menu]);
 	}
 	public function Content()
 	{ ?>
 <div class="main">
-	<div class="header">
-		<div class="content">
-			<h1>Shows</h1>
-			<div class="pure-menu pure-menu-horizontal">
-				<ul class="pure-menu">
-				</ul>
-			</div>
-		</div>
-	</div>
-		<?php
+	<?php
+	$this->header->Show();
+
 	if(!isset($this->shows) || count($this->shows) == 0)
 		echo '<div class="content"><p>0 shows where found.</p></div>';
 	else if($this->shows instanceof Show)

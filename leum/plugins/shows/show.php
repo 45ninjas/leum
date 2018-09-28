@@ -44,12 +44,18 @@ class Show
 		return ROOT . MEDIA_DIR . "/" . $this->cover_image;
 	}
 
-	static function Get($dbc, $slug = null)
+	static function Get($dbc, $identifier = null)
 	{
-		if($slug != null)
+		if($identifier != null)
 		{
-			$statement = $dbc->prepare("SELECT * from shows_shows where slug = ?");
-			$statement->execute([$slug]);
+			// Make the field either id or slug depending on what the identifier is.
+			if(is_numeric($identifier))
+				$field = 'id';
+			else
+				$field = 'slug';
+			
+			$statement = $dbc->prepare("SELECT * from shows_shows where $field = ?");
+			$statement->execute([$identifier]);
 			return $statement->fetchObject('Show');
 		}
 

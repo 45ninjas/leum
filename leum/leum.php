@@ -4,7 +4,7 @@ require_once 'front/error-handlers.php';
 require_once 'core/leum-core.php';
 require_once 'functions.php';
 require_once 'dispatcher.php';
-require_once 'front.php';
+require_once 'front/front.php';
 
 $core = new LeumCore();
 $leum = new Leum();

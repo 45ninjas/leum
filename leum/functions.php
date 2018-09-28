@@ -2,6 +2,8 @@
 // TODO: Depreciate this file. It's not needed and some functions are 'core'
 function DBConnect()
 {
+	LeumCore::WriteWarning("The DBCconnect function is depreciated. Use LeumCore::$dbc instead.");
+	return LeumCore::$dbc;
 	// TODO: Put this in LeumCore __construct as leumCore is loaded by both API and front.
 	global $prefrences;
 	$opt = [

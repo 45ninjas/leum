@@ -42,7 +42,7 @@ class LeumAPI
 		header("Access-Control-Allow-Methods: *");
 		header("Content-Type: application/json");
 
-		$this->dbc = DBConnect();
+		$this->dbc = LeumCore::$dbc;
 
 		$this->args = explode('/', rtrim($request, '/'));
 		$this->resource = array_shift($this->args);

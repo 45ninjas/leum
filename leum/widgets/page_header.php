@@ -9,6 +9,7 @@ class Page_Header implements IWidget
 	public $title;
 	public $subtitle;
 	public $menu;
+	public $content;
 	public $class;
 
 	function __construct($arguments)
@@ -25,6 +26,9 @@ class Page_Header implements IWidget
 		if(isset($arguments['menu']) && $arguments['menu'] instanceof IWidget)
 			$this->menu = $arguments['menu'];
 
+		if(isset($arguments['content']))
+			$this->content = $arguments['content'];
+
 		// Get the class if it exists. Add a space to the front if needed.
 		if(isset($arguments['class']))
 			$this->class = ' ' . $arguments['class'];
@@ -38,7 +42,26 @@ class Page_Header implements IWidget
 			<div class="content">
 				<h1><?=$this->title?></h1>
 				<h2><?=$this->subtitle?></h2>
-				<?php if(isset($this->menu)) $this->menu->Show(); ?>
+				<?php
+					if(isset($this->menu))
+						$this->menu->Show();
+
+					if(isset($this->content))
+					{
+						if($this->content instanceof IWidget)
+							$this->content->Show();
+
+						elseif(is_callable($this->content))
+						{
+							$fun = $this->content;
+							$fun();
+						}
+
+						else
+							echo $this->content;
+					}
+
+				?>
 			</div>
 		</div>
 		<?php

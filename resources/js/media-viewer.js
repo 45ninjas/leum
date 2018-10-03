@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function ()
 	});
 
 	// Register media click callbacks.
-	var itemContainer = document.querySelector(".main .items");
+	var itemContainer = document.querySelector(".main .media-list");
 	var items = itemContainer.children;
 	for (var i = 0; i < items.length; i++)
 	{
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function ()
 	itemContainer.addEventListener("click", function(e)
 	{
 		var target = e.target.parentElement;
-		if(target && target.matches(".item-tile"))
+		if(target && target.matches(".media-item"))
 		{
 			var index = target.dataset.mediaIndex;
 			activeViewer.Show(index);

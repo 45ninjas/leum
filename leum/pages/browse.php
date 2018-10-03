@@ -7,98 +7,91 @@ require_once SYS_ROOT . "/leum/page-parts/tag-field.php";
 require_once SYS_ROOT . "/leum/core/leum-core.php";
 require_once SYS_ROOT . "/leum/page-parts/media-viewer.php";
 
+require_once SYS_ROOT . "/leum/views/media/media.php";
+
 class browse implements IPage
 {
+	private $itemsToShow;
+
+	// Pagination!
 	public $pageNum = 0;
 	public $pageSize = PAGE_SIZE;
-
-	private $pageButtons;
-	private $itemsToShow;
 
 	private $totalResults;
 	private $totalPages;
 
-	private $tagField;
-
-	private $viewer;
-
+	// Tags
 	private $wantedTags;
 	private $unwantedTags;
 
-	public $useModal = true;
+	// Widgets and Views
+	private $mediaView;
+	private $header;
+	private $pageButtons;
+	private $tagField;
+	private $viewer;
 	
 	public function __construct($leum, $dbc, $userInfo, $arguments)
 	{
-		// Require the resources. 
-		$leum->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
+		// Require the tags script.
 		$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 
-		$leum->SetTitle("Browse");
-
-
-		// Get the page number.
+		// Get the parameters like Page, tags and filters.
 		if(isset($_GET['page']) && is_numeric($_GET['page']))
 			$this->pageNum = $_GET['page'] - 1;
 
-		// Get the wantedTags/IncludeTags.
+		// WantedTags/IncludeTags.
 		$this->wantedTags = null;
 		if(isset($_GET['t']) && !empty($_GET['t']))
 			$this->wantedTags = explode(',', $_GET['t']);
 
-		// Get the unwantedTags/ExcludeTags.
+		// Un-WantedTags/ExcludeTags.
 		$this->unwantedTags = null;
 		if(isset($_GET['et']) && !empty($_GET['et']))
 			$this->unwantedTags = explode(',', $_GET['et']);
 
-		// Create the query.
+		// Get the media using the MediaQuery builder.
 		$query = new MediaQuery($dbc);
 		$query->Order('date','desc');
 		$query->Fields(['media.*']);
 		$query->Pages($this->pageNum, $this->pageSize);
 
+		// Filter using tags if they exist.
 		if(isset($this->wantedTags))
 			$query->Tags($this->wantedTags);
 
 		$this->itemsToShow = $query->Execute();
 
-		// Get the results?
+		// Pagination!
 		$this->totalResults = LeumCore::GetTotalItems($dbc);
 		$this->totalPages = ceil($this->totalResults / $this->pageSize);
 
 		$this->pageButtons = new PageButtons($this->totalPages,$this->pageNum + 1);
 
+		$this->mediaView = new \Views\Media();
+
+		$this->header = Front::GetWidget('page_header',
+		[
+			'title'=>'Browse',
+			'content' => [$this, 'FilterBox']
+		]);
+		$leum->SetTitle("Browse");
 	}
 	public function Content()
 	{ ?>
 
 <div class="main">
-	<div class="header">
-		<div class="content">
-			<h1>Browse</h1>
-			<div class="pure-menu pure-menu-horizontal">
-				<ul class="pure-menu">
-					<!-- <li class="pure-menu-item"><a class="pure-menu-link">Filter <i class="fa fa-filter"></i></a></li> -->
-				</ul>
-			</div>
-			<?php $this->FilterBox(); ?>
-		</div>
-	</div>
+	<?php $this->header->Show(); ?>
 	<div class="content">
 		<p><?="$this->totalResults results, $this->totalPages pages."?></p>
 	</div>
-	<div class="items">
-		<?php foreach ($this->itemsToShow as $item)
-		{
-			$this->DoItem($item);	
-		} ?>
-	</div>
+	<?php $this->mediaView->List($this->itemsToShow, false); ?>
 	<div class="content">
 		<?php if($this->totalPages > 1) $this->pageButtons->DoButtons(); ?>
 	</div>
 </div>
 
 <?php
-$this->MediaViewer();
 }
 function DoItem($mediaItem)
 {
@@ -117,34 +110,6 @@ function DoItem($mediaItem)
 	</a>
 	<?php
 }
-function MediaViewer()
-{ ?>
-<div id="media-viewer" class="media-viewer full" hidden>
-	<div class="media-viewer-modal">
-		<a id="media-viewer-next" class="viewer-button" hidden>&rsaquo;</a>
-		<a id="media-viewer-prev" class="viewer-button" hidden>&lsaquo;</a>
-		<div class="header">
-			<span id="media-title"></span>
-			<button class="close-button" id="media-viewer-close"><i class="fa fa-times"></i></button>
-		</div>
-		<div class="content">
-		</div>
-		<div class="footer">
-			<a id="media-edit-link" class="edit-button" href="#">
-				<i class="fa fa-edit"></i>
-			</a>
-			<div class="tag-input">
-				<input id="tag-input" type="hidden" name="tags" value="">
-				<input type="text" id="tag-input-field" placeholder="new tag">
-				<ul class="suggestion-box" id="suggestion-box" hidden>
-				</ul>
-			</div>
-			<div id="tag-editor-field" class="tags tag-field">
-			</div>
-		</div>
-	</div>
-</div>
-<?php }
 function FilterBox()
 {
 $wantedText = "";

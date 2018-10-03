@@ -134,6 +134,7 @@ left join tags on tag_map.tag = tags.id";
 	{
 		try
 		{
+			ksort($this->argumentParts, SORT_NUMERIC);
 			$args = [];
 
 			foreach ($this->argumentParts as $chunks)
@@ -150,6 +151,7 @@ left join tags on tag_map.tag = tags.id";
 			ksort($this->sqlParts, SORT_NUMERIC);
 			$sql = implode(PHP_EOL, $this->sqlParts) . ';';
 
+			var_dump($argsMsg);
 
 			$statement = $this->dbc->Prepare($sql);
 

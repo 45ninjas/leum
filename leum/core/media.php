@@ -181,7 +181,10 @@ class Media
 			$media->title = $mediaData['title'];
 			$media->description = $mediaData['description'];
 			$media->file = $mediaData['file'];
-			$media->parent = $mediaData['parent'];
+			
+			if(isset($mediaData['parent']))
+				$media->parent = $mediaData['parent'];
+			
 			$media->type = $mediaData['type'];
 		}
 		if(is_numeric($index))

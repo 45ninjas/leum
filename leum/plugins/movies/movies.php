@@ -9,7 +9,7 @@ class Movies extends Plugin
 	public function AssignRoutes()
 	{
 		Dispatcher::AddRoute('movies', 'plugins/movies/pages/browse_movies.php');
-		Dispatcher::AddRoute('movies/%slug%', 'plugins/movies/pages/view_movie.php');
+		Dispatcher::AddRoute('movies/%slug%', 'plugins/movies/pages/edit_movie.php');
 	}
 }
 ?>

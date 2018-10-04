@@ -11,9 +11,9 @@ class Import implements IPage
 		$leum->PermissionCheck("admin-pages", "media-create", "tags-create", "media-tags");
 
 		// Get the suggestive input script added to the head.
-		$leum->RequireResource('/resources/js/suggestive-input.js', '<script src="' . GetAsset('/resources/js/suggestive-input.js') . '"></script>');
+		$leum->RequireResource('suggestive-input.js', '<script src="' . GetAsset('/resources/js/suggestive-input.js') . '"></script>');
 
-		$leum->RequireResource('/resources/js/media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
+		$leum->RequireResource('media-viewer.js', '<script src="' . GetAsset('/resources/js/media-viewer.js') . '"></script>');
 		$leum->RequireResource('tags.js', '<script type="text/javascript" src="' . GetAsset('/resources/js/tags.js') . '"></script>');
 
 		// If the directory is set, try to import it.
@@ -24,6 +24,9 @@ class Import implements IPage
 			
 			if(isset($_GET['description']))
 				$importer->description = $_GET['description'];
+
+			if(isset($_GET['type']))
+				$importer->type = $_GET['type'];
 
 			$this->imports = $importer->ImportDirectory($this->directory);
 		}
@@ -102,7 +105,7 @@ class Import implements IPage
 		?>
 		<h2>Import existing directory</h2>
 			<form class="pure-form">
-				<div id="dir-box pure-input" class="suggestion-input">
+				<div id="dir-box" class="suggestion-input">
 					<input class="user-input" type="text" name="directory">
 					<input class="suggestion" type="text" disabled>
 				</div>

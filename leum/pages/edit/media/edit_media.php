@@ -39,7 +39,7 @@ class edit_media implements IPage
 
 			if($_POST['modify'] === "generate-thumbnail")
 			{
-				include_once SYS_ROOT . "/utils/thumbnails.php";
+				include_once SYS_ROOT . "/leum/utils/thumbnails.php";
 				Thumbnails::MakeFor($dbc, $this->mediaItem);
 			}
 		}

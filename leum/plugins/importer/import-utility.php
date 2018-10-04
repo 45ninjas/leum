@@ -4,7 +4,12 @@ require_once SYS_ROOT . "/leum/utils/thumbnails.php";
 
 class ImportUtility
 {
+	private $path;
+
 	public $data;
+	public $description;
+	public $type = NULL;
+
 	public function ImportFile($file)
 	{
 		$this->data = json_decode(file_get_contents($file), true);
@@ -79,8 +84,7 @@ class ImportUtility
 		}
 	}
 
-	private $path;
-	public $description;
+
 	public function ImportDirectory($dir, $chunkSize = 20)
 	{
 		// Remove the trailing slash from the path and add it again? That's stupid.
@@ -136,6 +140,7 @@ class ImportUtility
 		$data = [
 			'title'			=> $info->getBasename(),
 			'description'	=> $this->description,
+			'type'			=> $this->type,
 			'file'			=> $localPath
 		];
 
